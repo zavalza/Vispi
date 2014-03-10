@@ -1,0 +1,1317 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> declara_programa codigo
+Rule 2     empty -> <empty>
+Rule 3     declara_programa -> PROGRAM ID PUNTO_Y_COMA
+Rule 4     codigo -> bloque
+Rule 5     codigo -> variables bloque
+Rule 6     variables -> VAR declaracion
+Rule 7     declaracion -> ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion
+Rule 8     declaracion -> empty
+Rule 9     mas_ids -> empty
+Rule 10    mas_ids -> COMA ID mas_ids
+Rule 11    tipo -> INT
+Rule 12    tipo -> FLOAT
+Rule 13    bloque -> LLAVE_IZQ estatuto LLAVE_DER
+Rule 14    estatuto -> empty
+Rule 15    estatuto -> asignacion estatuto
+Rule 16    estatuto -> condicion estatuto
+Rule 17    estatuto -> escritura estatuto
+Rule 18    asignacion -> ID IGUAL expresion PUNTO_Y_COMA
+Rule 19    escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+Rule 20    evalua_e_imprime -> expresion continua_imprime
+Rule 21    evalua_e_imprime -> CONSTANTE_STRING continua_imprime
+Rule 22    continua_imprime -> empty
+Rule 23    continua_imprime -> COMA evalua_e_imprime
+Rule 24    condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+Rule 25    otra_condicion -> empty
+Rule 26    otra_condicion -> ELSE bloque
+Rule 27    expresion -> exp mas_exp
+Rule 28    exp -> termino mas_terminos
+Rule 29    mas_exp -> empty
+Rule 30    mas_exp -> MAYOR_QUE exp
+Rule 31    mas_exp -> MENOR_QUE exp
+Rule 32    mas_exp -> MAYOR_MENOR exp
+Rule 33    mas_terminos -> empty
+Rule 34    mas_terminos -> MAS exp
+Rule 35    mas_terminos -> MENOS exp
+Rule 36    termino -> factor mas_factores
+Rule 37    mas_factores -> empty
+Rule 38    mas_factores -> ASTERISCO termino
+Rule 39    mas_factores -> DIAGONAL termino
+Rule 40    factor -> PARENTESIS_IZQ expresion PARENTESIS_DER
+Rule 41    factor -> MAS var_cte
+Rule 42    factor -> MENOS var_cte
+Rule 43    factor -> var_cte
+Rule 44    var_cte -> ID
+Rule 45    var_cte -> CONSTANTE_I
+Rule 46    var_cte -> CONSTANTE_F
+
+Terminals, with rules where they appear
+
+ASTERISCO            : 38
+COMA                 : 10 23
+CONSTANTE_F          : 46
+CONSTANTE_I          : 45
+CONSTANTE_STRING     : 21
+DIAGONAL             : 39
+DOS_PUNTOS           : 7
+ELSE                 : 26
+FLOAT                : 12
+ID                   : 3 7 10 18 44
+IF                   : 24
+IGUAL                : 18
+INT                  : 11
+LLAVE_DER            : 13
+LLAVE_IZQ            : 13
+MAS                  : 34 41
+MAYOR_MENOR          : 32
+MAYOR_QUE            : 30
+MENOR_QUE            : 31
+MENOS                : 35 42
+PARENTESIS_DER       : 19 24 40
+PARENTESIS_IZQ       : 19 24 40
+PRINT                : 19
+PROGRAM              : 3
+PUNTO_Y_COMA         : 3 7 18 19 24
+VAR                  : 6
+error                : 
+
+Nonterminals, with rules where they appear
+
+asignacion           : 15
+bloque               : 4 5 24 26
+codigo               : 1
+condicion            : 16
+continua_imprime     : 20 21
+declara_programa     : 1
+declaracion          : 6 7
+empty                : 8 9 14 22 25 29 33 37
+escritura            : 17
+estatuto             : 13 15 16 17
+evalua_e_imprime     : 19 23
+exp                  : 27 30 31 32 34 35
+expresion            : 18 20 24 40
+factor               : 36
+mas_exp              : 27
+mas_factores         : 36
+mas_ids              : 7 10
+mas_terminos         : 28
+otra_condicion       : 24
+programa             : 0
+termino              : 28 38 39
+tipo                 : 7
+var_cte              : 41 42 43
+variables            : 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . declara_programa codigo
+    (3) declara_programa -> . PROGRAM ID PUNTO_Y_COMA
+
+    PROGRAM         shift and go to state 2
+
+    declara_programa               shift and go to state 1
+    programa                       shift and go to state 3
+
+state 1
+
+    (1) programa -> declara_programa . codigo
+    (4) codigo -> . bloque
+    (5) codigo -> . variables bloque
+    (13) bloque -> . LLAVE_IZQ estatuto LLAVE_DER
+    (6) variables -> . VAR declaracion
+
+    LLAVE_IZQ       shift and go to state 8
+    VAR             shift and go to state 5
+
+    variables                      shift and go to state 4
+    bloque                         shift and go to state 6
+    codigo                         shift and go to state 7
+
+state 2
+
+    (3) declara_programa -> PROGRAM . ID PUNTO_Y_COMA
+
+    ID              shift and go to state 9
+
+
+state 3
+
+    (0) S' -> programa .
+
+
+
+state 4
+
+    (5) codigo -> variables . bloque
+    (13) bloque -> . LLAVE_IZQ estatuto LLAVE_DER
+
+    LLAVE_IZQ       shift and go to state 8
+
+    bloque                         shift and go to state 10
+
+state 5
+
+    (6) variables -> VAR . declaracion
+    (7) declaracion -> . ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion
+    (8) declaracion -> . empty
+    (2) empty -> .
+
+    ID              shift and go to state 12
+    LLAVE_IZQ       reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 11
+    declaracion                    shift and go to state 13
+
+state 6
+
+    (4) codigo -> bloque .
+
+    $end            reduce using rule 4 (codigo -> bloque .)
+
+
+state 7
+
+    (1) programa -> declara_programa codigo .
+
+    $end            reduce using rule 1 (programa -> declara_programa codigo .)
+
+
+state 8
+
+    (13) bloque -> LLAVE_IZQ . estatuto LLAVE_DER
+    (14) estatuto -> . empty
+    (15) estatuto -> . asignacion estatuto
+    (16) estatuto -> . condicion estatuto
+    (17) estatuto -> . escritura estatuto
+    (2) empty -> .
+    (18) asignacion -> . ID IGUAL expresion PUNTO_Y_COMA
+    (24) condicion -> . IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+    (19) escritura -> . PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+
+    LLAVE_DER       reduce using rule 2 (empty -> .)
+    ID              shift and go to state 19
+    IF              shift and go to state 18
+    PRINT           shift and go to state 17
+
+    asignacion                     shift and go to state 14
+    estatuto                       shift and go to state 15
+    condicion                      shift and go to state 16
+    empty                          shift and go to state 20
+    escritura                      shift and go to state 21
+
+state 9
+
+    (3) declara_programa -> PROGRAM ID . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 22
+
+
+state 10
+
+    (5) codigo -> variables bloque .
+
+    $end            reduce using rule 5 (codigo -> variables bloque .)
+
+
+state 11
+
+    (8) declaracion -> empty .
+
+    LLAVE_IZQ       reduce using rule 8 (declaracion -> empty .)
+
+
+state 12
+
+    (7) declaracion -> ID . mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion
+    (9) mas_ids -> . empty
+    (10) mas_ids -> . COMA ID mas_ids
+    (2) empty -> .
+
+    COMA            shift and go to state 25
+    DOS_PUNTOS      reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 24
+    mas_ids                        shift and go to state 23
+
+state 13
+
+    (6) variables -> VAR declaracion .
+
+    LLAVE_IZQ       reduce using rule 6 (variables -> VAR declaracion .)
+
+
+state 14
+
+    (15) estatuto -> asignacion . estatuto
+    (14) estatuto -> . empty
+    (15) estatuto -> . asignacion estatuto
+    (16) estatuto -> . condicion estatuto
+    (17) estatuto -> . escritura estatuto
+    (2) empty -> .
+    (18) asignacion -> . ID IGUAL expresion PUNTO_Y_COMA
+    (24) condicion -> . IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+    (19) escritura -> . PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+
+    LLAVE_DER       reduce using rule 2 (empty -> .)
+    ID              shift and go to state 19
+    IF              shift and go to state 18
+    PRINT           shift and go to state 17
+
+    asignacion                     shift and go to state 14
+    estatuto                       shift and go to state 26
+    condicion                      shift and go to state 16
+    empty                          shift and go to state 20
+    escritura                      shift and go to state 21
+
+state 15
+
+    (13) bloque -> LLAVE_IZQ estatuto . LLAVE_DER
+
+    LLAVE_DER       shift and go to state 27
+
+
+state 16
+
+    (16) estatuto -> condicion . estatuto
+    (14) estatuto -> . empty
+    (15) estatuto -> . asignacion estatuto
+    (16) estatuto -> . condicion estatuto
+    (17) estatuto -> . escritura estatuto
+    (2) empty -> .
+    (18) asignacion -> . ID IGUAL expresion PUNTO_Y_COMA
+    (24) condicion -> . IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+    (19) escritura -> . PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+
+    LLAVE_DER       reduce using rule 2 (empty -> .)
+    ID              shift and go to state 19
+    IF              shift and go to state 18
+    PRINT           shift and go to state 17
+
+    asignacion                     shift and go to state 14
+    estatuto                       shift and go to state 28
+    condicion                      shift and go to state 16
+    empty                          shift and go to state 20
+    escritura                      shift and go to state 21
+
+state 17
+
+    (19) escritura -> PRINT . PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+
+    PARENTESIS_IZQ  shift and go to state 29
+
+
+state 18
+
+    (24) condicion -> IF . PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+
+    PARENTESIS_IZQ  shift and go to state 30
+
+
+state 19
+
+    (18) asignacion -> ID . IGUAL expresion PUNTO_Y_COMA
+
+    IGUAL           shift and go to state 31
+
+
+state 20
+
+    (14) estatuto -> empty .
+
+    LLAVE_DER       reduce using rule 14 (estatuto -> empty .)
+
+
+state 21
+
+    (17) estatuto -> escritura . estatuto
+    (14) estatuto -> . empty
+    (15) estatuto -> . asignacion estatuto
+    (16) estatuto -> . condicion estatuto
+    (17) estatuto -> . escritura estatuto
+    (2) empty -> .
+    (18) asignacion -> . ID IGUAL expresion PUNTO_Y_COMA
+    (24) condicion -> . IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+    (19) escritura -> . PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+
+    LLAVE_DER       reduce using rule 2 (empty -> .)
+    ID              shift and go to state 19
+    IF              shift and go to state 18
+    PRINT           shift and go to state 17
+
+    asignacion                     shift and go to state 14
+    estatuto                       shift and go to state 32
+    condicion                      shift and go to state 16
+    empty                          shift and go to state 20
+    escritura                      shift and go to state 21
+
+state 22
+
+    (3) declara_programa -> PROGRAM ID PUNTO_Y_COMA .
+
+    LLAVE_IZQ       reduce using rule 3 (declara_programa -> PROGRAM ID PUNTO_Y_COMA .)
+    VAR             reduce using rule 3 (declara_programa -> PROGRAM ID PUNTO_Y_COMA .)
+
+
+state 23
+
+    (7) declaracion -> ID mas_ids . DOS_PUNTOS tipo PUNTO_Y_COMA declaracion
+
+    DOS_PUNTOS      shift and go to state 33
+
+
+state 24
+
+    (9) mas_ids -> empty .
+
+    DOS_PUNTOS      reduce using rule 9 (mas_ids -> empty .)
+
+
+state 25
+
+    (10) mas_ids -> COMA . ID mas_ids
+
+    ID              shift and go to state 34
+
+
+state 26
+
+    (15) estatuto -> asignacion estatuto .
+
+    LLAVE_DER       reduce using rule 15 (estatuto -> asignacion estatuto .)
+
+
+state 27
+
+    (13) bloque -> LLAVE_IZQ estatuto LLAVE_DER .
+
+    $end            reduce using rule 13 (bloque -> LLAVE_IZQ estatuto LLAVE_DER .)
+    ELSE            reduce using rule 13 (bloque -> LLAVE_IZQ estatuto LLAVE_DER .)
+    PUNTO_Y_COMA    reduce using rule 13 (bloque -> LLAVE_IZQ estatuto LLAVE_DER .)
+
+
+state 28
+
+    (16) estatuto -> condicion estatuto .
+
+    LLAVE_DER       reduce using rule 16 (estatuto -> condicion estatuto .)
+
+
+state 29
+
+    (19) escritura -> PRINT PARENTESIS_IZQ . evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA
+    (20) evalua_e_imprime -> . expresion continua_imprime
+    (21) evalua_e_imprime -> . CONSTANTE_STRING continua_imprime
+    (27) expresion -> . exp mas_exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    CONSTANTE_STRING shift and go to state 42
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    expresion                      shift and go to state 35
+    exp                            shift and go to state 41
+    evalua_e_imprime               shift and go to state 38
+    var_cte                        shift and go to state 45
+    factor                         shift and go to state 39
+    termino                        shift and go to state 47
+
+state 30
+
+    (24) condicion -> IF PARENTESIS_IZQ . expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+    (27) expresion -> . exp mas_exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    expresion                      shift and go to state 48
+    exp                            shift and go to state 41
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    factor                         shift and go to state 39
+
+state 31
+
+    (18) asignacion -> ID IGUAL . expresion PUNTO_Y_COMA
+    (27) expresion -> . exp mas_exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    expresion                      shift and go to state 49
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    factor                         shift and go to state 39
+    exp                            shift and go to state 41
+
+state 32
+
+    (17) estatuto -> escritura estatuto .
+
+    LLAVE_DER       reduce using rule 17 (estatuto -> escritura estatuto .)
+
+
+state 33
+
+    (7) declaracion -> ID mas_ids DOS_PUNTOS . tipo PUNTO_Y_COMA declaracion
+    (11) tipo -> . INT
+    (12) tipo -> . FLOAT
+
+    INT             shift and go to state 51
+    FLOAT           shift and go to state 52
+
+    tipo                           shift and go to state 50
+
+state 34
+
+    (10) mas_ids -> COMA ID . mas_ids
+    (9) mas_ids -> . empty
+    (10) mas_ids -> . COMA ID mas_ids
+    (2) empty -> .
+
+    COMA            shift and go to state 25
+    DOS_PUNTOS      reduce using rule 2 (empty -> .)
+
+    mas_ids                        shift and go to state 53
+    empty                          shift and go to state 24
+
+state 35
+
+    (20) evalua_e_imprime -> expresion . continua_imprime
+    (22) continua_imprime -> . empty
+    (23) continua_imprime -> . COMA evalua_e_imprime
+    (2) empty -> .
+
+    COMA            shift and go to state 54
+    PARENTESIS_DER  reduce using rule 2 (empty -> .)
+
+    continua_imprime               shift and go to state 55
+    empty                          shift and go to state 56
+
+state 36
+
+    (40) factor -> PARENTESIS_IZQ . expresion PARENTESIS_DER
+    (27) expresion -> . exp mas_exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    expresion                      shift and go to state 57
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    factor                         shift and go to state 39
+    exp                            shift and go to state 41
+
+state 37
+
+    (41) factor -> MAS . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 58
+
+state 38
+
+    (19) escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime . PARENTESIS_DER PUNTO_Y_COMA
+
+    PARENTESIS_DER  shift and go to state 59
+
+
+state 39
+
+    (36) termino -> factor . mas_factores
+    (37) mas_factores -> . empty
+    (38) mas_factores -> . ASTERISCO termino
+    (39) mas_factores -> . DIAGONAL termino
+    (2) empty -> .
+
+    ASTERISCO       shift and go to state 61
+    DIAGONAL        shift and go to state 62
+    MAS             reduce using rule 2 (empty -> .)
+    MENOS           reduce using rule 2 (empty -> .)
+    MAYOR_QUE       reduce using rule 2 (empty -> .)
+    MENOR_QUE       reduce using rule 2 (empty -> .)
+    MAYOR_MENOR     reduce using rule 2 (empty -> .)
+    COMA            reduce using rule 2 (empty -> .)
+    PARENTESIS_DER  reduce using rule 2 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 2 (empty -> .)
+
+    mas_factores                   shift and go to state 60
+    empty                          shift and go to state 63
+
+state 40
+
+    (42) factor -> MENOS . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 64
+
+state 41
+
+    (27) expresion -> exp . mas_exp
+    (29) mas_exp -> . empty
+    (30) mas_exp -> . MAYOR_QUE exp
+    (31) mas_exp -> . MENOR_QUE exp
+    (32) mas_exp -> . MAYOR_MENOR exp
+    (2) empty -> .
+
+    MAYOR_QUE       shift and go to state 68
+    MENOR_QUE       shift and go to state 65
+    MAYOR_MENOR     shift and go to state 66
+    COMA            reduce using rule 2 (empty -> .)
+    PARENTESIS_DER  reduce using rule 2 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 69
+    mas_exp                        shift and go to state 67
+
+state 42
+
+    (21) evalua_e_imprime -> CONSTANTE_STRING . continua_imprime
+    (22) continua_imprime -> . empty
+    (23) continua_imprime -> . COMA evalua_e_imprime
+    (2) empty -> .
+
+    COMA            shift and go to state 54
+    PARENTESIS_DER  reduce using rule 2 (empty -> .)
+
+    continua_imprime               shift and go to state 70
+    empty                          shift and go to state 56
+
+state 43
+
+    (46) var_cte -> CONSTANTE_F .
+
+    ASTERISCO       reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    DIAGONAL        reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    MAS             reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    MENOS           reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    MAYOR_QUE       reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    MENOR_QUE       reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    MAYOR_MENOR     reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    PARENTESIS_DER  reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    COMA            reduce using rule 46 (var_cte -> CONSTANTE_F .)
+    PUNTO_Y_COMA    reduce using rule 46 (var_cte -> CONSTANTE_F .)
+
+
+state 44
+
+    (44) var_cte -> ID .
+
+    ASTERISCO       reduce using rule 44 (var_cte -> ID .)
+    DIAGONAL        reduce using rule 44 (var_cte -> ID .)
+    MAS             reduce using rule 44 (var_cte -> ID .)
+    MENOS           reduce using rule 44 (var_cte -> ID .)
+    MAYOR_QUE       reduce using rule 44 (var_cte -> ID .)
+    MENOR_QUE       reduce using rule 44 (var_cte -> ID .)
+    MAYOR_MENOR     reduce using rule 44 (var_cte -> ID .)
+    PARENTESIS_DER  reduce using rule 44 (var_cte -> ID .)
+    COMA            reduce using rule 44 (var_cte -> ID .)
+    PUNTO_Y_COMA    reduce using rule 44 (var_cte -> ID .)
+
+
+state 45
+
+    (43) factor -> var_cte .
+
+    ASTERISCO       reduce using rule 43 (factor -> var_cte .)
+    DIAGONAL        reduce using rule 43 (factor -> var_cte .)
+    MAS             reduce using rule 43 (factor -> var_cte .)
+    MENOS           reduce using rule 43 (factor -> var_cte .)
+    MAYOR_QUE       reduce using rule 43 (factor -> var_cte .)
+    MENOR_QUE       reduce using rule 43 (factor -> var_cte .)
+    MAYOR_MENOR     reduce using rule 43 (factor -> var_cte .)
+    COMA            reduce using rule 43 (factor -> var_cte .)
+    PARENTESIS_DER  reduce using rule 43 (factor -> var_cte .)
+    PUNTO_Y_COMA    reduce using rule 43 (factor -> var_cte .)
+
+
+state 46
+
+    (45) var_cte -> CONSTANTE_I .
+
+    ASTERISCO       reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    DIAGONAL        reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    MAS             reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    MENOS           reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    MAYOR_QUE       reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    MENOR_QUE       reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    MAYOR_MENOR     reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    PARENTESIS_DER  reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    COMA            reduce using rule 45 (var_cte -> CONSTANTE_I .)
+    PUNTO_Y_COMA    reduce using rule 45 (var_cte -> CONSTANTE_I .)
+
+
+state 47
+
+    (28) exp -> termino . mas_terminos
+    (33) mas_terminos -> . empty
+    (34) mas_terminos -> . MAS exp
+    (35) mas_terminos -> . MENOS exp
+    (2) empty -> .
+
+    MAS             shift and go to state 71
+    MENOS           shift and go to state 73
+    MAYOR_QUE       reduce using rule 2 (empty -> .)
+    MENOR_QUE       reduce using rule 2 (empty -> .)
+    MAYOR_MENOR     reduce using rule 2 (empty -> .)
+    COMA            reduce using rule 2 (empty -> .)
+    PARENTESIS_DER  reduce using rule 2 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 74
+    mas_terminos                   shift and go to state 72
+
+state 48
+
+    (24) condicion -> IF PARENTESIS_IZQ expresion . PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA
+
+    PARENTESIS_DER  shift and go to state 75
+
+
+state 49
+
+    (18) asignacion -> ID IGUAL expresion . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 76
+
+
+state 50
+
+    (7) declaracion -> ID mas_ids DOS_PUNTOS tipo . PUNTO_Y_COMA declaracion
+
+    PUNTO_Y_COMA    shift and go to state 77
+
+
+state 51
+
+    (11) tipo -> INT .
+
+    PUNTO_Y_COMA    reduce using rule 11 (tipo -> INT .)
+
+
+state 52
+
+    (12) tipo -> FLOAT .
+
+    PUNTO_Y_COMA    reduce using rule 12 (tipo -> FLOAT .)
+
+
+state 53
+
+    (10) mas_ids -> COMA ID mas_ids .
+
+    DOS_PUNTOS      reduce using rule 10 (mas_ids -> COMA ID mas_ids .)
+
+
+state 54
+
+    (23) continua_imprime -> COMA . evalua_e_imprime
+    (20) evalua_e_imprime -> . expresion continua_imprime
+    (21) evalua_e_imprime -> . CONSTANTE_STRING continua_imprime
+    (27) expresion -> . exp mas_exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    CONSTANTE_STRING shift and go to state 42
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    expresion                      shift and go to state 35
+    exp                            shift and go to state 41
+    evalua_e_imprime               shift and go to state 78
+    var_cte                        shift and go to state 45
+    factor                         shift and go to state 39
+    termino                        shift and go to state 47
+
+state 55
+
+    (20) evalua_e_imprime -> expresion continua_imprime .
+
+    PARENTESIS_DER  reduce using rule 20 (evalua_e_imprime -> expresion continua_imprime .)
+
+
+state 56
+
+    (22) continua_imprime -> empty .
+
+    PARENTESIS_DER  reduce using rule 22 (continua_imprime -> empty .)
+
+
+state 57
+
+    (40) factor -> PARENTESIS_IZQ expresion . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 79
+
+
+state 58
+
+    (41) factor -> MAS var_cte .
+
+    ASTERISCO       reduce using rule 41 (factor -> MAS var_cte .)
+    DIAGONAL        reduce using rule 41 (factor -> MAS var_cte .)
+    MAS             reduce using rule 41 (factor -> MAS var_cte .)
+    MENOS           reduce using rule 41 (factor -> MAS var_cte .)
+    MAYOR_QUE       reduce using rule 41 (factor -> MAS var_cte .)
+    MENOR_QUE       reduce using rule 41 (factor -> MAS var_cte .)
+    MAYOR_MENOR     reduce using rule 41 (factor -> MAS var_cte .)
+    COMA            reduce using rule 41 (factor -> MAS var_cte .)
+    PARENTESIS_DER  reduce using rule 41 (factor -> MAS var_cte .)
+    PUNTO_Y_COMA    reduce using rule 41 (factor -> MAS var_cte .)
+
+
+state 59
+
+    (19) escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 80
+
+
+state 60
+
+    (36) termino -> factor mas_factores .
+
+    MAS             reduce using rule 36 (termino -> factor mas_factores .)
+    MENOS           reduce using rule 36 (termino -> factor mas_factores .)
+    COMA            reduce using rule 36 (termino -> factor mas_factores .)
+    PARENTESIS_DER  reduce using rule 36 (termino -> factor mas_factores .)
+    PUNTO_Y_COMA    reduce using rule 36 (termino -> factor mas_factores .)
+    MAYOR_QUE       reduce using rule 36 (termino -> factor mas_factores .)
+    MENOR_QUE       reduce using rule 36 (termino -> factor mas_factores .)
+    MAYOR_MENOR     reduce using rule 36 (termino -> factor mas_factores .)
+
+
+state 61
+
+    (38) mas_factores -> ASTERISCO . termino
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 81
+    factor                         shift and go to state 39
+
+state 62
+
+    (39) mas_factores -> DIAGONAL . termino
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 82
+    factor                         shift and go to state 39
+
+state 63
+
+    (37) mas_factores -> empty .
+
+    MAS             reduce using rule 37 (mas_factores -> empty .)
+    MENOS           reduce using rule 37 (mas_factores -> empty .)
+    MAYOR_QUE       reduce using rule 37 (mas_factores -> empty .)
+    MENOR_QUE       reduce using rule 37 (mas_factores -> empty .)
+    MAYOR_MENOR     reduce using rule 37 (mas_factores -> empty .)
+    COMA            reduce using rule 37 (mas_factores -> empty .)
+    PARENTESIS_DER  reduce using rule 37 (mas_factores -> empty .)
+    PUNTO_Y_COMA    reduce using rule 37 (mas_factores -> empty .)
+
+
+state 64
+
+    (42) factor -> MENOS var_cte .
+
+    ASTERISCO       reduce using rule 42 (factor -> MENOS var_cte .)
+    DIAGONAL        reduce using rule 42 (factor -> MENOS var_cte .)
+    MAS             reduce using rule 42 (factor -> MENOS var_cte .)
+    MENOS           reduce using rule 42 (factor -> MENOS var_cte .)
+    MAYOR_QUE       reduce using rule 42 (factor -> MENOS var_cte .)
+    MENOR_QUE       reduce using rule 42 (factor -> MENOS var_cte .)
+    MAYOR_MENOR     reduce using rule 42 (factor -> MENOS var_cte .)
+    COMA            reduce using rule 42 (factor -> MENOS var_cte .)
+    PARENTESIS_DER  reduce using rule 42 (factor -> MENOS var_cte .)
+    PUNTO_Y_COMA    reduce using rule 42 (factor -> MENOS var_cte .)
+
+
+state 65
+
+    (31) mas_exp -> MENOR_QUE . exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    exp                            shift and go to state 83
+    factor                         shift and go to state 39
+
+state 66
+
+    (32) mas_exp -> MAYOR_MENOR . exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    exp                            shift and go to state 84
+    factor                         shift and go to state 39
+
+state 67
+
+    (27) expresion -> exp mas_exp .
+
+    PARENTESIS_DER  reduce using rule 27 (expresion -> exp mas_exp .)
+    COMA            reduce using rule 27 (expresion -> exp mas_exp .)
+    PUNTO_Y_COMA    reduce using rule 27 (expresion -> exp mas_exp .)
+
+
+state 68
+
+    (30) mas_exp -> MAYOR_QUE . exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    exp                            shift and go to state 85
+    factor                         shift and go to state 39
+
+state 69
+
+    (29) mas_exp -> empty .
+
+    COMA            reduce using rule 29 (mas_exp -> empty .)
+    PARENTESIS_DER  reduce using rule 29 (mas_exp -> empty .)
+    PUNTO_Y_COMA    reduce using rule 29 (mas_exp -> empty .)
+
+
+state 70
+
+    (21) evalua_e_imprime -> CONSTANTE_STRING continua_imprime .
+
+    PARENTESIS_DER  reduce using rule 21 (evalua_e_imprime -> CONSTANTE_STRING continua_imprime .)
+
+
+state 71
+
+    (34) mas_terminos -> MAS . exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    exp                            shift and go to state 86
+    factor                         shift and go to state 39
+
+state 72
+
+    (28) exp -> termino mas_terminos .
+
+    MAYOR_QUE       reduce using rule 28 (exp -> termino mas_terminos .)
+    MENOR_QUE       reduce using rule 28 (exp -> termino mas_terminos .)
+    MAYOR_MENOR     reduce using rule 28 (exp -> termino mas_terminos .)
+    PARENTESIS_DER  reduce using rule 28 (exp -> termino mas_terminos .)
+    COMA            reduce using rule 28 (exp -> termino mas_terminos .)
+    PUNTO_Y_COMA    reduce using rule 28 (exp -> termino mas_terminos .)
+
+
+state 73
+
+    (35) mas_terminos -> MENOS . exp
+    (28) exp -> . termino mas_terminos
+    (36) termino -> . factor mas_factores
+    (40) factor -> . PARENTESIS_IZQ expresion PARENTESIS_DER
+    (41) factor -> . MAS var_cte
+    (42) factor -> . MENOS var_cte
+    (43) factor -> . var_cte
+    (44) var_cte -> . ID
+    (45) var_cte -> . CONSTANTE_I
+    (46) var_cte -> . CONSTANTE_F
+
+    PARENTESIS_IZQ  shift and go to state 36
+    MAS             shift and go to state 37
+    MENOS           shift and go to state 40
+    ID              shift and go to state 44
+    CONSTANTE_I     shift and go to state 46
+    CONSTANTE_F     shift and go to state 43
+
+    var_cte                        shift and go to state 45
+    termino                        shift and go to state 47
+    exp                            shift and go to state 87
+    factor                         shift and go to state 39
+
+state 74
+
+    (33) mas_terminos -> empty .
+
+    MAYOR_QUE       reduce using rule 33 (mas_terminos -> empty .)
+    MENOR_QUE       reduce using rule 33 (mas_terminos -> empty .)
+    MAYOR_MENOR     reduce using rule 33 (mas_terminos -> empty .)
+    COMA            reduce using rule 33 (mas_terminos -> empty .)
+    PARENTESIS_DER  reduce using rule 33 (mas_terminos -> empty .)
+    PUNTO_Y_COMA    reduce using rule 33 (mas_terminos -> empty .)
+
+
+state 75
+
+    (24) condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER . bloque otra_condicion PUNTO_Y_COMA
+    (13) bloque -> . LLAVE_IZQ estatuto LLAVE_DER
+
+    LLAVE_IZQ       shift and go to state 8
+
+    bloque                         shift and go to state 88
+
+state 76
+
+    (18) asignacion -> ID IGUAL expresion PUNTO_Y_COMA .
+
+    ID              reduce using rule 18 (asignacion -> ID IGUAL expresion PUNTO_Y_COMA .)
+    IF              reduce using rule 18 (asignacion -> ID IGUAL expresion PUNTO_Y_COMA .)
+    PRINT           reduce using rule 18 (asignacion -> ID IGUAL expresion PUNTO_Y_COMA .)
+    LLAVE_DER       reduce using rule 18 (asignacion -> ID IGUAL expresion PUNTO_Y_COMA .)
+
+
+state 77
+
+    (7) declaracion -> ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA . declaracion
+    (7) declaracion -> . ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion
+    (8) declaracion -> . empty
+    (2) empty -> .
+
+    ID              shift and go to state 12
+    LLAVE_IZQ       reduce using rule 2 (empty -> .)
+
+    declaracion                    shift and go to state 89
+    empty                          shift and go to state 11
+
+state 78
+
+    (23) continua_imprime -> COMA evalua_e_imprime .
+
+    PARENTESIS_DER  reduce using rule 23 (continua_imprime -> COMA evalua_e_imprime .)
+
+
+state 79
+
+    (40) factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .
+
+    ASTERISCO       reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    DIAGONAL        reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    MAS             reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    MENOS           reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    MAYOR_QUE       reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    MENOR_QUE       reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    MAYOR_MENOR     reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    COMA            reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    PARENTESIS_DER  reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+    PUNTO_Y_COMA    reduce using rule 40 (factor -> PARENTESIS_IZQ expresion PARENTESIS_DER .)
+
+
+state 80
+
+    (19) escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA .
+
+    ID              reduce using rule 19 (escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA .)
+    IF              reduce using rule 19 (escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA .)
+    PRINT           reduce using rule 19 (escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA .)
+    LLAVE_DER       reduce using rule 19 (escritura -> PRINT PARENTESIS_IZQ evalua_e_imprime PARENTESIS_DER PUNTO_Y_COMA .)
+
+
+state 81
+
+    (38) mas_factores -> ASTERISCO termino .
+
+    MAS             reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    MENOS           reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    MAYOR_QUE       reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    MENOR_QUE       reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    MAYOR_MENOR     reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    COMA            reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    PARENTESIS_DER  reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+    PUNTO_Y_COMA    reduce using rule 38 (mas_factores -> ASTERISCO termino .)
+
+
+state 82
+
+    (39) mas_factores -> DIAGONAL termino .
+
+    MAS             reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    MENOS           reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    MAYOR_QUE       reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    MENOR_QUE       reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    MAYOR_MENOR     reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    COMA            reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    PARENTESIS_DER  reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+    PUNTO_Y_COMA    reduce using rule 39 (mas_factores -> DIAGONAL termino .)
+
+
+state 83
+
+    (31) mas_exp -> MENOR_QUE exp .
+
+    COMA            reduce using rule 31 (mas_exp -> MENOR_QUE exp .)
+    PARENTESIS_DER  reduce using rule 31 (mas_exp -> MENOR_QUE exp .)
+    PUNTO_Y_COMA    reduce using rule 31 (mas_exp -> MENOR_QUE exp .)
+
+
+state 84
+
+    (32) mas_exp -> MAYOR_MENOR exp .
+
+    COMA            reduce using rule 32 (mas_exp -> MAYOR_MENOR exp .)
+    PARENTESIS_DER  reduce using rule 32 (mas_exp -> MAYOR_MENOR exp .)
+    PUNTO_Y_COMA    reduce using rule 32 (mas_exp -> MAYOR_MENOR exp .)
+
+
+state 85
+
+    (30) mas_exp -> MAYOR_QUE exp .
+
+    COMA            reduce using rule 30 (mas_exp -> MAYOR_QUE exp .)
+    PARENTESIS_DER  reduce using rule 30 (mas_exp -> MAYOR_QUE exp .)
+    PUNTO_Y_COMA    reduce using rule 30 (mas_exp -> MAYOR_QUE exp .)
+
+
+state 86
+
+    (34) mas_terminos -> MAS exp .
+
+    MAYOR_QUE       reduce using rule 34 (mas_terminos -> MAS exp .)
+    MENOR_QUE       reduce using rule 34 (mas_terminos -> MAS exp .)
+    MAYOR_MENOR     reduce using rule 34 (mas_terminos -> MAS exp .)
+    COMA            reduce using rule 34 (mas_terminos -> MAS exp .)
+    PARENTESIS_DER  reduce using rule 34 (mas_terminos -> MAS exp .)
+    PUNTO_Y_COMA    reduce using rule 34 (mas_terminos -> MAS exp .)
+
+
+state 87
+
+    (35) mas_terminos -> MENOS exp .
+
+    MAYOR_QUE       reduce using rule 35 (mas_terminos -> MENOS exp .)
+    MENOR_QUE       reduce using rule 35 (mas_terminos -> MENOS exp .)
+    MAYOR_MENOR     reduce using rule 35 (mas_terminos -> MENOS exp .)
+    COMA            reduce using rule 35 (mas_terminos -> MENOS exp .)
+    PARENTESIS_DER  reduce using rule 35 (mas_terminos -> MENOS exp .)
+    PUNTO_Y_COMA    reduce using rule 35 (mas_terminos -> MENOS exp .)
+
+
+state 88
+
+    (24) condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque . otra_condicion PUNTO_Y_COMA
+    (25) otra_condicion -> . empty
+    (26) otra_condicion -> . ELSE bloque
+    (2) empty -> .
+
+    ELSE            shift and go to state 91
+    PUNTO_Y_COMA    reduce using rule 2 (empty -> .)
+
+    otra_condicion                 shift and go to state 90
+    empty                          shift and go to state 92
+
+state 89
+
+    (7) declaracion -> ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion .
+
+    LLAVE_IZQ       reduce using rule 7 (declaracion -> ID mas_ids DOS_PUNTOS tipo PUNTO_Y_COMA declaracion .)
+
+
+state 90
+
+    (24) condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 93
+
+
+state 91
+
+    (26) otra_condicion -> ELSE . bloque
+    (13) bloque -> . LLAVE_IZQ estatuto LLAVE_DER
+
+    LLAVE_IZQ       shift and go to state 8
+
+    bloque                         shift and go to state 94
+
+state 92
+
+    (25) otra_condicion -> empty .
+
+    PUNTO_Y_COMA    reduce using rule 25 (otra_condicion -> empty .)
+
+
+state 93
+
+    (24) condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA .
+
+    ID              reduce using rule 24 (condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA .)
+    IF              reduce using rule 24 (condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA .)
+    PRINT           reduce using rule 24 (condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA .)
+    LLAVE_DER       reduce using rule 24 (condicion -> IF PARENTESIS_IZQ expresion PARENTESIS_DER bloque otra_condicion PUNTO_Y_COMA .)
+
+
+state 94
+
+    (26) otra_condicion -> ELSE bloque .
+
+    PUNTO_Y_COMA    reduce using rule 26 (otra_condicion -> ELSE bloque .)
+

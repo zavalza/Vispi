@@ -1,0 +1,19 @@
+PROGRAM test;
+VAR x : int;
+   y2 : float;
+{
+  x = 5;
+  y2 = 45.89;
+  IF ( x > 4.0)
+  {
+	x = x + 1;
+	PRINT("Esto funciona");
+	y2 = y2 * x / x ;
+  }
+  ELSE
+  {
+   	x = x - 1;
+	y2 = ( 45 * (x-2) / 24.67);
+  };
+
+}

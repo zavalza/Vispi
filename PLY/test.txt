@@ -1,0 +1,14 @@
+PROGRAM test;
+VAR x : int;
+{
+  x = 5;
+  IF ( x > 4.0)
+  {
+	x = x + 1;
+  }
+  ELSE
+  {
+   	x = x - 1;
+  };
+
+}
