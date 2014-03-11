@@ -64,6 +64,7 @@ tokens = [
 	'SINGLE_QUOTE',
 	#'SHARP',
 	'TAB',
+	'NEWLINE',
 ] + list(reserved.values())
 
 def t_ID(t):
@@ -112,16 +113,18 @@ t_COLON         = r':'
 t_PERIOD        = r'\.'
 #t_SHARP			= r'\#'
 t_TAB 			=r'\t'
+t_NEWLINE		=r'\n+'
 
+#May be we will need to define a rule to count tabs
 #def t_TAB(t)
 	#r'\t+'
 
-t_ignore_COMMENT = r'\#.*'
+t_ignore_COMMENT = r'\#.*\n'
 
 # Define a rule so we can track line numbers
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+#def t_newline(t):
+    #r'\n+'
+    #t.lexer.lineno += len(t.value)
 
 # A string containing ignored characters (spaces)
 t_ignore  = ' '
@@ -140,6 +143,7 @@ lexer = lex.lex()
  ### Test the parser####
 data = '''
 PROGRAM test 
+
 # Esto es una prueba
 if ( x > 4.0):
 	x = x + 1
