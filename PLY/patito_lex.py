@@ -25,6 +25,8 @@ reserved = {
     'while':'WHILE',
     'do':'DO',
     'print':'PRINT',
+	'true':'TRUE',
+	'false':'FALSE',
 }
 # List of token names.
 tokens = [
@@ -45,22 +47,23 @@ tokens = [
 	'LESS_THAN',
 	'LESS_EQUAL_THAN',
 	'GREATER_EQUAL_THAN',
-	'NOT_EQUAL',
+	'NOT_EQUAL_THAN',
 	'SAME_AS',
 	'AND',
 	'OR',
 	'NOT',
     # Assignment (=)
 	'EQUAL',
-	# Delimeters ( ) , . : ; " ' 
+	# Other Symbols ( ) , . : " ' # \t
 	'LPAREN', 
 	'RPAREN', 
 	'COMMA',
 	'PERIOD',
 	'COLON',  
-	'SEMI',
-	'DBQUOTE',
-	'QUOTE',
+	'DOUBLE_QUOTE',
+	'SINGLE_QUOTE',
+	#'SHARP',
+	'TAB',
 ] + list(reserved.values())
 
 def t_ID(t):
@@ -68,43 +71,60 @@ def t_ID(t):
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
     return t
 
-def t_CONSTANTE_F(t):
+def t_C_FLOAT(t):
     r'(\d+)(\.)(\d+)'
     t.value = float(t.value)
     return t
 
-def t_CONSTANTE_I(t):
+def t_C_INT(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-t_CONSTANTE_STRING = r'\"[^\n"]+\"'
+t_C_BOOL = r'[true|false]'
+t_C_CHAR = r'\'[^\']\''
+t_C_STRING = r'\"[^\"]+\"'
 
-#literals = [+','-','*','/']
-t_PUNTO_Y_COMA = r';'
-t_DOS_PUNTOS = r':'
-t_COMA = r','
-t_IGUAL = r'='
-t_MAS = r'\+'
-t_MENOS = r'-'
-t_ASTERISCO = r'\*'
-t_DIAGONAL = r'\/'
-t_MAYOR_QUE = r'>'
-t_MENOR_QUE = r'<'
-t_MAYOR_MENOR = r'<>'
-t_PARENTESIS_IZQ = r'\('
-t_PARENTESIS_DER = r'\)'
-t_LLAVE_IZQ = r'\{'
-t_LLAVE_DER = r'\}'
+# Operators
+t_PLUS      	= r'\+'
+t_MINUS         = r'-'
+t_DIVIDE        = r'/'
+t_MOD			= r'%'
+t_TIMES         = r'\*'
+t_GREATER_THAN          = r'>'
+t_LESS_THAN				= r'<'
+t_LESS_EQUAL_THAN		= r'<='
+t_GREATER_EQUAL_THAN	= r'>='
+t_NOT_EQUAL_THAN		= r'!='
+t_SAME_AS				= r'=='
+t_AND					= r'&&'
+t_OR					= r'\|\|'
+t_NOT					= r'!'
 
+# Assignment operator
+t_EQUAL         = r'='
+
+# Delimeters
+t_LPAREN        = r'\('
+t_RPAREN        = r'\)'
+t_COMMA         = r'\,'
+t_COLON         = r':'
+t_PERIOD        = r'\.'
+#t_SHARP			= r'\#'
+t_TAB 			=r'\t'
+
+#def t_TAB(t)
+	#r'\t+'
+
+t_ignore_COMMENT = r'\#.*'
 
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# A string containing ignored characters (spaces and tabs)
-t_ignore  = ' \t'
+# A string containing ignored characters (spaces)
+t_ignore  = ' '
 
 # Error handling rule
 def t_error(t):
@@ -112,23 +132,27 @@ def t_error(t):
     t.lexer.skip(1)
 
 # Build the lexer
-lexer = lex.lex(debug=0)
+#lexer = lex.lex(debug=0)
 
 # # Build the lexer
-# lexer = lex.lex()
+lexer = lex.lex()
 
-# ### Test the parser####
-# data = '''
-# PROGRAM test ; int
-# IF ( x > 4.0) { x = x + 1; }  ELSE {  x = x - 1;};}
-# '''
+ ### Test the parser####
+data = '''
+PROGRAM test 
+# Esto es una prueba
+if ( x > 4.0):
+	x = x + 1
+else: 
+	x = x - 1
+'''
 
 # # Give the lexer some input
-# lexer.input(data)
+lexer.input(data)
 
 # # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok: break      # No more input
-#     print tok
+while True:
+	tok = lexer.token()
+	if not tok: break      # No more input
+	print tok
 
