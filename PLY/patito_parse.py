@@ -6,15 +6,49 @@ tokens = patito_lex.tokens
 
 #Grammatic rules
 def p_program(p):
-    'programa : declara_programa codigo'
-    print "Listo, programa exitoso!"
+    'program : anyNumberOfLines PROGRAM ID NEWLINE hardware sectionOfVariables sectionOfAssigments	sectionOfFuntions main'
+    print "Great, programm was sucessfull!"
 
 def p_empty(p):
     'empty :'
     pass
 
-def p_declara_programa(p):
-    'declara_programa : PROGRAM ID PUNTO_Y_COMA'
+def p_anyNumberOfLines(p):
+'''anyNumberOfLines : empty
+					| NEWLINE anyNumberOfLines '''
+
+def p_hardware(p):
+	'hardware : camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration '
+
+def p_camDeclaration(p):
+'''camDeclaration : empty
+				  | CAM typeOfCamera COLON ID NEWLINE'''
+
+def p_typeOfCamera(p):
+'''typeOfCamera : WEBCAM
+				| PICAM'''
+
+def p_inputsDeclaration(p):
+'''inputsDeclaration : empty
+					 | INPUT atLeastOnePin NEWLINE'''
+
+def p_ouputsDeclaration(p):
+'''outputsDeclaration : empty
+					  | OUTPUT atLeastOnePin NEWLINE'''
+
+def p_pwmDeclaration(p):
+'''pwmDeclaration : empty
+				  | PWM atLeastOnePin NEWLINE'''
+
+def p_atLeastOnePin(p):
+'''atLeastOnePin(p) : C_INT COLON ID maybeMorePins'
+
+
+def p_maybeMorePins(p):
+'''maybeMorePins : empty
+				 | COMMA atLeastOnePin'''
+
+#####Little Duck Codee####
 
 def p_codigo(p):
     '''codigo : bloque
