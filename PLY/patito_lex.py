@@ -84,7 +84,7 @@ def t_C_INT(t):
 
 t_C_BOOL = r'[true|false]'
 t_C_CHAR = r'\'[^\']\''
-t_C_STRING = r'\"[^\"]+\"'
+t_C_STRING = r'\"[^\"]*\"'
 
 # Operators
 t_PLUS      	= r'\+'
@@ -115,7 +115,7 @@ t_PERIOD        = r'\.'
 t_TAB 			=r'\t'
 t_NEWLINE		=r'\n+'
 
-#May be we will need to define a rule to count tabs
+#Maybe we will need to define a rule to count tabs
 #def t_TAB(t)
 	#r'\t+'
 

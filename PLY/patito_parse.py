@@ -6,47 +6,37 @@ tokens = patito_lex.tokens
 
 #Grammatic rules
 def p_program(p):
-    'program : anyNumberOfLines PROGRAM ID NEWLINE hardware sectionOfVariables sectionOfAssigments	sectionOfFuntions main'
+    'program : PROGRAM ID NEWLINE hardware sectionOfVariables sectionOfAssigments	sectionOfFuntions main'
     print "Great, programm was sucessfull!"
 
 def p_empty(p):
     'empty :'
     pass
 
-def p_anyNumberOfLines(p):
-'''anyNumberOfLines : empty
-					| NEWLINE anyNumberOfLines '''
-
 def p_hardware(p):
 	'hardware : camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration '
 
 def p_camDeclaration(p):
 '''camDeclaration : empty
-				  | CAM typeOfCamera COLON ID NEWLINE'''
-
-def p_typeOfCamera(p):
-'''typeOfCamera : WEBCAM
-				| PICAM'''
+				  | CAM WEBCAM COLON ID NEWLINE
+                  | CAM PICAM COLON ID NEWLINE'''
 
 def p_inputsDeclaration(p):
 '''inputsDeclaration : empty
-					 | INPUT atLeastOnePin NEWLINE'''
+					 | INPUT pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
 '''outputsDeclaration : empty
-					  | OUTPUT atLeastOnePin NEWLINE'''
+					  | OUTPUT pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
 '''pwmDeclaration : empty
-				  | PWM atLeastOnePin NEWLINE'''
+				  | PWM pinList NEWLINE'''
 
-def p_atLeastOnePin(p):
-'''atLeastOnePin(p) : C_INT COLON ID maybeMorePins'
+def p_pinList(p):
+'''pinList : C_INT COLON ID
+           | C_INT COLON ID COMMA pinList'''
 
-
-def p_maybeMorePins(p):
-'''maybeMorePins : empty
-				 | COMMA atLeastOnePin'''
 
 #####Little Duck Codee####
 
