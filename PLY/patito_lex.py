@@ -52,7 +52,7 @@ tokens = [
 	'AND',
 	'OR',
 	'NOT',
-    # Assignment (=)
+    # Assignment =
 	'EQUAL',
 	# Other Symbols ( ) , . : " ' # \t
 	'LPAREN', 
