@@ -70,7 +70,8 @@ def p_assign(p):
     'assign : ID EQUAL expression NEWLINE'
 
 def p_main(p):
-    'main : VOID MAIN LPAREN parameters RPAREN NEWLINE block'
+    '''main : VOID MAIN LPAREN RPAREN NEWLINE block
+            | VOID MAIN LPAREN tipo ID paramterList RPAREN NEWLINE block'''
 
 def p_block(p):
     '''block : empty
