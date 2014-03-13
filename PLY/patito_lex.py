@@ -32,7 +32,7 @@ reserved = {
 # List of token names.
 tokens = [
     'ID',
-	#Constants
+	# Constants
 	'C_BOOL',
     'C_INT',
     'C_FLOAT',
@@ -85,14 +85,14 @@ def t_C_INT(t):
 
 t_C_BOOL = r'[true|false]'
 t_C_CHAR = r'\'[^\']\''
-t_C_STRING = r'\"[^\"]*\"'
+t_C_STRING = r'\".*?\"'
 
 # Operators
-t_PLUS      	= r'\+'
-t_MINUS         = r'-'
-t_DIVIDE        = r'/'
-t_MOD			= r'%'
-t_TIMES         = r'\*'
+t_PLUS      			= r'\+'
+t_MINUS         		= r'-'
+t_DIVIDE        		= r'/'
+t_MOD					= r'%'
+t_TIMES         		= r'\*'
 t_GREATER_THAN          = r'>'
 t_LESS_THAN				= r'<'
 t_LESS_EQUAL_THAN		= r'<='
@@ -112,7 +112,7 @@ t_RPAREN        = r'\)'
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
-#t_SHARP			= r'\#'
+#t_SHARP		= r'\#'
 t_TAB 			=r'\t'
 t_NEWLINE		=r'\n+'
 
@@ -142,14 +142,31 @@ def t_error(t):
 lexer = lex.lex()
 
  ### Test the parser####
-data = '''
-PROGRAM test 
+data = ''' PROGRAM primerTest
+cd
+CAM webcam : cam1
+INPUT 8 : boton1, 9: boton2
+OUTPUT 5: led1
 
-# Esto es una prueba
-if ( x > 4.0):
-	x = x + 1
-else: 
-	x = x - 1
+int elefante, paloma
+float tigre
+bool si_o_no
+
+int funcionextra(int parametro1)
+	int otroAnimal
+	otroAnimal = parametro1 - 1
+	if (otroAnimal != 0)
+		funcionextra(4)
+
+void main()
+	string estoEsUnMensaje
+    char letra
+
+	estoEsUnMensaje = "el elefante rosa corre en la pradera"
+    esteEsUnChar = 'a'
+
+	print(estoEsUnMensaje)
+	tigre = tigre + 5 * 8 - elefante / (si_o_no + 9)
 '''
 
 # # Give the lexer some input

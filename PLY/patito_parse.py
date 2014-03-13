@@ -18,24 +18,24 @@ def p_hardware(p):
 
 def p_camDeclaration(p):
     '''camDeclaration : empty
-				    | CAM WEBCAM COLON ID NEWLINE
-                    | CAM PICAM COLON ID NEWLINE'''
+				      | CAM WEBCAM COLON ID NEWLINE
+                      | CAM PICAM COLON ID NEWLINE'''
 
 def p_inputsDeclaration(p):
     '''inputsDeclaration : empty
-					 | INPUT pinList NEWLINE'''
+					     | INPUT pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
     '''outputsDeclaration : empty
-					  | OUTPUT pinList NEWLINE'''
+					      | OUTPUT pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
     '''pwmDeclaration : empty
-				  | PWM pinList NEWLINE'''
+				      | PWM pinList NEWLINE'''
 
 def p_pinList(p):
     '''pinList : C_INT COLON ID
-           | C_INT COLON ID COMMA pinList'''
+               | C_INT COLON ID COMMA pinList'''
 
 def p_vars(p):
     'vars : tipo idList NEWLINE'
