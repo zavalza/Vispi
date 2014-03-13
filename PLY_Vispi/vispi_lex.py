@@ -24,7 +24,6 @@ reserved = {
     'else':'ELSE',
     'while':'WHILE',
     'do':'DO',
-    'print':'PRINT',
 	'true':'TRUE',
 	'false':'FALSE',
 	'main' : 'MAIN',
@@ -55,15 +54,12 @@ tokens = [
 	'NOT',
     # Assignment =
 	'EQUAL',
-	# Other Symbols ( ) , . : " ' # \t
+	# Other Symbols ( ) , . : \t \n
 	'LPAREN', 
 	'RPAREN', 
 	'COMMA',
 	'PERIOD',
 	'COLON',  
-	'DOUBLE_QUOTE',
-	'SINGLE_QUOTE',
-	#'SHARP',
 	'TAB',
 	'NEWLINE',
 ] + list(reserved.values())
@@ -112,7 +108,10 @@ t_RPAREN        = r'\)'
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
+<<<<<<< HEAD
 #t_SHARP			= r'\#'
+=======
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 t_TAB 			=r'\t'
 t_NEWLINE		=r'\n+'
 
@@ -136,12 +135,11 @@ def t_error(t):
     t.lexer.skip(1)
 
 # Build the lexer
-#lexer = lex.lex(debug=0)
+lexer = lex.lex(debug=0)
 
-# # Build the lexer
-lexer = lex.lex()
 
  ### Test the parser####
+<<<<<<< HEAD
 data = '''
 PROGRAM test 
 
@@ -160,4 +158,44 @@ while True:
 	tok = lexer.token()
 	if not tok: break      # No more input
 	print tok
+=======
+# data = ''' PROGRAM primerTest
+# CAM webcam : cam1
+# INPUT 8 : boton1, 9: boton2
+# OUTPUT 5: led1
+
+# int elefante, paloma
+# float tigre
+# bool si_o_no
+
+# int funcionextra(int parametro1)
+# 	int otroAnimal
+# 	otroAnimal = parametro1 - 1
+# 	if (otroAnimal != 0)
+# 		funcionextra(4)
+# 	else 
+# 		funcionextra(3)
+
+# void main()
+# 	string estoEsUnMensaje
+#     char letra
+
+# 	estoEsUnMensaje = "el elefante rosa corre en la pradera"
+#     esteEsUnChar = 'a'
+
+# 	print(estoEsUnMensaje)
+# 	tigre = tigre + 5 * 8 - elefante / (si_o_no + 9)
+# '''
+
+
+###Test just the lexer###
+# # # Give the lexer some input
+# lexer.input(data)
+
+# # # Tokenize
+# while True:
+# 	tok = lexer.token()
+# 	if not tok: break      # No more input
+# 	print tok
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 

@@ -2,14 +2,11 @@ Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    DOUBLE_QUOTE
-    PRINT
     TRUE
     PERIOD
     TIMES
     AND
     FALSE
-    SINGLE_QUOTE
     NOT
     OR
 
@@ -30,6 +27,7 @@ Rule 11    pwmDeclaration -> empty
 Rule 12    pwmDeclaration -> PWM pinList NEWLINE
 Rule 13    pinList -> C_INT COLON ID
 Rule 14    pinList -> C_INT COLON ID COMMA pinList
+<<<<<<< HEAD
 Rule 15    vars -> tipo idList NEWLINE
 Rule 16    idList -> ID
 Rule 17    idList -> ID COMMA idList
@@ -89,12 +87,78 @@ Rule 70    cvar -> C_INT
 Rule 71    cvar -> C_FLOAT
 Rule 72    cvar -> C_CHAR
 Rule 73    cvar -> C_STRING
+=======
+Rule 15    vars -> tipo idList NEWLINE vars
+Rule 16    vars -> empty
+Rule 17    idList -> ID
+Rule 18    idList -> ID COMMA idList
+Rule 19    tipo -> BOOL
+Rule 20    tipo -> INT
+Rule 21    tipo -> FLOAT
+Rule 22    tipo -> CHAR
+Rule 23    tipo -> STRING
+Rule 24    tipo -> IMAGE
+Rule 25    functions -> tipo ID LPAREN RPAREN NEWLINE block functions
+Rule 26    functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+Rule 27    functions -> VOID ID LPAREN RPAREN NEWLINE block functions
+Rule 28    functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+Rule 29    functions -> empty
+Rule 30    parameterList -> empty
+Rule 31    parameterList -> COMMA tipo ID parameterList
+Rule 32    assign -> ID EQUAL expression NEWLINE assign
+Rule 33    assign -> empty
+Rule 34    main -> VOID MAIN LPAREN RPAREN NEWLINE block
+Rule 35    main -> VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block
+Rule 36    block -> empty
+Rule 37    block -> TAB statement moreStatements
+Rule 38    moreStatements -> empty
+Rule 39    moreStatements -> NEWLINE TAB statement moreStatements
+Rule 40    statement -> assign
+Rule 41    statement -> condition
+Rule 42    statement -> cycle
+Rule 43    statement -> funct NEWLINE
+Rule 44    condition -> IF expression COLON NEWLINE block
+Rule 45    condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block
+Rule 46    cycle -> WHILE expression COLON NEWLINE block
+Rule 47    cycle -> DO COLON NEWLINE block WHILE expression NEWLINE
+Rule 48    funct -> ID LPAREN RPAREN
+Rule 49    funct -> ID LPAREN expression expressionList RPAREN
+Rule 50    expressionList -> empty
+Rule 51    expressionList -> COMMA expression expressionList
+Rule 52    expression -> exp
+Rule 53    expression -> exp compareToken exp
+Rule 54    compareToken -> GREATER_THAN
+Rule 55    compareToken -> LESS_THAN
+Rule 56    compareToken -> LESS_EQUAL_THAN
+Rule 57    compareToken -> GREATER_EQUAL_THAN
+Rule 58    compareToken -> NOT_EQUAL_THAN
+Rule 59    compareToken -> SAME_AS
+Rule 60    exp -> term moreTerms
+Rule 61    moreTerms -> empty
+Rule 62    moreTerms -> PLUS term moreTerms
+Rule 63    moreTerms -> MINUS term moreTerms
+Rule 64    term -> factor moreFactors
+Rule 65    moreFactors -> empty
+Rule 66    moreFactors -> DIVIDE factor moreFactors
+Rule 67    moreFactors -> TIMES factor moreFactors
+Rule 68    moreFactors -> MOD factor moreFactors
+Rule 69    factor -> LPAREN expression RPAREN
+Rule 70    factor -> cvar
+Rule 71    factor -> funct
+Rule 72    cvar -> ID
+Rule 73    cvar -> C_BOOL
+Rule 74    cvar -> C_INT
+Rule 75    cvar -> C_FLOAT
+Rule 76    cvar -> C_CHAR
+Rule 77    cvar -> C_STRING
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 
 Terminals, with rules where they appear
 
 AND                  : 
-BOOL                 : 18
+BOOL                 : 19
 CAM                  : 5 6
+<<<<<<< HEAD
 CHAR                 : 21
 COLON                : 5 6 13 14 40 41 41 42 43
 COMMA                : 14 17 29 47
@@ -126,10 +190,43 @@ MOD                  : 64
 NEWLINE              : 1 5 6 8 10 12 15 24 25 26 27 30 31 35 39 40 41 41 42 43 43
 NOT                  : 
 NOT_EQUAL_THAN       : 54
+=======
+CHAR                 : 22
+COLON                : 5 6 13 14 44 45 45 46 47
+COMMA                : 14 18 31 51
+C_BOOL               : 73
+C_CHAR               : 76
+C_FLOAT              : 75
+C_INT                : 13 14 74
+C_STRING             : 77
+DIVIDE               : 66
+DO                   : 47
+ELSE                 : 45
+EQUAL                : 32
+FALSE                : 
+FLOAT                : 21
+GREATER_EQUAL_THAN   : 57
+GREATER_THAN         : 54
+ID                   : 1 5 6 13 14 17 18 25 26 26 27 28 28 31 32 35 48 49 72
+IF                   : 44 45
+IMAGE                : 24
+INPUT                : 8
+INT                  : 20
+LESS_EQUAL_THAN      : 56
+LESS_THAN            : 55
+LPAREN               : 25 26 27 28 34 35 48 49 69
+MAIN                 : 34 35
+MINUS                : 63
+MOD                  : 68
+NEWLINE              : 1 5 6 8 10 12 15 25 26 27 28 32 34 35 39 43 44 45 45 46 47 47
+NOT                  : 
+NOT_EQUAL_THAN       : 58
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 OR                   : 
 OUTPUT               : 10
 PERIOD               : 
 PICAM                : 6
+<<<<<<< HEAD
 PLUS                 : 58
 PRINT                : 
 PROGRAM              : 1
@@ -144,10 +241,25 @@ TRUE                 :
 VOID                 : 26 27 31
 WEBCAM               : 5
 WHILE                : 42 43
+=======
+PLUS                 : 62
+PROGRAM              : 1
+PWM                  : 12
+RPAREN               : 25 26 27 28 34 35 48 49 69
+SAME_AS              : 59
+STRING               : 23
+TAB                  : 37 39
+TIMES                : 67
+TRUE                 : 
+VOID                 : 27 28 34 35
+WEBCAM               : 5
+WHILE                : 46 47
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 error                : 
 
 Nonterminals, with rules where they appear
 
+<<<<<<< HEAD
 TIME                 : 63
 assign               : 1 36
 block                : 24 25 26 27 31 40 41 41 42 43
@@ -163,10 +275,27 @@ expressionList       : 45 47
 factor               : 60 62 63 64
 funct                : 39 67
 functions            : 1
+=======
+assign               : 1 32 40
+block                : 25 26 27 28 34 35 44 45 45 46 47
+camDeclaration       : 3
+compareToken         : 53
+condition            : 41
+cvar                 : 70
+cycle                : 42
+empty                : 4 7 9 11 16 29 30 33 36 38 50 61 65
+exp                  : 52 53 53
+expression           : 32 44 45 46 47 49 51 69
+expressionList       : 49 51
+factor               : 64 66 67 68
+funct                : 43 71
+functions            : 1 25 26 27 28
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 hardware             : 1
-idList               : 15 17
+idList               : 15 18
 inputsDeclaration    : 3
 main                 : 1
+<<<<<<< HEAD
 moreFactors          : 60 62 63 64
 moreStatements       : 33 35
 moreTerms            : 56 58 59
@@ -181,3 +310,3022 @@ term                 : 56 58 59
 tipo                 : 15 24 25 25 27 29
 vars                 : 1
 
+=======
+moreFactors          : 64 66 67 68
+moreStatements       : 37 39
+moreTerms            : 60 62 63
+outputsDeclaration   : 3
+parameterList        : 26 28 31 35
+pinList              : 8 10 12 14
+program              : 0
+pwmDeclaration       : 3
+statement            : 37 39
+term                 : 60 62 63
+tipo                 : 15 25 26 26 28 31 35
+vars                 : 1 15
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM ID NEWLINE hardware vars assign functions main
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . ID NEWLINE hardware vars assign functions main
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM ID . NEWLINE hardware vars assign functions main
+
+    NEWLINE         shift and go to state 4
+
+
+state 4
+
+    (1) program -> PROGRAM ID NEWLINE . hardware vars assign functions main
+    (3) hardware -> . camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration
+    (4) camDeclaration -> . empty
+    (5) camDeclaration -> . CAM WEBCAM COLON ID NEWLINE
+    (6) camDeclaration -> . CAM PICAM COLON ID NEWLINE
+    (2) empty -> .
+
+    CAM             shift and go to state 6
+    INPUT           reduce using rule 2 (empty -> .)
+    OUTPUT          reduce using rule 2 (empty -> .)
+    PWM             reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+    camDeclaration                 shift and go to state 7
+    hardware                       shift and go to state 5
+    empty                          shift and go to state 8
+
+state 5
+
+    (1) program -> PROGRAM ID NEWLINE hardware . vars assign functions main
+    (15) vars -> . tipo idList NEWLINE vars
+    (16) vars -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for BOOL resolved as shift
+  ! shift/reduce conflict for INT resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for CHAR resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for IMAGE resolved as shift
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+  ! BOOL            [ reduce using rule 2 (empty -> .) ]
+  ! INT             [ reduce using rule 2 (empty -> .) ]
+  ! FLOAT           [ reduce using rule 2 (empty -> .) ]
+  ! CHAR            [ reduce using rule 2 (empty -> .) ]
+  ! STRING          [ reduce using rule 2 (empty -> .) ]
+  ! IMAGE           [ reduce using rule 2 (empty -> .) ]
+
+    tipo                           shift and go to state 11
+    vars                           shift and go to state 12
+    empty                          shift and go to state 17
+
+state 6
+
+    (5) camDeclaration -> CAM . WEBCAM COLON ID NEWLINE
+    (6) camDeclaration -> CAM . PICAM COLON ID NEWLINE
+
+    WEBCAM          shift and go to state 18
+    PICAM           shift and go to state 19
+
+
+state 7
+
+    (3) hardware -> camDeclaration . inputsDeclaration outputsDeclaration pwmDeclaration
+    (7) inputsDeclaration -> . empty
+    (8) inputsDeclaration -> . INPUT pinList NEWLINE
+    (2) empty -> .
+
+    INPUT           shift and go to state 21
+    OUTPUT          reduce using rule 2 (empty -> .)
+    PWM             reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+    inputsDeclaration              shift and go to state 20
+    empty                          shift and go to state 22
+
+state 8
+
+    (4) camDeclaration -> empty .
+
+    INPUT           reduce using rule 4 (camDeclaration -> empty .)
+    OUTPUT          reduce using rule 4 (camDeclaration -> empty .)
+    PWM             reduce using rule 4 (camDeclaration -> empty .)
+    BOOL            reduce using rule 4 (camDeclaration -> empty .)
+    INT             reduce using rule 4 (camDeclaration -> empty .)
+    FLOAT           reduce using rule 4 (camDeclaration -> empty .)
+    CHAR            reduce using rule 4 (camDeclaration -> empty .)
+    STRING          reduce using rule 4 (camDeclaration -> empty .)
+    IMAGE           reduce using rule 4 (camDeclaration -> empty .)
+    ID              reduce using rule 4 (camDeclaration -> empty .)
+    VOID            reduce using rule 4 (camDeclaration -> empty .)
+
+
+state 9
+
+    (22) tipo -> CHAR .
+
+    ID              reduce using rule 22 (tipo -> CHAR .)
+
+
+state 10
+
+    (21) tipo -> FLOAT .
+
+    ID              reduce using rule 21 (tipo -> FLOAT .)
+
+
+state 11
+
+    (15) vars -> tipo . idList NEWLINE vars
+    (17) idList -> . ID
+    (18) idList -> . ID COMMA idList
+
+    ID              shift and go to state 24
+
+    idList                         shift and go to state 23
+
+state 12
+
+    (1) program -> PROGRAM ID NEWLINE hardware vars . assign functions main
+    (32) assign -> . ID EQUAL expression NEWLINE assign
+    (33) assign -> . empty
+    (2) empty -> .
+
+    ID              shift and go to state 26
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+
+    assign                         shift and go to state 25
+    empty                          shift and go to state 27
+
+state 13
+
+    (20) tipo -> INT .
+
+    ID              reduce using rule 20 (tipo -> INT .)
+
+
+state 14
+
+    (24) tipo -> IMAGE .
+
+    ID              reduce using rule 24 (tipo -> IMAGE .)
+
+
+state 15
+
+    (19) tipo -> BOOL .
+
+    ID              reduce using rule 19 (tipo -> BOOL .)
+
+
+state 16
+
+    (23) tipo -> STRING .
+
+    ID              reduce using rule 23 (tipo -> STRING .)
+
+
+state 17
+
+    (16) vars -> empty .
+
+    ID              reduce using rule 16 (vars -> empty .)
+    VOID            reduce using rule 16 (vars -> empty .)
+    BOOL            reduce using rule 16 (vars -> empty .)
+    INT             reduce using rule 16 (vars -> empty .)
+    FLOAT           reduce using rule 16 (vars -> empty .)
+    CHAR            reduce using rule 16 (vars -> empty .)
+    STRING          reduce using rule 16 (vars -> empty .)
+    IMAGE           reduce using rule 16 (vars -> empty .)
+
+
+state 18
+
+    (5) camDeclaration -> CAM WEBCAM . COLON ID NEWLINE
+
+    COLON           shift and go to state 28
+
+
+state 19
+
+    (6) camDeclaration -> CAM PICAM . COLON ID NEWLINE
+
+    COLON           shift and go to state 29
+
+
+state 20
+
+    (3) hardware -> camDeclaration inputsDeclaration . outputsDeclaration pwmDeclaration
+    (9) outputsDeclaration -> . empty
+    (10) outputsDeclaration -> . OUTPUT pinList NEWLINE
+    (2) empty -> .
+
+    OUTPUT          shift and go to state 31
+    PWM             reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+    outputsDeclaration             shift and go to state 30
+    empty                          shift and go to state 32
+
+state 21
+
+    (8) inputsDeclaration -> INPUT . pinList NEWLINE
+    (13) pinList -> . C_INT COLON ID
+    (14) pinList -> . C_INT COLON ID COMMA pinList
+
+    C_INT           shift and go to state 34
+
+    pinList                        shift and go to state 33
+
+state 22
+
+    (7) inputsDeclaration -> empty .
+
+    OUTPUT          reduce using rule 7 (inputsDeclaration -> empty .)
+    PWM             reduce using rule 7 (inputsDeclaration -> empty .)
+    BOOL            reduce using rule 7 (inputsDeclaration -> empty .)
+    INT             reduce using rule 7 (inputsDeclaration -> empty .)
+    FLOAT           reduce using rule 7 (inputsDeclaration -> empty .)
+    CHAR            reduce using rule 7 (inputsDeclaration -> empty .)
+    STRING          reduce using rule 7 (inputsDeclaration -> empty .)
+    IMAGE           reduce using rule 7 (inputsDeclaration -> empty .)
+    ID              reduce using rule 7 (inputsDeclaration -> empty .)
+    VOID            reduce using rule 7 (inputsDeclaration -> empty .)
+
+
+state 23
+
+    (15) vars -> tipo idList . NEWLINE vars
+
+    NEWLINE         shift and go to state 35
+
+
+state 24
+
+    (17) idList -> ID .
+    (18) idList -> ID . COMMA idList
+
+    NEWLINE         reduce using rule 17 (idList -> ID .)
+    COMMA           shift and go to state 36
+
+
+state 25
+
+    (1) program -> PROGRAM ID NEWLINE hardware vars assign . functions main
+    (25) functions -> . tipo ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> . tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (27) functions -> . VOID ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> . VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (29) functions -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for VOID resolved as shift
+    VOID            shift and go to state 39
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+  ! VOID            [ reduce using rule 2 (empty -> .) ]
+
+    functions                      shift and go to state 37
+    tipo                           shift and go to state 38
+    empty                          shift and go to state 40
+
+state 26
+
+    (32) assign -> ID . EQUAL expression NEWLINE assign
+
+    EQUAL           shift and go to state 41
+
+
+state 27
+
+    (33) assign -> empty .
+
+    NEWLINE         reduce using rule 33 (assign -> empty .)
+    VOID            reduce using rule 33 (assign -> empty .)
+    BOOL            reduce using rule 33 (assign -> empty .)
+    INT             reduce using rule 33 (assign -> empty .)
+    FLOAT           reduce using rule 33 (assign -> empty .)
+    CHAR            reduce using rule 33 (assign -> empty .)
+    STRING          reduce using rule 33 (assign -> empty .)
+    IMAGE           reduce using rule 33 (assign -> empty .)
+    $end            reduce using rule 33 (assign -> empty .)
+    WHILE           reduce using rule 33 (assign -> empty .)
+    ELSE            reduce using rule 33 (assign -> empty .)
+
+
+state 28
+
+    (5) camDeclaration -> CAM WEBCAM COLON . ID NEWLINE
+
+    ID              shift and go to state 42
+
+
+state 29
+
+    (6) camDeclaration -> CAM PICAM COLON . ID NEWLINE
+
+    ID              shift and go to state 43
+
+
+state 30
+
+    (3) hardware -> camDeclaration inputsDeclaration outputsDeclaration . pwmDeclaration
+    (11) pwmDeclaration -> . empty
+    (12) pwmDeclaration -> . PWM pinList NEWLINE
+    (2) empty -> .
+
+    PWM             shift and go to state 45
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+    pwmDeclaration                 shift and go to state 44
+    empty                          shift and go to state 46
+
+state 31
+
+    (10) outputsDeclaration -> OUTPUT . pinList NEWLINE
+    (13) pinList -> . C_INT COLON ID
+    (14) pinList -> . C_INT COLON ID COMMA pinList
+
+    C_INT           shift and go to state 34
+
+    pinList                        shift and go to state 47
+
+state 32
+
+    (9) outputsDeclaration -> empty .
+
+    PWM             reduce using rule 9 (outputsDeclaration -> empty .)
+    BOOL            reduce using rule 9 (outputsDeclaration -> empty .)
+    INT             reduce using rule 9 (outputsDeclaration -> empty .)
+    FLOAT           reduce using rule 9 (outputsDeclaration -> empty .)
+    CHAR            reduce using rule 9 (outputsDeclaration -> empty .)
+    STRING          reduce using rule 9 (outputsDeclaration -> empty .)
+    IMAGE           reduce using rule 9 (outputsDeclaration -> empty .)
+    ID              reduce using rule 9 (outputsDeclaration -> empty .)
+    VOID            reduce using rule 9 (outputsDeclaration -> empty .)
+
+
+state 33
+
+    (8) inputsDeclaration -> INPUT pinList . NEWLINE
+
+    NEWLINE         shift and go to state 48
+
+
+state 34
+
+    (13) pinList -> C_INT . COLON ID
+    (14) pinList -> C_INT . COLON ID COMMA pinList
+
+    COLON           shift and go to state 49
+
+
+state 35
+
+    (15) vars -> tipo idList NEWLINE . vars
+    (15) vars -> . tipo idList NEWLINE vars
+    (16) vars -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for BOOL resolved as shift
+  ! shift/reduce conflict for INT resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for CHAR resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for IMAGE resolved as shift
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+    ID              reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+
+  ! BOOL            [ reduce using rule 2 (empty -> .) ]
+  ! INT             [ reduce using rule 2 (empty -> .) ]
+  ! FLOAT           [ reduce using rule 2 (empty -> .) ]
+  ! CHAR            [ reduce using rule 2 (empty -> .) ]
+  ! STRING          [ reduce using rule 2 (empty -> .) ]
+  ! IMAGE           [ reduce using rule 2 (empty -> .) ]
+
+    vars                           shift and go to state 50
+    empty                          shift and go to state 17
+    tipo                           shift and go to state 11
+
+state 36
+
+    (18) idList -> ID COMMA . idList
+    (17) idList -> . ID
+    (18) idList -> . ID COMMA idList
+
+    ID              shift and go to state 24
+
+    idList                         shift and go to state 51
+
+state 37
+
+    (1) program -> PROGRAM ID NEWLINE hardware vars assign functions . main
+    (34) main -> . VOID MAIN LPAREN RPAREN NEWLINE block
+    (35) main -> . VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block
+
+    VOID            shift and go to state 52
+
+    main                           shift and go to state 53
+
+state 38
+
+    (25) functions -> tipo . ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> tipo . ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+
+    ID              shift and go to state 54
+
+
+state 39
+
+    (27) functions -> VOID . ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> VOID . ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+
+    ID              shift and go to state 55
+
+
+state 40
+
+    (29) functions -> empty .
+
+    VOID            reduce using rule 29 (functions -> empty .)
+
+
+state 41
+
+    (32) assign -> ID EQUAL . expression NEWLINE assign
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 68
+
+state 42
+
+    (5) camDeclaration -> CAM WEBCAM COLON ID . NEWLINE
+
+    NEWLINE         shift and go to state 69
+
+
+state 43
+
+    (6) camDeclaration -> CAM PICAM COLON ID . NEWLINE
+
+    NEWLINE         shift and go to state 70
+
+
+state 44
+
+    (3) hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .
+
+    BOOL            reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    INT             reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    FLOAT           reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    CHAR            reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    STRING          reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    IMAGE           reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    ID              reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+    VOID            reduce using rule 3 (hardware -> camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration .)
+
+
+state 45
+
+    (12) pwmDeclaration -> PWM . pinList NEWLINE
+    (13) pinList -> . C_INT COLON ID
+    (14) pinList -> . C_INT COLON ID COMMA pinList
+
+    C_INT           shift and go to state 34
+
+    pinList                        shift and go to state 71
+
+state 46
+
+    (11) pwmDeclaration -> empty .
+
+    BOOL            reduce using rule 11 (pwmDeclaration -> empty .)
+    INT             reduce using rule 11 (pwmDeclaration -> empty .)
+    FLOAT           reduce using rule 11 (pwmDeclaration -> empty .)
+    CHAR            reduce using rule 11 (pwmDeclaration -> empty .)
+    STRING          reduce using rule 11 (pwmDeclaration -> empty .)
+    IMAGE           reduce using rule 11 (pwmDeclaration -> empty .)
+    ID              reduce using rule 11 (pwmDeclaration -> empty .)
+    VOID            reduce using rule 11 (pwmDeclaration -> empty .)
+
+
+state 47
+
+    (10) outputsDeclaration -> OUTPUT pinList . NEWLINE
+
+    NEWLINE         shift and go to state 72
+
+
+state 48
+
+    (8) inputsDeclaration -> INPUT pinList NEWLINE .
+
+    OUTPUT          reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    PWM             reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    BOOL            reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    INT             reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    FLOAT           reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    CHAR            reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    STRING          reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    IMAGE           reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    ID              reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+    VOID            reduce using rule 8 (inputsDeclaration -> INPUT pinList NEWLINE .)
+
+
+state 49
+
+    (13) pinList -> C_INT COLON . ID
+    (14) pinList -> C_INT COLON . ID COMMA pinList
+
+    ID              shift and go to state 73
+
+
+state 50
+
+    (15) vars -> tipo idList NEWLINE vars .
+
+    ID              reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    VOID            reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    BOOL            reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    INT             reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    FLOAT           reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    CHAR            reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    STRING          reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+    IMAGE           reduce using rule 15 (vars -> tipo idList NEWLINE vars .)
+
+
+state 51
+
+    (18) idList -> ID COMMA idList .
+
+    NEWLINE         reduce using rule 18 (idList -> ID COMMA idList .)
+
+
+state 52
+
+    (34) main -> VOID . MAIN LPAREN RPAREN NEWLINE block
+    (35) main -> VOID . MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block
+
+    MAIN            shift and go to state 74
+
+
+state 53
+
+    (1) program -> PROGRAM ID NEWLINE hardware vars assign functions main .
+
+    $end            reduce using rule 1 (program -> PROGRAM ID NEWLINE hardware vars assign functions main .)
+
+
+state 54
+
+    (25) functions -> tipo ID . LPAREN RPAREN NEWLINE block functions
+    (26) functions -> tipo ID . LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+
+    LPAREN          shift and go to state 75
+
+
+state 55
+
+    (27) functions -> VOID ID . LPAREN RPAREN NEWLINE block functions
+    (28) functions -> VOID ID . LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+
+    LPAREN          shift and go to state 76
+
+
+state 56
+
+    (60) exp -> term . moreTerms
+    (61) moreTerms -> . empty
+    (62) moreTerms -> . PLUS term moreTerms
+    (63) moreTerms -> . MINUS term moreTerms
+    (2) empty -> .
+
+    PLUS            shift and go to state 78
+    MINUS           shift and go to state 79
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreTerms                      shift and go to state 77
+    empty                          shift and go to state 80
+
+state 57
+
+    (77) cvar -> C_STRING .
+
+    DIVIDE          reduce using rule 77 (cvar -> C_STRING .)
+    TIMES           reduce using rule 77 (cvar -> C_STRING .)
+    MOD             reduce using rule 77 (cvar -> C_STRING .)
+    PLUS            reduce using rule 77 (cvar -> C_STRING .)
+    MINUS           reduce using rule 77 (cvar -> C_STRING .)
+    NEWLINE         reduce using rule 77 (cvar -> C_STRING .)
+    RPAREN          reduce using rule 77 (cvar -> C_STRING .)
+    COMMA           reduce using rule 77 (cvar -> C_STRING .)
+    COLON           reduce using rule 77 (cvar -> C_STRING .)
+    GREATER_THAN    reduce using rule 77 (cvar -> C_STRING .)
+    LESS_THAN       reduce using rule 77 (cvar -> C_STRING .)
+    LESS_EQUAL_THAN reduce using rule 77 (cvar -> C_STRING .)
+    GREATER_EQUAL_THAN reduce using rule 77 (cvar -> C_STRING .)
+    NOT_EQUAL_THAN  reduce using rule 77 (cvar -> C_STRING .)
+    SAME_AS         reduce using rule 77 (cvar -> C_STRING .)
+
+
+state 58
+
+    (69) factor -> LPAREN . expression RPAREN
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 81
+
+state 59
+
+    (71) factor -> funct .
+
+    DIVIDE          reduce using rule 71 (factor -> funct .)
+    TIMES           reduce using rule 71 (factor -> funct .)
+    MOD             reduce using rule 71 (factor -> funct .)
+    PLUS            reduce using rule 71 (factor -> funct .)
+    MINUS           reduce using rule 71 (factor -> funct .)
+    GREATER_THAN    reduce using rule 71 (factor -> funct .)
+    LESS_THAN       reduce using rule 71 (factor -> funct .)
+    LESS_EQUAL_THAN reduce using rule 71 (factor -> funct .)
+    GREATER_EQUAL_THAN reduce using rule 71 (factor -> funct .)
+    NOT_EQUAL_THAN  reduce using rule 71 (factor -> funct .)
+    SAME_AS         reduce using rule 71 (factor -> funct .)
+    COMMA           reduce using rule 71 (factor -> funct .)
+    RPAREN          reduce using rule 71 (factor -> funct .)
+    NEWLINE         reduce using rule 71 (factor -> funct .)
+    COLON           reduce using rule 71 (factor -> funct .)
+
+
+state 60
+
+    (74) cvar -> C_INT .
+
+    DIVIDE          reduce using rule 74 (cvar -> C_INT .)
+    TIMES           reduce using rule 74 (cvar -> C_INT .)
+    MOD             reduce using rule 74 (cvar -> C_INT .)
+    PLUS            reduce using rule 74 (cvar -> C_INT .)
+    MINUS           reduce using rule 74 (cvar -> C_INT .)
+    NEWLINE         reduce using rule 74 (cvar -> C_INT .)
+    RPAREN          reduce using rule 74 (cvar -> C_INT .)
+    COMMA           reduce using rule 74 (cvar -> C_INT .)
+    COLON           reduce using rule 74 (cvar -> C_INT .)
+    GREATER_THAN    reduce using rule 74 (cvar -> C_INT .)
+    LESS_THAN       reduce using rule 74 (cvar -> C_INT .)
+    LESS_EQUAL_THAN reduce using rule 74 (cvar -> C_INT .)
+    GREATER_EQUAL_THAN reduce using rule 74 (cvar -> C_INT .)
+    NOT_EQUAL_THAN  reduce using rule 74 (cvar -> C_INT .)
+    SAME_AS         reduce using rule 74 (cvar -> C_INT .)
+
+
+state 61
+
+    (73) cvar -> C_BOOL .
+
+    DIVIDE          reduce using rule 73 (cvar -> C_BOOL .)
+    TIMES           reduce using rule 73 (cvar -> C_BOOL .)
+    MOD             reduce using rule 73 (cvar -> C_BOOL .)
+    PLUS            reduce using rule 73 (cvar -> C_BOOL .)
+    MINUS           reduce using rule 73 (cvar -> C_BOOL .)
+    NEWLINE         reduce using rule 73 (cvar -> C_BOOL .)
+    RPAREN          reduce using rule 73 (cvar -> C_BOOL .)
+    COMMA           reduce using rule 73 (cvar -> C_BOOL .)
+    COLON           reduce using rule 73 (cvar -> C_BOOL .)
+    GREATER_THAN    reduce using rule 73 (cvar -> C_BOOL .)
+    LESS_THAN       reduce using rule 73 (cvar -> C_BOOL .)
+    LESS_EQUAL_THAN reduce using rule 73 (cvar -> C_BOOL .)
+    GREATER_EQUAL_THAN reduce using rule 73 (cvar -> C_BOOL .)
+    NOT_EQUAL_THAN  reduce using rule 73 (cvar -> C_BOOL .)
+    SAME_AS         reduce using rule 73 (cvar -> C_BOOL .)
+
+
+state 62
+
+    (72) cvar -> ID .
+    (48) funct -> ID . LPAREN RPAREN
+    (49) funct -> ID . LPAREN expression expressionList RPAREN
+
+    DIVIDE          reduce using rule 72 (cvar -> ID .)
+    TIMES           reduce using rule 72 (cvar -> ID .)
+    MOD             reduce using rule 72 (cvar -> ID .)
+    PLUS            reduce using rule 72 (cvar -> ID .)
+    MINUS           reduce using rule 72 (cvar -> ID .)
+    NEWLINE         reduce using rule 72 (cvar -> ID .)
+    RPAREN          reduce using rule 72 (cvar -> ID .)
+    COMMA           reduce using rule 72 (cvar -> ID .)
+    COLON           reduce using rule 72 (cvar -> ID .)
+    GREATER_THAN    reduce using rule 72 (cvar -> ID .)
+    LESS_THAN       reduce using rule 72 (cvar -> ID .)
+    LESS_EQUAL_THAN reduce using rule 72 (cvar -> ID .)
+    GREATER_EQUAL_THAN reduce using rule 72 (cvar -> ID .)
+    NOT_EQUAL_THAN  reduce using rule 72 (cvar -> ID .)
+    SAME_AS         reduce using rule 72 (cvar -> ID .)
+    LPAREN          shift and go to state 82
+
+
+state 63
+
+    (76) cvar -> C_CHAR .
+
+    DIVIDE          reduce using rule 76 (cvar -> C_CHAR .)
+    TIMES           reduce using rule 76 (cvar -> C_CHAR .)
+    MOD             reduce using rule 76 (cvar -> C_CHAR .)
+    PLUS            reduce using rule 76 (cvar -> C_CHAR .)
+    MINUS           reduce using rule 76 (cvar -> C_CHAR .)
+    NEWLINE         reduce using rule 76 (cvar -> C_CHAR .)
+    RPAREN          reduce using rule 76 (cvar -> C_CHAR .)
+    COMMA           reduce using rule 76 (cvar -> C_CHAR .)
+    COLON           reduce using rule 76 (cvar -> C_CHAR .)
+    GREATER_THAN    reduce using rule 76 (cvar -> C_CHAR .)
+    LESS_THAN       reduce using rule 76 (cvar -> C_CHAR .)
+    LESS_EQUAL_THAN reduce using rule 76 (cvar -> C_CHAR .)
+    GREATER_EQUAL_THAN reduce using rule 76 (cvar -> C_CHAR .)
+    NOT_EQUAL_THAN  reduce using rule 76 (cvar -> C_CHAR .)
+    SAME_AS         reduce using rule 76 (cvar -> C_CHAR .)
+
+
+state 64
+
+    (75) cvar -> C_FLOAT .
+
+    DIVIDE          reduce using rule 75 (cvar -> C_FLOAT .)
+    TIMES           reduce using rule 75 (cvar -> C_FLOAT .)
+    MOD             reduce using rule 75 (cvar -> C_FLOAT .)
+    PLUS            reduce using rule 75 (cvar -> C_FLOAT .)
+    MINUS           reduce using rule 75 (cvar -> C_FLOAT .)
+    NEWLINE         reduce using rule 75 (cvar -> C_FLOAT .)
+    RPAREN          reduce using rule 75 (cvar -> C_FLOAT .)
+    COMMA           reduce using rule 75 (cvar -> C_FLOAT .)
+    COLON           reduce using rule 75 (cvar -> C_FLOAT .)
+    GREATER_THAN    reduce using rule 75 (cvar -> C_FLOAT .)
+    LESS_THAN       reduce using rule 75 (cvar -> C_FLOAT .)
+    LESS_EQUAL_THAN reduce using rule 75 (cvar -> C_FLOAT .)
+    GREATER_EQUAL_THAN reduce using rule 75 (cvar -> C_FLOAT .)
+    NOT_EQUAL_THAN  reduce using rule 75 (cvar -> C_FLOAT .)
+    SAME_AS         reduce using rule 75 (cvar -> C_FLOAT .)
+
+
+state 65
+
+    (52) expression -> exp .
+    (53) expression -> exp . compareToken exp
+    (54) compareToken -> . GREATER_THAN
+    (55) compareToken -> . LESS_THAN
+    (56) compareToken -> . LESS_EQUAL_THAN
+    (57) compareToken -> . GREATER_EQUAL_THAN
+    (58) compareToken -> . NOT_EQUAL_THAN
+    (59) compareToken -> . SAME_AS
+
+    RPAREN          reduce using rule 52 (expression -> exp .)
+    COLON           reduce using rule 52 (expression -> exp .)
+    COMMA           reduce using rule 52 (expression -> exp .)
+    NEWLINE         reduce using rule 52 (expression -> exp .)
+    GREATER_THAN    shift and go to state 88
+    LESS_THAN       shift and go to state 89
+    LESS_EQUAL_THAN shift and go to state 85
+    GREATER_EQUAL_THAN shift and go to state 84
+    NOT_EQUAL_THAN  shift and go to state 87
+    SAME_AS         shift and go to state 86
+
+    compareToken                   shift and go to state 83
+
+state 66
+
+    (64) term -> factor . moreFactors
+    (65) moreFactors -> . empty
+    (66) moreFactors -> . DIVIDE factor moreFactors
+    (67) moreFactors -> . TIMES factor moreFactors
+    (68) moreFactors -> . MOD factor moreFactors
+    (2) empty -> .
+
+    DIVIDE          shift and go to state 91
+    TIMES           shift and go to state 92
+    MOD             shift and go to state 94
+    PLUS            reduce using rule 2 (empty -> .)
+    MINUS           reduce using rule 2 (empty -> .)
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreFactors                    shift and go to state 90
+    empty                          shift and go to state 93
+
+state 67
+
+    (70) factor -> cvar .
+
+    DIVIDE          reduce using rule 70 (factor -> cvar .)
+    TIMES           reduce using rule 70 (factor -> cvar .)
+    MOD             reduce using rule 70 (factor -> cvar .)
+    PLUS            reduce using rule 70 (factor -> cvar .)
+    MINUS           reduce using rule 70 (factor -> cvar .)
+    GREATER_THAN    reduce using rule 70 (factor -> cvar .)
+    LESS_THAN       reduce using rule 70 (factor -> cvar .)
+    LESS_EQUAL_THAN reduce using rule 70 (factor -> cvar .)
+    GREATER_EQUAL_THAN reduce using rule 70 (factor -> cvar .)
+    NOT_EQUAL_THAN  reduce using rule 70 (factor -> cvar .)
+    SAME_AS         reduce using rule 70 (factor -> cvar .)
+    COMMA           reduce using rule 70 (factor -> cvar .)
+    RPAREN          reduce using rule 70 (factor -> cvar .)
+    NEWLINE         reduce using rule 70 (factor -> cvar .)
+    COLON           reduce using rule 70 (factor -> cvar .)
+
+
+state 68
+
+    (32) assign -> ID EQUAL expression . NEWLINE assign
+
+    NEWLINE         shift and go to state 95
+
+
+state 69
+
+    (5) camDeclaration -> CAM WEBCAM COLON ID NEWLINE .
+
+    INPUT           reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    OUTPUT          reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    PWM             reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    BOOL            reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    INT             reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    FLOAT           reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    CHAR            reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    STRING          reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    IMAGE           reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    ID              reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+    VOID            reduce using rule 5 (camDeclaration -> CAM WEBCAM COLON ID NEWLINE .)
+
+
+state 70
+
+    (6) camDeclaration -> CAM PICAM COLON ID NEWLINE .
+
+    INPUT           reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    OUTPUT          reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    PWM             reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    BOOL            reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    INT             reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    FLOAT           reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    CHAR            reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    STRING          reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    IMAGE           reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    ID              reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+    VOID            reduce using rule 6 (camDeclaration -> CAM PICAM COLON ID NEWLINE .)
+
+
+state 71
+
+    (12) pwmDeclaration -> PWM pinList . NEWLINE
+
+    NEWLINE         shift and go to state 96
+
+
+state 72
+
+    (10) outputsDeclaration -> OUTPUT pinList NEWLINE .
+
+    PWM             reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    BOOL            reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    INT             reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    FLOAT           reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    CHAR            reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    STRING          reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    IMAGE           reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    ID              reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+    VOID            reduce using rule 10 (outputsDeclaration -> OUTPUT pinList NEWLINE .)
+
+
+state 73
+
+    (13) pinList -> C_INT COLON ID .
+    (14) pinList -> C_INT COLON ID . COMMA pinList
+
+    NEWLINE         reduce using rule 13 (pinList -> C_INT COLON ID .)
+    COMMA           shift and go to state 97
+
+
+state 74
+
+    (34) main -> VOID MAIN . LPAREN RPAREN NEWLINE block
+    (35) main -> VOID MAIN . LPAREN tipo ID parameterList RPAREN NEWLINE block
+
+    LPAREN          shift and go to state 98
+
+
+state 75
+
+    (25) functions -> tipo ID LPAREN . RPAREN NEWLINE block functions
+    (26) functions -> tipo ID LPAREN . tipo ID parameterList RPAREN NEWLINE block functions
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+
+    RPAREN          shift and go to state 99
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+    tipo                           shift and go to state 100
+
+state 76
+
+    (27) functions -> VOID ID LPAREN . RPAREN NEWLINE block functions
+    (28) functions -> VOID ID LPAREN . tipo ID parameterList RPAREN NEWLINE block functions
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+
+    RPAREN          shift and go to state 101
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+    tipo                           shift and go to state 102
+
+state 77
+
+    (60) exp -> term moreTerms .
+
+    GREATER_THAN    reduce using rule 60 (exp -> term moreTerms .)
+    LESS_THAN       reduce using rule 60 (exp -> term moreTerms .)
+    LESS_EQUAL_THAN reduce using rule 60 (exp -> term moreTerms .)
+    GREATER_EQUAL_THAN reduce using rule 60 (exp -> term moreTerms .)
+    NOT_EQUAL_THAN  reduce using rule 60 (exp -> term moreTerms .)
+    SAME_AS         reduce using rule 60 (exp -> term moreTerms .)
+    NEWLINE         reduce using rule 60 (exp -> term moreTerms .)
+    COMMA           reduce using rule 60 (exp -> term moreTerms .)
+    RPAREN          reduce using rule 60 (exp -> term moreTerms .)
+    COLON           reduce using rule 60 (exp -> term moreTerms .)
+
+
+state 78
+
+    (62) moreTerms -> PLUS . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 103
+    funct                          shift and go to state 59
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+
+state 79
+
+    (63) moreTerms -> MINUS . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 104
+    funct                          shift and go to state 59
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+
+state 80
+
+    (61) moreTerms -> empty .
+
+    GREATER_THAN    reduce using rule 61 (moreTerms -> empty .)
+    LESS_THAN       reduce using rule 61 (moreTerms -> empty .)
+    LESS_EQUAL_THAN reduce using rule 61 (moreTerms -> empty .)
+    GREATER_EQUAL_THAN reduce using rule 61 (moreTerms -> empty .)
+    NOT_EQUAL_THAN  reduce using rule 61 (moreTerms -> empty .)
+    SAME_AS         reduce using rule 61 (moreTerms -> empty .)
+    NEWLINE         reduce using rule 61 (moreTerms -> empty .)
+    RPAREN          reduce using rule 61 (moreTerms -> empty .)
+    COMMA           reduce using rule 61 (moreTerms -> empty .)
+    COLON           reduce using rule 61 (moreTerms -> empty .)
+
+
+state 81
+
+    (69) factor -> LPAREN expression . RPAREN
+
+    RPAREN          shift and go to state 105
+
+
+state 82
+
+    (48) funct -> ID LPAREN . RPAREN
+    (49) funct -> ID LPAREN . expression expressionList RPAREN
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    RPAREN          shift and go to state 106
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 107
+
+state 83
+
+    (53) expression -> exp compareToken . exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 108
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+
+state 84
+
+    (57) compareToken -> GREATER_EQUAL_THAN .
+
+    LPAREN          reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    ID              reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    C_BOOL          reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    C_INT           reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    C_FLOAT         reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    C_CHAR          reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+    C_STRING        reduce using rule 57 (compareToken -> GREATER_EQUAL_THAN .)
+
+
+state 85
+
+    (56) compareToken -> LESS_EQUAL_THAN .
+
+    LPAREN          reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    ID              reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    C_BOOL          reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    C_INT           reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    C_FLOAT         reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    C_CHAR          reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+    C_STRING        reduce using rule 56 (compareToken -> LESS_EQUAL_THAN .)
+
+
+state 86
+
+    (59) compareToken -> SAME_AS .
+
+    LPAREN          reduce using rule 59 (compareToken -> SAME_AS .)
+    ID              reduce using rule 59 (compareToken -> SAME_AS .)
+    C_BOOL          reduce using rule 59 (compareToken -> SAME_AS .)
+    C_INT           reduce using rule 59 (compareToken -> SAME_AS .)
+    C_FLOAT         reduce using rule 59 (compareToken -> SAME_AS .)
+    C_CHAR          reduce using rule 59 (compareToken -> SAME_AS .)
+    C_STRING        reduce using rule 59 (compareToken -> SAME_AS .)
+
+
+state 87
+
+    (58) compareToken -> NOT_EQUAL_THAN .
+
+    LPAREN          reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    ID              reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    C_BOOL          reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    C_INT           reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    C_FLOAT         reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    C_CHAR          reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+    C_STRING        reduce using rule 58 (compareToken -> NOT_EQUAL_THAN .)
+
+
+state 88
+
+    (54) compareToken -> GREATER_THAN .
+
+    LPAREN          reduce using rule 54 (compareToken -> GREATER_THAN .)
+    ID              reduce using rule 54 (compareToken -> GREATER_THAN .)
+    C_BOOL          reduce using rule 54 (compareToken -> GREATER_THAN .)
+    C_INT           reduce using rule 54 (compareToken -> GREATER_THAN .)
+    C_FLOAT         reduce using rule 54 (compareToken -> GREATER_THAN .)
+    C_CHAR          reduce using rule 54 (compareToken -> GREATER_THAN .)
+    C_STRING        reduce using rule 54 (compareToken -> GREATER_THAN .)
+
+
+state 89
+
+    (55) compareToken -> LESS_THAN .
+
+    LPAREN          reduce using rule 55 (compareToken -> LESS_THAN .)
+    ID              reduce using rule 55 (compareToken -> LESS_THAN .)
+    C_BOOL          reduce using rule 55 (compareToken -> LESS_THAN .)
+    C_INT           reduce using rule 55 (compareToken -> LESS_THAN .)
+    C_FLOAT         reduce using rule 55 (compareToken -> LESS_THAN .)
+    C_CHAR          reduce using rule 55 (compareToken -> LESS_THAN .)
+    C_STRING        reduce using rule 55 (compareToken -> LESS_THAN .)
+
+
+state 90
+
+    (64) term -> factor moreFactors .
+
+    PLUS            reduce using rule 64 (term -> factor moreFactors .)
+    MINUS           reduce using rule 64 (term -> factor moreFactors .)
+    GREATER_THAN    reduce using rule 64 (term -> factor moreFactors .)
+    LESS_THAN       reduce using rule 64 (term -> factor moreFactors .)
+    LESS_EQUAL_THAN reduce using rule 64 (term -> factor moreFactors .)
+    GREATER_EQUAL_THAN reduce using rule 64 (term -> factor moreFactors .)
+    NOT_EQUAL_THAN  reduce using rule 64 (term -> factor moreFactors .)
+    SAME_AS         reduce using rule 64 (term -> factor moreFactors .)
+    RPAREN          reduce using rule 64 (term -> factor moreFactors .)
+    NEWLINE         reduce using rule 64 (term -> factor moreFactors .)
+    COMMA           reduce using rule 64 (term -> factor moreFactors .)
+    COLON           reduce using rule 64 (term -> factor moreFactors .)
+
+
+state 91
+
+    (66) moreFactors -> DIVIDE . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    funct                          shift and go to state 59
+    cvar                           shift and go to state 67
+    factor                         shift and go to state 109
+
+state 92
+
+    (67) moreFactors -> TIMES . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    funct                          shift and go to state 59
+    cvar                           shift and go to state 67
+    factor                         shift and go to state 110
+
+state 93
+
+    (65) moreFactors -> empty .
+
+    PLUS            reduce using rule 65 (moreFactors -> empty .)
+    MINUS           reduce using rule 65 (moreFactors -> empty .)
+    GREATER_THAN    reduce using rule 65 (moreFactors -> empty .)
+    LESS_THAN       reduce using rule 65 (moreFactors -> empty .)
+    LESS_EQUAL_THAN reduce using rule 65 (moreFactors -> empty .)
+    GREATER_EQUAL_THAN reduce using rule 65 (moreFactors -> empty .)
+    NOT_EQUAL_THAN  reduce using rule 65 (moreFactors -> empty .)
+    SAME_AS         reduce using rule 65 (moreFactors -> empty .)
+    NEWLINE         reduce using rule 65 (moreFactors -> empty .)
+    RPAREN          reduce using rule 65 (moreFactors -> empty .)
+    COMMA           reduce using rule 65 (moreFactors -> empty .)
+    COLON           reduce using rule 65 (moreFactors -> empty .)
+
+
+state 94
+
+    (68) moreFactors -> MOD . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    funct                          shift and go to state 59
+    cvar                           shift and go to state 67
+    factor                         shift and go to state 111
+
+state 95
+
+    (32) assign -> ID EQUAL expression NEWLINE . assign
+    (32) assign -> . ID EQUAL expression NEWLINE assign
+    (33) assign -> . empty
+    (2) empty -> .
+
+    ID              shift and go to state 26
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+    assign                         shift and go to state 112
+    empty                          shift and go to state 27
+
+state 96
+
+    (12) pwmDeclaration -> PWM pinList NEWLINE .
+
+    BOOL            reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    INT             reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    FLOAT           reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    CHAR            reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    STRING          reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    IMAGE           reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    ID              reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+    VOID            reduce using rule 12 (pwmDeclaration -> PWM pinList NEWLINE .)
+
+
+state 97
+
+    (14) pinList -> C_INT COLON ID COMMA . pinList
+    (13) pinList -> . C_INT COLON ID
+    (14) pinList -> . C_INT COLON ID COMMA pinList
+
+    C_INT           shift and go to state 34
+
+    pinList                        shift and go to state 113
+
+state 98
+
+    (34) main -> VOID MAIN LPAREN . RPAREN NEWLINE block
+    (35) main -> VOID MAIN LPAREN . tipo ID parameterList RPAREN NEWLINE block
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+
+    RPAREN          shift and go to state 114
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+    tipo                           shift and go to state 115
+
+state 99
+
+    (25) functions -> tipo ID LPAREN RPAREN . NEWLINE block functions
+
+    NEWLINE         shift and go to state 116
+
+
+state 100
+
+    (26) functions -> tipo ID LPAREN tipo . ID parameterList RPAREN NEWLINE block functions
+
+    ID              shift and go to state 117
+
+
+state 101
+
+    (27) functions -> VOID ID LPAREN RPAREN . NEWLINE block functions
+
+    NEWLINE         shift and go to state 118
+
+
+state 102
+
+    (28) functions -> VOID ID LPAREN tipo . ID parameterList RPAREN NEWLINE block functions
+
+    ID              shift and go to state 119
+
+
+state 103
+
+    (62) moreTerms -> PLUS term . moreTerms
+    (61) moreTerms -> . empty
+    (62) moreTerms -> . PLUS term moreTerms
+    (63) moreTerms -> . MINUS term moreTerms
+    (2) empty -> .
+
+    PLUS            shift and go to state 78
+    MINUS           shift and go to state 79
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreTerms                      shift and go to state 120
+    empty                          shift and go to state 80
+
+state 104
+
+    (63) moreTerms -> MINUS term . moreTerms
+    (61) moreTerms -> . empty
+    (62) moreTerms -> . PLUS term moreTerms
+    (63) moreTerms -> . MINUS term moreTerms
+    (2) empty -> .
+
+    PLUS            shift and go to state 78
+    MINUS           shift and go to state 79
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreTerms                      shift and go to state 121
+    empty                          shift and go to state 80
+
+state 105
+
+    (69) factor -> LPAREN expression RPAREN .
+
+    DIVIDE          reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    MOD             reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    GREATER_THAN    reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    LESS_THAN       reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    LESS_EQUAL_THAN reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    GREATER_EQUAL_THAN reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    NOT_EQUAL_THAN  reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    SAME_AS         reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+    COLON           reduce using rule 69 (factor -> LPAREN expression RPAREN .)
+
+
+state 106
+
+    (48) funct -> ID LPAREN RPAREN .
+
+    DIVIDE          reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    TIMES           reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    MOD             reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    PLUS            reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    MINUS           reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    GREATER_THAN    reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    LESS_THAN       reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    LESS_EQUAL_THAN reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    GREATER_EQUAL_THAN reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    NOT_EQUAL_THAN  reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    SAME_AS         reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    COLON           reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    NEWLINE         reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    RPAREN          reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+    COMMA           reduce using rule 48 (funct -> ID LPAREN RPAREN .)
+
+
+state 107
+
+    (49) funct -> ID LPAREN expression . expressionList RPAREN
+    (50) expressionList -> . empty
+    (51) expressionList -> . COMMA expression expressionList
+    (2) empty -> .
+
+    COMMA           shift and go to state 123
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    expressionList                 shift and go to state 122
+    empty                          shift and go to state 124
+
+state 108
+
+    (53) expression -> exp compareToken exp .
+
+    RPAREN          reduce using rule 53 (expression -> exp compareToken exp .)
+    COLON           reduce using rule 53 (expression -> exp compareToken exp .)
+    COMMA           reduce using rule 53 (expression -> exp compareToken exp .)
+    NEWLINE         reduce using rule 53 (expression -> exp compareToken exp .)
+
+
+state 109
+
+    (66) moreFactors -> DIVIDE factor . moreFactors
+    (65) moreFactors -> . empty
+    (66) moreFactors -> . DIVIDE factor moreFactors
+    (67) moreFactors -> . TIMES factor moreFactors
+    (68) moreFactors -> . MOD factor moreFactors
+    (2) empty -> .
+
+    DIVIDE          shift and go to state 91
+    TIMES           shift and go to state 92
+    MOD             shift and go to state 94
+    PLUS            reduce using rule 2 (empty -> .)
+    MINUS           reduce using rule 2 (empty -> .)
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreFactors                    shift and go to state 125
+    empty                          shift and go to state 93
+
+state 110
+
+    (67) moreFactors -> TIMES factor . moreFactors
+    (65) moreFactors -> . empty
+    (66) moreFactors -> . DIVIDE factor moreFactors
+    (67) moreFactors -> . TIMES factor moreFactors
+    (68) moreFactors -> . MOD factor moreFactors
+    (2) empty -> .
+
+    DIVIDE          shift and go to state 91
+    TIMES           shift and go to state 92
+    MOD             shift and go to state 94
+    PLUS            reduce using rule 2 (empty -> .)
+    MINUS           reduce using rule 2 (empty -> .)
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreFactors                    shift and go to state 126
+    empty                          shift and go to state 93
+
+state 111
+
+    (68) moreFactors -> MOD factor . moreFactors
+    (65) moreFactors -> . empty
+    (66) moreFactors -> . DIVIDE factor moreFactors
+    (67) moreFactors -> . TIMES factor moreFactors
+    (68) moreFactors -> . MOD factor moreFactors
+    (2) empty -> .
+
+    DIVIDE          shift and go to state 91
+    TIMES           shift and go to state 92
+    MOD             shift and go to state 94
+    PLUS            reduce using rule 2 (empty -> .)
+    MINUS           reduce using rule 2 (empty -> .)
+    GREATER_THAN    reduce using rule 2 (empty -> .)
+    LESS_THAN       reduce using rule 2 (empty -> .)
+    LESS_EQUAL_THAN reduce using rule 2 (empty -> .)
+    GREATER_EQUAL_THAN reduce using rule 2 (empty -> .)
+    NOT_EQUAL_THAN  reduce using rule 2 (empty -> .)
+    SAME_AS         reduce using rule 2 (empty -> .)
+    NEWLINE         reduce using rule 2 (empty -> .)
+    RPAREN          reduce using rule 2 (empty -> .)
+    COMMA           reduce using rule 2 (empty -> .)
+    COLON           reduce using rule 2 (empty -> .)
+
+    moreFactors                    shift and go to state 127
+    empty                          shift and go to state 93
+
+state 112
+
+    (32) assign -> ID EQUAL expression NEWLINE assign .
+
+    NEWLINE         reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    VOID            reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    BOOL            reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    INT             reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    FLOAT           reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    CHAR            reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    STRING          reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    IMAGE           reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    $end            reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    WHILE           reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+    ELSE            reduce using rule 32 (assign -> ID EQUAL expression NEWLINE assign .)
+
+
+state 113
+
+    (14) pinList -> C_INT COLON ID COMMA pinList .
+
+    NEWLINE         reduce using rule 14 (pinList -> C_INT COLON ID COMMA pinList .)
+
+
+state 114
+
+    (34) main -> VOID MAIN LPAREN RPAREN . NEWLINE block
+
+    NEWLINE         shift and go to state 128
+
+
+state 115
+
+    (35) main -> VOID MAIN LPAREN tipo . ID parameterList RPAREN NEWLINE block
+
+    ID              shift and go to state 129
+
+
+state 116
+
+    (25) functions -> tipo ID LPAREN RPAREN NEWLINE . block functions
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+
+    block                          shift and go to state 132
+    empty                          shift and go to state 131
+
+state 117
+
+    (26) functions -> tipo ID LPAREN tipo ID . parameterList RPAREN NEWLINE block functions
+    (30) parameterList -> . empty
+    (31) parameterList -> . COMMA tipo ID parameterList
+    (2) empty -> .
+
+    COMMA           shift and go to state 134
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    parameterList                  shift and go to state 133
+    empty                          shift and go to state 135
+
+state 118
+
+    (27) functions -> VOID ID LPAREN RPAREN NEWLINE . block functions
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 136
+
+state 119
+
+    (28) functions -> VOID ID LPAREN tipo ID . parameterList RPAREN NEWLINE block functions
+    (30) parameterList -> . empty
+    (31) parameterList -> . COMMA tipo ID parameterList
+    (2) empty -> .
+
+    COMMA           shift and go to state 134
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    parameterList                  shift and go to state 137
+    empty                          shift and go to state 135
+
+state 120
+
+    (62) moreTerms -> PLUS term moreTerms .
+
+    GREATER_THAN    reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    LESS_THAN       reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    LESS_EQUAL_THAN reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    GREATER_EQUAL_THAN reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    NOT_EQUAL_THAN  reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    SAME_AS         reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    NEWLINE         reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    RPAREN          reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    COMMA           reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+    COLON           reduce using rule 62 (moreTerms -> PLUS term moreTerms .)
+
+
+state 121
+
+    (63) moreTerms -> MINUS term moreTerms .
+
+    GREATER_THAN    reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    LESS_THAN       reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    LESS_EQUAL_THAN reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    GREATER_EQUAL_THAN reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    NOT_EQUAL_THAN  reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    SAME_AS         reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    NEWLINE         reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    RPAREN          reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    COMMA           reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+    COLON           reduce using rule 63 (moreTerms -> MINUS term moreTerms .)
+
+
+state 122
+
+    (49) funct -> ID LPAREN expression expressionList . RPAREN
+
+    RPAREN          shift and go to state 138
+
+
+state 123
+
+    (51) expressionList -> COMMA . expression expressionList
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 139
+
+state 124
+
+    (50) expressionList -> empty .
+
+    RPAREN          reduce using rule 50 (expressionList -> empty .)
+
+
+state 125
+
+    (66) moreFactors -> DIVIDE factor moreFactors .
+
+    PLUS            reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    MINUS           reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    GREATER_THAN    reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    LESS_THAN       reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    LESS_EQUAL_THAN reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    GREATER_EQUAL_THAN reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    NOT_EQUAL_THAN  reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    SAME_AS         reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    NEWLINE         reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    RPAREN          reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    COMMA           reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+    COLON           reduce using rule 66 (moreFactors -> DIVIDE factor moreFactors .)
+
+
+state 126
+
+    (67) moreFactors -> TIMES factor moreFactors .
+
+    PLUS            reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    MINUS           reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    GREATER_THAN    reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    LESS_THAN       reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    LESS_EQUAL_THAN reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    GREATER_EQUAL_THAN reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    NOT_EQUAL_THAN  reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    SAME_AS         reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    NEWLINE         reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    RPAREN          reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    COMMA           reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+    COLON           reduce using rule 67 (moreFactors -> TIMES factor moreFactors .)
+
+
+state 127
+
+    (68) moreFactors -> MOD factor moreFactors .
+
+    PLUS            reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    MINUS           reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    GREATER_THAN    reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    LESS_THAN       reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    LESS_EQUAL_THAN reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    GREATER_EQUAL_THAN reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    NOT_EQUAL_THAN  reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    SAME_AS         reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    NEWLINE         reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    RPAREN          reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    COMMA           reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+    COLON           reduce using rule 68 (moreFactors -> MOD factor moreFactors .)
+
+
+state 128
+
+    (34) main -> VOID MAIN LPAREN RPAREN NEWLINE . block
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    $end            reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 140
+
+state 129
+
+    (35) main -> VOID MAIN LPAREN tipo ID . parameterList RPAREN NEWLINE block
+    (30) parameterList -> . empty
+    (31) parameterList -> . COMMA tipo ID parameterList
+    (2) empty -> .
+
+    COMMA           shift and go to state 134
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    parameterList                  shift and go to state 141
+    empty                          shift and go to state 135
+
+state 130
+
+    (37) block -> TAB . statement moreStatements
+    (40) statement -> . assign
+    (41) statement -> . condition
+    (42) statement -> . cycle
+    (43) statement -> . funct NEWLINE
+    (32) assign -> . ID EQUAL expression NEWLINE assign
+    (33) assign -> . empty
+    (44) condition -> . IF expression COLON NEWLINE block
+    (45) condition -> . IF expression COLON NEWLINE block ELSE COLON NEWLINE block
+    (46) cycle -> . WHILE expression COLON NEWLINE block
+    (47) cycle -> . DO COLON NEWLINE block WHILE expression NEWLINE
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+    (2) empty -> .
+
+  ! shift/reduce conflict for WHILE resolved as shift
+    ID              shift and go to state 145
+    IF              shift and go to state 144
+    WHILE           shift and go to state 146
+    DO              shift and go to state 142
+    NEWLINE         reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+  ! WHILE           [ reduce using rule 2 (empty -> .) ]
+
+    funct                          shift and go to state 143
+    empty                          shift and go to state 27
+    statement                      shift and go to state 147
+    assign                         shift and go to state 148
+    condition                      shift and go to state 149
+    cycle                          shift and go to state 150
+
+state 131
+
+    (36) block -> empty .
+
+    $end            reduce using rule 36 (block -> empty .)
+    WHILE           reduce using rule 36 (block -> empty .)
+    NEWLINE         reduce using rule 36 (block -> empty .)
+    VOID            reduce using rule 36 (block -> empty .)
+    BOOL            reduce using rule 36 (block -> empty .)
+    INT             reduce using rule 36 (block -> empty .)
+    FLOAT           reduce using rule 36 (block -> empty .)
+    CHAR            reduce using rule 36 (block -> empty .)
+    STRING          reduce using rule 36 (block -> empty .)
+    IMAGE           reduce using rule 36 (block -> empty .)
+    ELSE            reduce using rule 36 (block -> empty .)
+
+
+state 132
+
+    (25) functions -> tipo ID LPAREN RPAREN NEWLINE block . functions
+    (25) functions -> . tipo ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> . tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (27) functions -> . VOID ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> . VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (29) functions -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for VOID resolved as shift
+    VOID            shift and go to state 39
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+  ! VOID            [ reduce using rule 2 (empty -> .) ]
+
+    functions                      shift and go to state 151
+    empty                          shift and go to state 40
+    tipo                           shift and go to state 38
+
+state 133
+
+    (26) functions -> tipo ID LPAREN tipo ID parameterList . RPAREN NEWLINE block functions
+
+    RPAREN          shift and go to state 152
+
+
+state 134
+
+    (31) parameterList -> COMMA . tipo ID parameterList
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+    tipo                           shift and go to state 153
+
+state 135
+
+    (30) parameterList -> empty .
+
+    RPAREN          reduce using rule 30 (parameterList -> empty .)
+
+
+state 136
+
+    (27) functions -> VOID ID LPAREN RPAREN NEWLINE block . functions
+    (25) functions -> . tipo ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> . tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (27) functions -> . VOID ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> . VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (29) functions -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for VOID resolved as shift
+    VOID            shift and go to state 39
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+  ! VOID            [ reduce using rule 2 (empty -> .) ]
+
+    functions                      shift and go to state 154
+    empty                          shift and go to state 40
+    tipo                           shift and go to state 38
+
+state 137
+
+    (28) functions -> VOID ID LPAREN tipo ID parameterList . RPAREN NEWLINE block functions
+
+    RPAREN          shift and go to state 155
+
+
+state 138
+
+    (49) funct -> ID LPAREN expression expressionList RPAREN .
+
+    DIVIDE          reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    TIMES           reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    MOD             reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    PLUS            reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    MINUS           reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    GREATER_THAN    reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    LESS_THAN       reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    LESS_EQUAL_THAN reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    GREATER_EQUAL_THAN reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    NOT_EQUAL_THAN  reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    SAME_AS         reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    COLON           reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    NEWLINE         reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    RPAREN          reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+    COMMA           reduce using rule 49 (funct -> ID LPAREN expression expressionList RPAREN .)
+
+
+state 139
+
+    (51) expressionList -> COMMA expression . expressionList
+    (50) expressionList -> . empty
+    (51) expressionList -> . COMMA expression expressionList
+    (2) empty -> .
+
+    COMMA           shift and go to state 123
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    expressionList                 shift and go to state 156
+    empty                          shift and go to state 124
+
+state 140
+
+    (34) main -> VOID MAIN LPAREN RPAREN NEWLINE block .
+
+    $end            reduce using rule 34 (main -> VOID MAIN LPAREN RPAREN NEWLINE block .)
+
+
+state 141
+
+    (35) main -> VOID MAIN LPAREN tipo ID parameterList . RPAREN NEWLINE block
+
+    RPAREN          shift and go to state 157
+
+
+state 142
+
+    (47) cycle -> DO . COLON NEWLINE block WHILE expression NEWLINE
+
+    COLON           shift and go to state 158
+
+
+state 143
+
+    (43) statement -> funct . NEWLINE
+
+    NEWLINE         shift and go to state 159
+
+
+state 144
+
+    (44) condition -> IF . expression COLON NEWLINE block
+    (45) condition -> IF . expression COLON NEWLINE block ELSE COLON NEWLINE block
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 160
+
+state 145
+
+    (32) assign -> ID . EQUAL expression NEWLINE assign
+    (48) funct -> ID . LPAREN RPAREN
+    (49) funct -> ID . LPAREN expression expressionList RPAREN
+
+    EQUAL           shift and go to state 41
+    LPAREN          shift and go to state 82
+
+
+state 146
+
+    (46) cycle -> WHILE . expression COLON NEWLINE block
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 161
+
+state 147
+
+    (37) block -> TAB statement . moreStatements
+    (38) moreStatements -> . empty
+    (39) moreStatements -> . NEWLINE TAB statement moreStatements
+    (2) empty -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 162
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+  ! NEWLINE         [ reduce using rule 2 (empty -> .) ]
+
+    empty                          shift and go to state 163
+    moreStatements                 shift and go to state 164
+
+state 148
+
+    (40) statement -> assign .
+
+    NEWLINE         reduce using rule 40 (statement -> assign .)
+    VOID            reduce using rule 40 (statement -> assign .)
+    BOOL            reduce using rule 40 (statement -> assign .)
+    INT             reduce using rule 40 (statement -> assign .)
+    FLOAT           reduce using rule 40 (statement -> assign .)
+    CHAR            reduce using rule 40 (statement -> assign .)
+    STRING          reduce using rule 40 (statement -> assign .)
+    IMAGE           reduce using rule 40 (statement -> assign .)
+    $end            reduce using rule 40 (statement -> assign .)
+    WHILE           reduce using rule 40 (statement -> assign .)
+    ELSE            reduce using rule 40 (statement -> assign .)
+
+
+state 149
+
+    (41) statement -> condition .
+
+    NEWLINE         reduce using rule 41 (statement -> condition .)
+    VOID            reduce using rule 41 (statement -> condition .)
+    BOOL            reduce using rule 41 (statement -> condition .)
+    INT             reduce using rule 41 (statement -> condition .)
+    FLOAT           reduce using rule 41 (statement -> condition .)
+    CHAR            reduce using rule 41 (statement -> condition .)
+    STRING          reduce using rule 41 (statement -> condition .)
+    IMAGE           reduce using rule 41 (statement -> condition .)
+    $end            reduce using rule 41 (statement -> condition .)
+    WHILE           reduce using rule 41 (statement -> condition .)
+    ELSE            reduce using rule 41 (statement -> condition .)
+
+
+state 150
+
+    (42) statement -> cycle .
+
+    NEWLINE         reduce using rule 42 (statement -> cycle .)
+    VOID            reduce using rule 42 (statement -> cycle .)
+    BOOL            reduce using rule 42 (statement -> cycle .)
+    INT             reduce using rule 42 (statement -> cycle .)
+    FLOAT           reduce using rule 42 (statement -> cycle .)
+    CHAR            reduce using rule 42 (statement -> cycle .)
+    STRING          reduce using rule 42 (statement -> cycle .)
+    IMAGE           reduce using rule 42 (statement -> cycle .)
+    $end            reduce using rule 42 (statement -> cycle .)
+    WHILE           reduce using rule 42 (statement -> cycle .)
+    ELSE            reduce using rule 42 (statement -> cycle .)
+
+
+state 151
+
+    (25) functions -> tipo ID LPAREN RPAREN NEWLINE block functions .
+
+    VOID            reduce using rule 25 (functions -> tipo ID LPAREN RPAREN NEWLINE block functions .)
+
+
+state 152
+
+    (26) functions -> tipo ID LPAREN tipo ID parameterList RPAREN . NEWLINE block functions
+
+    NEWLINE         shift and go to state 165
+
+
+state 153
+
+    (31) parameterList -> COMMA tipo . ID parameterList
+
+    ID              shift and go to state 166
+
+
+state 154
+
+    (27) functions -> VOID ID LPAREN RPAREN NEWLINE block functions .
+
+    VOID            reduce using rule 27 (functions -> VOID ID LPAREN RPAREN NEWLINE block functions .)
+
+
+state 155
+
+    (28) functions -> VOID ID LPAREN tipo ID parameterList RPAREN . NEWLINE block functions
+
+    NEWLINE         shift and go to state 167
+
+
+state 156
+
+    (51) expressionList -> COMMA expression expressionList .
+
+    RPAREN          reduce using rule 51 (expressionList -> COMMA expression expressionList .)
+
+
+state 157
+
+    (35) main -> VOID MAIN LPAREN tipo ID parameterList RPAREN . NEWLINE block
+
+    NEWLINE         shift and go to state 168
+
+
+state 158
+
+    (47) cycle -> DO COLON . NEWLINE block WHILE expression NEWLINE
+
+    NEWLINE         shift and go to state 169
+
+
+state 159
+
+    (43) statement -> funct NEWLINE .
+
+    NEWLINE         reduce using rule 43 (statement -> funct NEWLINE .)
+    VOID            reduce using rule 43 (statement -> funct NEWLINE .)
+    BOOL            reduce using rule 43 (statement -> funct NEWLINE .)
+    INT             reduce using rule 43 (statement -> funct NEWLINE .)
+    FLOAT           reduce using rule 43 (statement -> funct NEWLINE .)
+    CHAR            reduce using rule 43 (statement -> funct NEWLINE .)
+    STRING          reduce using rule 43 (statement -> funct NEWLINE .)
+    IMAGE           reduce using rule 43 (statement -> funct NEWLINE .)
+    $end            reduce using rule 43 (statement -> funct NEWLINE .)
+    WHILE           reduce using rule 43 (statement -> funct NEWLINE .)
+    ELSE            reduce using rule 43 (statement -> funct NEWLINE .)
+
+
+state 160
+
+    (44) condition -> IF expression . COLON NEWLINE block
+    (45) condition -> IF expression . COLON NEWLINE block ELSE COLON NEWLINE block
+
+    COLON           shift and go to state 170
+
+
+state 161
+
+    (46) cycle -> WHILE expression . COLON NEWLINE block
+
+    COLON           shift and go to state 171
+
+
+state 162
+
+    (39) moreStatements -> NEWLINE . TAB statement moreStatements
+
+    TAB             shift and go to state 172
+
+
+state 163
+
+    (38) moreStatements -> empty .
+
+    NEWLINE         reduce using rule 38 (moreStatements -> empty .)
+    VOID            reduce using rule 38 (moreStatements -> empty .)
+    BOOL            reduce using rule 38 (moreStatements -> empty .)
+    INT             reduce using rule 38 (moreStatements -> empty .)
+    FLOAT           reduce using rule 38 (moreStatements -> empty .)
+    CHAR            reduce using rule 38 (moreStatements -> empty .)
+    STRING          reduce using rule 38 (moreStatements -> empty .)
+    IMAGE           reduce using rule 38 (moreStatements -> empty .)
+    $end            reduce using rule 38 (moreStatements -> empty .)
+    WHILE           reduce using rule 38 (moreStatements -> empty .)
+    ELSE            reduce using rule 38 (moreStatements -> empty .)
+
+
+state 164
+
+    (37) block -> TAB statement moreStatements .
+
+    $end            reduce using rule 37 (block -> TAB statement moreStatements .)
+    WHILE           reduce using rule 37 (block -> TAB statement moreStatements .)
+    NEWLINE         reduce using rule 37 (block -> TAB statement moreStatements .)
+    VOID            reduce using rule 37 (block -> TAB statement moreStatements .)
+    BOOL            reduce using rule 37 (block -> TAB statement moreStatements .)
+    INT             reduce using rule 37 (block -> TAB statement moreStatements .)
+    FLOAT           reduce using rule 37 (block -> TAB statement moreStatements .)
+    CHAR            reduce using rule 37 (block -> TAB statement moreStatements .)
+    STRING          reduce using rule 37 (block -> TAB statement moreStatements .)
+    IMAGE           reduce using rule 37 (block -> TAB statement moreStatements .)
+    ELSE            reduce using rule 37 (block -> TAB statement moreStatements .)
+
+
+state 165
+
+    (26) functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE . block functions
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+
+    block                          shift and go to state 173
+    empty                          shift and go to state 131
+
+state 166
+
+    (31) parameterList -> COMMA tipo ID . parameterList
+    (30) parameterList -> . empty
+    (31) parameterList -> . COMMA tipo ID parameterList
+    (2) empty -> .
+
+    COMMA           shift and go to state 134
+    RPAREN          reduce using rule 2 (empty -> .)
+
+    parameterList                  shift and go to state 174
+    empty                          shift and go to state 135
+
+state 167
+
+    (28) functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE . block functions
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+
+    block                          shift and go to state 175
+    empty                          shift and go to state 131
+
+state 168
+
+    (35) main -> VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE . block
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    $end            reduce using rule 2 (empty -> .)
+
+    block                          shift and go to state 176
+    empty                          shift and go to state 131
+
+state 169
+
+    (47) cycle -> DO COLON NEWLINE . block WHILE expression NEWLINE
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    WHILE           reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 177
+
+state 170
+
+    (44) condition -> IF expression COLON . NEWLINE block
+    (45) condition -> IF expression COLON . NEWLINE block ELSE COLON NEWLINE block
+
+    NEWLINE         shift and go to state 178
+
+
+state 171
+
+    (46) cycle -> WHILE expression COLON . NEWLINE block
+
+    NEWLINE         shift and go to state 179
+
+
+state 172
+
+    (39) moreStatements -> NEWLINE TAB . statement moreStatements
+    (40) statement -> . assign
+    (41) statement -> . condition
+    (42) statement -> . cycle
+    (43) statement -> . funct NEWLINE
+    (32) assign -> . ID EQUAL expression NEWLINE assign
+    (33) assign -> . empty
+    (44) condition -> . IF expression COLON NEWLINE block
+    (45) condition -> . IF expression COLON NEWLINE block ELSE COLON NEWLINE block
+    (46) cycle -> . WHILE expression COLON NEWLINE block
+    (47) cycle -> . DO COLON NEWLINE block WHILE expression NEWLINE
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+    (2) empty -> .
+
+  ! shift/reduce conflict for WHILE resolved as shift
+    ID              shift and go to state 145
+    IF              shift and go to state 144
+    WHILE           shift and go to state 146
+    DO              shift and go to state 142
+    NEWLINE         reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+  ! WHILE           [ reduce using rule 2 (empty -> .) ]
+
+    funct                          shift and go to state 143
+    empty                          shift and go to state 27
+    statement                      shift and go to state 180
+    assign                         shift and go to state 148
+    condition                      shift and go to state 149
+    cycle                          shift and go to state 150
+
+state 173
+
+    (26) functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block . functions
+    (25) functions -> . tipo ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> . tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (27) functions -> . VOID ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> . VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (29) functions -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for VOID resolved as shift
+    VOID            shift and go to state 39
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+  ! VOID            [ reduce using rule 2 (empty -> .) ]
+
+    functions                      shift and go to state 181
+    empty                          shift and go to state 40
+    tipo                           shift and go to state 38
+
+state 174
+
+    (31) parameterList -> COMMA tipo ID parameterList .
+
+    RPAREN          reduce using rule 31 (parameterList -> COMMA tipo ID parameterList .)
+
+
+state 175
+
+    (28) functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block . functions
+    (25) functions -> . tipo ID LPAREN RPAREN NEWLINE block functions
+    (26) functions -> . tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (27) functions -> . VOID ID LPAREN RPAREN NEWLINE block functions
+    (28) functions -> . VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+    (29) functions -> . empty
+    (19) tipo -> . BOOL
+    (20) tipo -> . INT
+    (21) tipo -> . FLOAT
+    (22) tipo -> . CHAR
+    (23) tipo -> . STRING
+    (24) tipo -> . IMAGE
+    (2) empty -> .
+
+  ! shift/reduce conflict for VOID resolved as shift
+    VOID            shift and go to state 39
+    BOOL            shift and go to state 15
+    INT             shift and go to state 13
+    FLOAT           shift and go to state 10
+    CHAR            shift and go to state 9
+    STRING          shift and go to state 16
+    IMAGE           shift and go to state 14
+
+  ! VOID            [ reduce using rule 2 (empty -> .) ]
+
+    functions                      shift and go to state 182
+    empty                          shift and go to state 40
+    tipo                           shift and go to state 38
+
+state 176
+
+    (35) main -> VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block .
+
+    $end            reduce using rule 35 (main -> VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block .)
+
+
+state 177
+
+    (47) cycle -> DO COLON NEWLINE block . WHILE expression NEWLINE
+
+    WHILE           shift and go to state 183
+
+
+state 178
+
+    (44) condition -> IF expression COLON NEWLINE . block
+    (45) condition -> IF expression COLON NEWLINE . block ELSE COLON NEWLINE block
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    NEWLINE         reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 184
+
+state 179
+
+    (46) cycle -> WHILE expression COLON NEWLINE . block
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    NEWLINE         reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 185
+
+state 180
+
+    (39) moreStatements -> NEWLINE TAB statement . moreStatements
+    (38) moreStatements -> . empty
+    (39) moreStatements -> . NEWLINE TAB statement moreStatements
+    (2) empty -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 162
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+  ! NEWLINE         [ reduce using rule 2 (empty -> .) ]
+
+    empty                          shift and go to state 163
+    moreStatements                 shift and go to state 186
+
+state 181
+
+    (26) functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions .
+
+    VOID            reduce using rule 26 (functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions .)
+
+
+state 182
+
+    (28) functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions .
+
+    VOID            reduce using rule 28 (functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions .)
+
+
+state 183
+
+    (47) cycle -> DO COLON NEWLINE block WHILE . expression NEWLINE
+    (52) expression -> . exp
+    (53) expression -> . exp compareToken exp
+    (60) exp -> . term moreTerms
+    (64) term -> . factor moreFactors
+    (69) factor -> . LPAREN expression RPAREN
+    (70) factor -> . cvar
+    (71) factor -> . funct
+    (72) cvar -> . ID
+    (73) cvar -> . C_BOOL
+    (74) cvar -> . C_INT
+    (75) cvar -> . C_FLOAT
+    (76) cvar -> . C_CHAR
+    (77) cvar -> . C_STRING
+    (48) funct -> . ID LPAREN RPAREN
+    (49) funct -> . ID LPAREN expression expressionList RPAREN
+
+    LPAREN          shift and go to state 58
+    ID              shift and go to state 62
+    C_BOOL          shift and go to state 61
+    C_INT           shift and go to state 60
+    C_FLOAT         shift and go to state 64
+    C_CHAR          shift and go to state 63
+    C_STRING        shift and go to state 57
+
+    term                           shift and go to state 56
+    funct                          shift and go to state 59
+    exp                            shift and go to state 65
+    factor                         shift and go to state 66
+    cvar                           shift and go to state 67
+    expression                     shift and go to state 187
+
+state 184
+
+    (44) condition -> IF expression COLON NEWLINE block .
+    (45) condition -> IF expression COLON NEWLINE block . ELSE COLON NEWLINE block
+
+  ! shift/reduce conflict for ELSE resolved as shift
+    NEWLINE         reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    VOID            reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    BOOL            reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    INT             reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    FLOAT           reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    CHAR            reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    STRING          reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    IMAGE           reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    $end            reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    WHILE           reduce using rule 44 (condition -> IF expression COLON NEWLINE block .)
+    ELSE            shift and go to state 188
+
+  ! ELSE            [ reduce using rule 44 (condition -> IF expression COLON NEWLINE block .) ]
+
+
+state 185
+
+    (46) cycle -> WHILE expression COLON NEWLINE block .
+
+    NEWLINE         reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    VOID            reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    BOOL            reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    INT             reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    FLOAT           reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    CHAR            reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    STRING          reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    IMAGE           reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    $end            reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    WHILE           reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+    ELSE            reduce using rule 46 (cycle -> WHILE expression COLON NEWLINE block .)
+
+
+state 186
+
+    (39) moreStatements -> NEWLINE TAB statement moreStatements .
+
+    NEWLINE         reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    VOID            reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    BOOL            reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    INT             reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    FLOAT           reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    CHAR            reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    STRING          reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    IMAGE           reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    $end            reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    WHILE           reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+    ELSE            reduce using rule 39 (moreStatements -> NEWLINE TAB statement moreStatements .)
+
+
+state 187
+
+    (47) cycle -> DO COLON NEWLINE block WHILE expression . NEWLINE
+
+    NEWLINE         shift and go to state 189
+
+
+state 188
+
+    (45) condition -> IF expression COLON NEWLINE block ELSE . COLON NEWLINE block
+
+    COLON           shift and go to state 190
+
+
+state 189
+
+    (47) cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .
+
+    NEWLINE         reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    VOID            reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    BOOL            reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    INT             reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    FLOAT           reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    CHAR            reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    STRING          reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    IMAGE           reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    $end            reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    WHILE           reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+    ELSE            reduce using rule 47 (cycle -> DO COLON NEWLINE block WHILE expression NEWLINE .)
+
+
+state 190
+
+    (45) condition -> IF expression COLON NEWLINE block ELSE COLON . NEWLINE block
+
+    NEWLINE         shift and go to state 191
+
+
+state 191
+
+    (45) condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE . block
+    (36) block -> . empty
+    (37) block -> . TAB statement moreStatements
+    (2) empty -> .
+
+    TAB             shift and go to state 130
+    NEWLINE         reduce using rule 2 (empty -> .)
+    VOID            reduce using rule 2 (empty -> .)
+    BOOL            reduce using rule 2 (empty -> .)
+    INT             reduce using rule 2 (empty -> .)
+    FLOAT           reduce using rule 2 (empty -> .)
+    CHAR            reduce using rule 2 (empty -> .)
+    STRING          reduce using rule 2 (empty -> .)
+    IMAGE           reduce using rule 2 (empty -> .)
+    $end            reduce using rule 2 (empty -> .)
+    WHILE           reduce using rule 2 (empty -> .)
+    ELSE            reduce using rule 2 (empty -> .)
+
+    empty                          shift and go to state 131
+    block                          shift and go to state 192
+
+state 192
+
+    (45) condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .
+
+    NEWLINE         reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    VOID            reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    BOOL            reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    INT             reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    FLOAT           reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    CHAR            reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    STRING          reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    IMAGE           reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    $end            reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    WHILE           reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+    ELSE            reduce using rule 45 (condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for BOOL in state 5 resolved as shift
+WARNING: shift/reduce conflict for INT in state 5 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 5 resolved as shift
+WARNING: shift/reduce conflict for CHAR in state 5 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 5 resolved as shift
+WARNING: shift/reduce conflict for IMAGE in state 5 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 25 resolved as shift
+WARNING: shift/reduce conflict for BOOL in state 35 resolved as shift
+WARNING: shift/reduce conflict for INT in state 35 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 35 resolved as shift
+WARNING: shift/reduce conflict for CHAR in state 35 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 35 resolved as shift
+WARNING: shift/reduce conflict for IMAGE in state 35 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 130 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 132 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 136 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 147 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 172 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 173 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 175 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 180 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 184 resolved as shift
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d

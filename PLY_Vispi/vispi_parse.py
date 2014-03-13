@@ -13,7 +13,7 @@ def p_empty(p):
     pass
 
 def p_hardware(p):
-	'hardware : camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration '
+	'hardware : camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration'
 
 def p_camDeclaration(p):
     '''camDeclaration : empty
@@ -37,7 +37,8 @@ def p_pinList(p):
                | C_INT COLON ID COMMA pinList'''
 
 def p_vars(p):
-    'vars : tipo idList NEWLINE'
+    '''vars : tipo idList NEWLINE vars
+            | empty'''
 
 def p_idList(p):
     '''idList : ID
@@ -52,17 +53,19 @@ def p_tipo(p):
             | IMAGE'''
 
 def p_functions(p):
-    '''functions : tipo ID LPAREN RPAREN NEWLINE block
-                 | tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block
-                 | VOID ID LPAREN RPAREN NEWLINE block
-                 | VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block'''
+    '''functions : tipo ID LPAREN RPAREN NEWLINE block functions
+                 | tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+                 | VOID ID LPAREN RPAREN NEWLINE block functions
+                 | VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block functions
+                 | empty'''
 
 def p_parameterList(p):
     '''parameterList : empty
                      | COMMA tipo ID parameterList'''
 
 def p_assign(p):
-    'assign : ID EQUAL expression NEWLINE'
+    '''assign : ID EQUAL expression NEWLINE assign
+                | empty'''
 
 def p_main(p):
     '''main : VOID MAIN LPAREN RPAREN NEWLINE block 
