@@ -27,6 +27,7 @@ reserved = {
     'print':'PRINT',
 	'true':'TRUE',
 	'false':'FALSE',
+	'main' : 'MAIN',
 }
 # List of token names.
 tokens = [
