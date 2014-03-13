@@ -6,7 +6,7 @@ tokens = patito_lex.tokens
 
 #Grammatic rules
 def p_program(p):
-    'program : PROGRAM ID NEWLINE hardware sectionOfVariables sectionOfAssigments	sectionOfFuntions main'
+    'program : PROGRAM ID NEWLINE hardware vars assign	functions main'
     print "Great, programm was sucessfull!"
 
 def p_empty(p):
@@ -17,24 +17,24 @@ def p_hardware(p):
 	'hardware : camDeclaration inputsDeclaration outputsDeclaration pwmDeclaration '
 
 def p_camDeclaration(p):
-'''camDeclaration : empty
-				  | CAM WEBCAM COLON ID NEWLINE
-                  | CAM PICAM COLON ID NEWLINE'''
+    '''camDeclaration : empty
+				    | CAM WEBCAM COLON ID NEWLINE
+                    | CAM PICAM COLON ID NEWLINE'''
 
 def p_inputsDeclaration(p):
-'''inputsDeclaration : empty
+    '''inputsDeclaration : empty
 					 | INPUT pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
-'''outputsDeclaration : empty
+    '''outputsDeclaration : empty
 					  | OUTPUT pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
-'''pwmDeclaration : empty
+    '''pwmDeclaration : empty
 				  | PWM pinList NEWLINE'''
 
 def p_pinList(p):
-'''pinList : C_INT COLON ID
+    '''pinList : C_INT COLON ID
            | C_INT COLON ID COMMA pinList'''
 
 def p_vars(p):
@@ -66,7 +66,7 @@ def p_assign(p):
     'assign : ID EQUAL expression NEWLINE'
 
 def p_main(p):
-    'main : VOID MAIN LPAREN parameters RPAREN NEWLINE'
+    'main : VOID MAIN LPAREN parameters RPAREN NEWLINE block'
 
 def p_block(p):
     '''block : empty
