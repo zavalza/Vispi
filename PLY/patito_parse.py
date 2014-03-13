@@ -6,7 +6,7 @@ tokens = patito_lex.tokens
 
 #Grammatic rules
 def p_program(p):
-    'program : PROGRAM ID NEWLINE hardware sectionOfVariables sectionOfAssigments	sectionOfFuntions main'
+    'program : PROGRAM ID NEWLINE hardware vars assign functions main'
     print "Great, programm was sucessfull!"
 
 def p_empty(p):
@@ -66,7 +66,7 @@ def p_assign(p):
     'assign : ID EQUAL expression NEWLINE'
 
 def p_main(p):
-    'main : VOID MAIN LPAREN parameters RPAREN NEWLINE'
+    'main : VOID MAIN LPAREN parameters RPAREN NEWLINE block'
 
 def p_block(p):
     '''block : empty

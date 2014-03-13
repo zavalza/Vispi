@@ -1,0 +1,23 @@
+PROGRAM primerTest
+
+CAM webcam : cam1
+INPUT 8 : boton1, 9: boton2
+OUTPUT 5: led1
+
+int elefante, paloma
+float tigre
+bool si_o_no
+
+int funcionextra(int parametro1)
+	int otroAnimal
+	otroAnimal = parametro1 - 1
+	if (otroAnimal != 0)
+		funcionextra(4)
+
+void main()
+	string estoEsUnMensaje
+
+	estoEsUnMensaje = "el elefante rosa corre en la pradera"
+
+	print(estoEsUnMensaje)
+	tigre = tigre + 5 * 8 - elefante / (si_o_no + 9)
