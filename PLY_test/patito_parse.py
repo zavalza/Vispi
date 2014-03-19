@@ -6,7 +6,12 @@ tokens = patito_lex.tokens
 
 #Grammatic rules
 def p_program(p):
+<<<<<<< HEAD
+    'program : PROGRAM ID NEWLINE hardware vars assign functions main'
+=======
     'program : PROGRAM ID NEWLINE hardware vars assign	functions main'
+>>>>>>> d8d43db6ccd724f30faa9de99486d76517caff88
+    print "Great, programm was sucessfull!"
 
 def p_empty(p):
     'empty :'
@@ -17,24 +22,24 @@ def p_hardware(p):
 
 def p_camDeclaration(p):
     '''camDeclaration : empty
-				      | CAM WEBCAM COLON ID NEWLINE
-                      | CAM PICAM COLON ID NEWLINE'''
+				    | CAM WEBCAM COLON ID NEWLINE
+                    | CAM PICAM COLON ID NEWLINE'''
 
 def p_inputsDeclaration(p):
     '''inputsDeclaration : empty
-					     | INPUT pinList NEWLINE'''
+					 | INPUT pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
     '''outputsDeclaration : empty
-					      | OUTPUT pinList NEWLINE'''
+					  | OUTPUT pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
     '''pwmDeclaration : empty
-				      | PWM pinList NEWLINE'''
+				  | PWM pinList NEWLINE'''
 
 def p_pinList(p):
     '''pinList : C_INT COLON ID
-               | C_INT COLON ID COMMA pinList'''
+           | C_INT COLON ID COMMA pinList'''
 
 def p_vars(p):
     'vars : tipo idList NEWLINE'
@@ -65,8 +70,8 @@ def p_assign(p):
     'assign : ID EQUAL expression NEWLINE'
 
 def p_main(p):
-    '''main : VOID MAIN LPAREN RPAREN NEWLINE block 
-			| VOID MAIN LPAREN tipo ID parameterList RPAREN NEWLINE block'''
+    '''main : VOID MAIN LPAREN RPAREN NEWLINE block
+            | VOID MAIN LPAREN tipo ID paramterList RPAREN NEWLINE block'''
 
 def p_block(p):
     '''block : empty
@@ -124,7 +129,7 @@ def p_term(p):
 def p_moreFactors(p):
     '''moreFactors : empty
                    | DIVIDE factor moreFactors
-                   | TIMES factor moreFactors
+                   | TIME factor moreFactors
                    | MOD factor moreFactors'''
 
 def p_factor(p):

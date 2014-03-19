@@ -1,0 +1,24 @@
+/* Code to run on http://www.bottlecaps.de/rr/ui to get the syntax diagrams*/
+
+Program ::= 'program' 'id' '\n' Hardware Vars Assign Functions Main
+Hardware ::= CamDeclaration InputsDeclaration OutputsDeclaration PwmDeclaration
+CamDeclaration ::= ( 'CAM' ('webcam' | 'picam') ':' 'id' '\n' )?
+InputsDeclaration ::= ( 'INPUT' PinList '\n' )?
+OutputsDeclaration ::= ( 'OUTPUT' PinList '\n' )?
+PwmDeclaration ::= ( 'PWM' PinList '\n' )?
+PinList ::= 'c_int' ':' 'id' (',' 'c_int' ':' 'id')*
+Vars ::= (Tipo 'id' (',' 'id')* '\n')*
+Tipo ::= 'bool' | 'int' | 'float' | 'char' | 'string' | 'image'
+Functions ::= ( (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block )*
+Assign ::= ( 'id' '=' Expression '\n' )*
+Main ::= 'void' 'main' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block
+Block ::= ('\t' Statement ('\n' '\t' Statement)* )?
+Statement ::= Assign | Condition | Cycle | Funct '\n' | 'return' Expression '\n'
+Condition ::= 'if' Expression ':' '\n' Block ('else' ':' '\n' Block)?
+Cycle ::= 'while' Expression ':' '\n' Block | 'do' ':' '\n' Block 'while' Expression '\n'
+Funct ::= 'id' '(' (Expression (',' Expression)* )? ')'
+Expression ::= Exp (('>'|'<'|'>='|'<='|'!='|'==') Exp)?
+Exp ::= Term ( ('+'|'-') Term )*
+Term ::= Factor ( ('*'|'/'|'%') Factor )*
+Factor ::= '(' Expression ')' | Cvar | Funct
+Cvar ::= 'id' | 'c_int' | 'c_float' | 'c_bool' | 'c_char' | 'c_string' 

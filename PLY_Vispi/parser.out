@@ -4,6 +4,7 @@ Unused terminals:
 
     TRUE
     PERIOD
+    TIMES
     AND
     FALSE
     NOT
@@ -26,6 +27,67 @@ Rule 11    pwmDeclaration -> empty
 Rule 12    pwmDeclaration -> PWM pinList NEWLINE
 Rule 13    pinList -> C_INT COLON ID
 Rule 14    pinList -> C_INT COLON ID COMMA pinList
+<<<<<<< HEAD
+Rule 15    vars -> tipo idList NEWLINE
+Rule 16    idList -> ID
+Rule 17    idList -> ID COMMA idList
+Rule 18    tipo -> BOOL
+Rule 19    tipo -> INT
+Rule 20    tipo -> FLOAT
+Rule 21    tipo -> CHAR
+Rule 22    tipo -> STRING
+Rule 23    tipo -> IMAGE
+Rule 24    functions -> tipo ID LPAREN RPAREN NEWLINE block
+Rule 25    functions -> tipo ID LPAREN tipo ID parameterList RPAREN NEWLINE block
+Rule 26    functions -> VOID ID LPAREN RPAREN NEWLINE block
+Rule 27    functions -> VOID ID LPAREN tipo ID parameterList RPAREN NEWLINE block
+Rule 28    parameterList -> empty
+Rule 29    parameterList -> COMMA tipo ID parameterList
+Rule 30    assign -> ID EQUAL expression NEWLINE
+Rule 31    main -> VOID MAIN LPAREN parameters RPAREN NEWLINE block
+Rule 32    block -> empty
+Rule 33    block -> TAB statement moreStatements
+Rule 34    moreStatements -> empty
+Rule 35    moreStatements -> NEWLINE TAB statement moreStatements
+Rule 36    statement -> assign
+Rule 37    statement -> condition
+Rule 38    statement -> cycle
+Rule 39    statement -> funct NEWLINE
+Rule 40    condition -> IF expression COLON NEWLINE block
+Rule 41    condition -> IF expression COLON NEWLINE block ELSE COLON NEWLINE block
+Rule 42    cycle -> WHILE expression COLON NEWLINE block
+Rule 43    cycle -> DO COLON NEWLINE block WHILE expression NEWLINE
+Rule 44    funct -> ID LPAREN RPAREN
+Rule 45    funct -> ID LPAREN expression expressionList RPAREN
+Rule 46    expressionList -> empty
+Rule 47    expressionList -> COMMA expression expressionList
+Rule 48    expression -> exp
+Rule 49    expression -> exp compareToken exp
+Rule 50    compareToken -> GREATER_THAN
+Rule 51    compareToken -> LESS_THAN
+Rule 52    compareToken -> LESS_EQUAL_THAN
+Rule 53    compareToken -> GREATER_EQUAL_THAN
+Rule 54    compareToken -> NOT_EQUAL_THAN
+Rule 55    compareToken -> SAME_AS
+Rule 56    exp -> term moreTerms
+Rule 57    moreTerms -> empty
+Rule 58    moreTerms -> PLUS term moreTerms
+Rule 59    moreTerms -> MINUS term moreTerms
+Rule 60    term -> factor moreFactors
+Rule 61    moreFactors -> empty
+Rule 62    moreFactors -> DIVIDE factor moreFactors
+Rule 63    moreFactors -> TIME factor moreFactors
+Rule 64    moreFactors -> MOD factor moreFactors
+Rule 65    factor -> LPAREN expression RPAREN
+Rule 66    factor -> cvar
+Rule 67    factor -> funct
+Rule 68    cvar -> ID
+Rule 69    cvar -> C_BOOL
+Rule 70    cvar -> C_INT
+Rule 71    cvar -> C_FLOAT
+Rule 72    cvar -> C_CHAR
+Rule 73    cvar -> C_STRING
+=======
 Rule 15    vars -> tipo idList NEWLINE vars
 Rule 16    vars -> empty
 Rule 17    idList -> ID
@@ -89,12 +151,46 @@ Rule 74    cvar -> C_INT
 Rule 75    cvar -> C_FLOAT
 Rule 76    cvar -> C_CHAR
 Rule 77    cvar -> C_STRING
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 
 Terminals, with rules where they appear
 
 AND                  : 
 BOOL                 : 19
 CAM                  : 5 6
+<<<<<<< HEAD
+CHAR                 : 21
+COLON                : 5 6 13 14 40 41 41 42 43
+COMMA                : 14 17 29 47
+C_BOOL               : 69
+C_CHAR               : 72
+C_FLOAT              : 71
+C_INT                : 13 14 70
+C_STRING             : 73
+DIVIDE               : 62
+DO                   : 43
+DOUBLE_QUOTE         : 
+ELSE                 : 41
+EQUAL                : 30
+FALSE                : 
+FLOAT                : 20
+GREATER_EQUAL_THAN   : 53
+GREATER_THAN         : 50
+ID                   : 1 5 6 13 14 16 17 24 25 25 26 27 27 29 30 44 45 68
+IF                   : 40 41
+IMAGE                : 23
+INPUT                : 8
+INT                  : 19
+LESS_EQUAL_THAN      : 52
+LESS_THAN            : 51
+LPAREN               : 24 25 26 27 31 44 45 65
+MAIN                 : 31
+MINUS                : 59
+MOD                  : 64
+NEWLINE              : 1 5 6 8 10 12 15 24 25 26 27 30 31 35 39 40 41 41 42 43 43
+NOT                  : 
+NOT_EQUAL_THAN       : 54
+=======
 CHAR                 : 22
 COLON                : 5 6 13 14 44 45 45 46 47
 COMMA                : 14 18 31 51
@@ -125,10 +221,27 @@ MOD                  : 68
 NEWLINE              : 1 5 6 8 10 12 15 25 26 27 28 32 34 35 39 43 44 45 45 46 47 47
 NOT                  : 
 NOT_EQUAL_THAN       : 58
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 OR                   : 
 OUTPUT               : 10
 PERIOD               : 
 PICAM                : 6
+<<<<<<< HEAD
+PLUS                 : 58
+PRINT                : 
+PROGRAM              : 1
+PWM                  : 12
+RPAREN               : 24 25 26 27 31 44 45 65
+SAME_AS              : 55
+SINGLE_QUOTE         : 
+STRING               : 22
+TAB                  : 33 35
+TIMES                : 
+TRUE                 : 
+VOID                 : 26 27 31
+WEBCAM               : 5
+WHILE                : 42 43
+=======
 PLUS                 : 62
 PROGRAM              : 1
 PWM                  : 12
@@ -141,10 +254,28 @@ TRUE                 :
 VOID                 : 27 28 34 35
 WEBCAM               : 5
 WHILE                : 46 47
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 error                : 
 
 Nonterminals, with rules where they appear
 
+<<<<<<< HEAD
+TIME                 : 63
+assign               : 1 36
+block                : 24 25 26 27 31 40 41 41 42 43
+camDeclaration       : 3
+compareToken         : 49
+condition            : 37
+cvar                 : 66
+cycle                : 38
+empty                : 4 7 9 11 28 32 34 46 57 61
+exp                  : 48 49 49
+expression           : 30 40 41 42 43 45 47 65
+expressionList       : 45 47
+factor               : 60 62 63 64
+funct                : 39 67
+functions            : 1
+=======
 assign               : 1 32 40
 block                : 25 26 27 28 34 35 44 45 45 46 47
 camDeclaration       : 3
@@ -159,10 +290,27 @@ expressionList       : 49 51
 factor               : 64 66 67 68
 funct                : 43 71
 functions            : 1 25 26 27 28
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 hardware             : 1
 idList               : 15 18
 inputsDeclaration    : 3
 main                 : 1
+<<<<<<< HEAD
+moreFactors          : 60 62 63 64
+moreStatements       : 33 35
+moreTerms            : 56 58 59
+outputsDeclaration   : 3
+parameterList        : 25 27 29
+parameters           : 31
+pinList              : 8 10 12 14
+program              : 0
+pwmDeclaration       : 3
+statement            : 33 35
+term                 : 56 58 59
+tipo                 : 15 24 25 25 27 29
+vars                 : 1
+
+=======
 moreFactors          : 64 66 67 68
 moreStatements       : 37 39
 moreTerms            : 60 62 63
@@ -3180,3 +3328,4 @@ WARNING: shift/reduce conflict for VOID in state 173 resolved as shift
 WARNING: shift/reduce conflict for VOID in state 175 resolved as shift
 WARNING: shift/reduce conflict for NEWLINE in state 180 resolved as shift
 WARNING: shift/reduce conflict for ELSE in state 184 resolved as shift
+>>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
