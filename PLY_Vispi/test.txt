@@ -7,7 +7,7 @@ int elefante, paloma
 float tigre
 bool si_o_no
 
-def int funcionextra ( int parametro1):
+def int funcionextra (int parametro1):
 	int otroAnimal
 	otroAnimal = parametro1 - 1
 	if (otroAnimal != 0):

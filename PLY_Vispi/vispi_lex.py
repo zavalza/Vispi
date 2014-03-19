@@ -66,6 +66,10 @@ tokens = [
 	'NEWLINE',
 ] + list(reserved.values())
 
+#Check these tokens first
+t_LPAREN        = r'\('
+t_RPAREN        = r'\)'
+
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9_]*'
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
@@ -105,8 +109,6 @@ t_NOT					= r'!'
 t_EQUAL         = r'='
 
 # Delimeters
-t_LPAREN        = r'\('
-t_RPAREN        = r'\)'
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
