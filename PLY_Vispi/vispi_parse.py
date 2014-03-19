@@ -38,6 +38,7 @@ def p_pinList(p):
 
 def p_vars(p):
     '''vars : tipo idList NEWLINE vars
+            | tipo assign vars
             | empty'''
 
 def p_idList(p):
@@ -66,7 +67,7 @@ def p_parameterList(p):
                      | COMMA tipo ID parameterList'''
 
 def p_assign(p):
-    '''assign : ID EQUAL expression NEWLINE assign
+    '''assign : idList EQUAL expression NEWLINE assign
               | empty'''
 
 # def p_main(p):
