@@ -12,7 +12,6 @@ def void comparaImagen():
 	imDisplay(diferencias)
 def void main ():
 	while (true): 
-		#Entradas digitales son booleanos
 		if(boton):
 			comparaImagen()
 			led2 = TRUE
@@ -22,7 +21,5 @@ def void main ():
 			if(countObjects(tempImg,"Face") > personas):
 				print mensajeAlerta
 				led1 = TRUE 
-				#PWMs se escriben como ints
-				#Duty cycle
 				velocidad = 75
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

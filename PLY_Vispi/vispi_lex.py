@@ -24,8 +24,8 @@ reserved = {
     'else':'ELSE',
     'while':'WHILE',
     'do':'DO',
-	'true':'TRUE',
-	'false':'FALSE',
+	#'true':'TRUE',
+	#'false':'FALSE',
 	'main' : 'MAIN',
 	'return' : 'RETURN',
 	'def' : 'DEF'
