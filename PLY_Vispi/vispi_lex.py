@@ -109,10 +109,6 @@ t_RPAREN        = r'\)'
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
-<<<<<<< HEAD
-#t_SHARP			= r'\#'
-=======
->>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
 t_TAB 			=r'\t'
 t_NEWLINE		=r'\n+'
 
@@ -140,26 +136,6 @@ lexer = lex.lex(debug=0)
 
 
  ### Test the parser####
-<<<<<<< HEAD
-data = '''
-PROGRAM test 
-
-# Esto es una prueba
-if ( x > 4.0):
-	x = x + 1
-else: 
-	x = x - 1
-'''
-
-# # Give the lexer some input
-lexer.input(data)
-
-# # Tokenize
-while True:
-	tok = lexer.token()
-	if not tok: break      # No more input
-	print tok
-=======
 # data = ''' PROGRAM primerTest
 # CAM webcam : cam1
 # INPUT 8 : boton1, 9: boton2
@@ -198,5 +174,5 @@ while True:
 # 	tok = lexer.token()
 # 	if not tok: break      # No more input
 # 	print tok
->>>>>>> 74aefcf52e61632e84e68863e491ef1a7f22be4d
+
 
