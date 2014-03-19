@@ -6,7 +6,7 @@ tokens = vispi_lex.tokens
 
 #Grammatic rules
 def p_program(p):
-    'program : PROGRAM ID NEWLINE hardware vars assign functions main'
+    'program : PROGRAM ID NEWLINE hardware vars assign functions'
 
 def p_empty(p):
     'empty :'
@@ -57,6 +57,8 @@ def p_functions(p):
                  | DEF tipo ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
                  | DEF VOID ID LPAREN RPAREN COLON NEWLINE block functions
                  | DEF VOID ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
                  | empty'''
 
 def p_parameterList(p):
@@ -67,9 +69,9 @@ def p_assign(p):
     '''assign : ID EQUAL expression NEWLINE assign
               | empty'''
 
-def p_main(p):
-    '''main : DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block 
-			| DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block'''
+# def p_main(p):
+#     '''main : DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block 
+# 			| DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block'''
 
 def p_block(p):
     '''block : empty
@@ -77,10 +79,11 @@ def p_block(p):
 
 def p_moreStatements(p):
     '''moreStatements : empty
-                      | NEWLINE TAB statement moreStatements'''
+                      | TAB statement moreStatements'''
 
 def p_statement(p):
-    '''statement : assign
+    '''statement : vars 
+                 | assign
                  | condition
                  | cycle
                  | funct NEWLINE
