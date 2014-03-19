@@ -1,10 +1,33 @@
-PROGRAM primerTest
-CAM webcam : cam1
-INPUT 8 : boton1, 9: boton2
-OUTPUT 5: led1
-int elefante, paloma
-float tigre
-bool si_o_no
-
-void main ( ):
-	string estoEsUnMensaje
+PROGRAM buscaIntruso 
+CAM webcam:micamara 
+INPUT 17:boton 
+OUTPUT 22:led1,23:led2
+PWM 18:velocidad
+int personas
+string mensajeAlerta
+image imgInicial
+personas = 5
+mensajeAlerta = "Alerta de intruso!"
+imgInicial = takePicture()
+def void comparaImagen():
+	imagen tempImg = takePicture()
+	#Restar imágenes es válido
+	imagen diferencias = imgInicial - tempImg
+	#Se abre una ventana con la imagen
+	imDisplay(diferencias)
+def void main ():
+	while (true): 
+		#Entradas digitales son booleanos
+		if(boton):
+			comparaImagen()
+			led2 = TRUE
+			velocidad = 25
+		else: 
+			imagen tempImg = takePicture()
+			if(countObjects(tempImg,"Face") > personas):
+				print mensajeAlerta
+				led1 = TRUE 
+				#PWMs se escriben como ints
+				#Duty cycle
+				velocidad = 75
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
