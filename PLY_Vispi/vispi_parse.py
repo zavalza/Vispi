@@ -53,10 +53,10 @@ def p_tipo(p):
             | IMAGE'''
 
 def p_functions(p):
-    '''functions : tipo ID LPAREN RPAREN COLON NEWLINE block functions
-                 | tipo ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
-                 | VOID ID LPAREN RPAREN COLON NEWLINE block functions
-                 | VOID ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+    '''functions : DEF tipo ID LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF tipo ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
                  | empty'''
 
 def p_parameterList(p):
@@ -68,8 +68,8 @@ def p_assign(p):
               | empty'''
 
 def p_main(p):
-    '''main : VOID MAIN LPAREN RPAREN COLON NEWLINE block 
-			| VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block'''
+    '''main : DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block 
+			| DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block'''
 
 def p_block(p):
     '''block : empty

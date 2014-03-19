@@ -27,7 +27,8 @@ reserved = {
 	'true':'TRUE',
 	'false':'FALSE',
 	'main' : 'MAIN',
-	'return' : 'RETURN'
+	'return' : 'RETURN',
+	'def' : 'DEF'
 }
 # List of token names.
 tokens = [
