@@ -80,7 +80,7 @@ def t_C_INT(t):
     t.value = int(t.value)
     return t
 
-t_C_BOOL = r'[true|false]'
+t_C_BOOL = r'(true|false)'
 t_C_CHAR = r'\'[^\']\''
 t_C_STRING = r'\"[^\"]*\"'
 
@@ -110,7 +110,7 @@ t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
 t_TAB 			=r'\t'
-t_NEWLINE		=r'\n+'
+#t_NEWLINE		=r'\n+'
 
 #Maybe we will need to define a rule to count tabs
 #def t_TAB(t)
@@ -119,23 +119,24 @@ t_NEWLINE		=r'\n+'
 t_ignore_COMMENT = r'\#.*\n'
 
 # Define a rule so we can track line numbers
-#def t_newline(t):
-    #r'\n+'
-    #t.lexer.lineno += len(t.value)
+def t_NEWLINE(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    return t
 
 # A string containing ignored characters (spaces)
 t_ignore  = ' '
 
 # Error handling rule
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
+    print "Illegal character '%s' in line '%s'" % (t.value[0],t.lexer.lineno)
     t.lexer.skip(1)
 
 # Build the lexer
 lexer = lex.lex(debug=0)
 
 
- ### Test the parser####
+### Test the parser####
 # data = ''' PROGRAM primerTest
 # CAM webcam : cam1
 # INPUT 8 : boton1, 9: boton2
@@ -165,7 +166,7 @@ lexer = lex.lex(debug=0)
 # '''
 
 
-###Test just the lexer###
+# ##Test just the lexer###
 # # # Give the lexer some input
 # lexer.input(data)
 

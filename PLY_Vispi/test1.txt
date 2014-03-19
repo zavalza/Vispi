@@ -1,0 +1,10 @@
+PROGRAM primerTest
+CAM webcam : cam1
+INPUT 8 : boton1, 9: boton2
+OUTPUT 5: led1
+int elefante, paloma
+float tigre
+bool si_o_no
+
+void main ( ):
+	string estoEsUnMensaje

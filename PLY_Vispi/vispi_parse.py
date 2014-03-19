@@ -149,16 +149,16 @@ def p_cvar(p):
 
 def p_error(p):
     if p:
-        print("Syntax error at '%s'" % p.value)
+        print("Syntax error at '%s'" %(p.value))
     else:
         print("Syntax error at EOF")
 
 
 parser = yacc.yacc()
 
-def parse(data,debug=0):
+def parse(data):
     parser.error = 0
-    p = parser.parse(data,debug=debug)
+    p = parser.parse(data, debug=1, tracking=True)
     if parser.error: return None
     return p
 
@@ -168,4 +168,4 @@ def parse(data,debug=0):
 #     except EOFError:
 #         break
 #     if not s: continue
-#     yacc.parse(s)
+#     yacc.parse(s)line
