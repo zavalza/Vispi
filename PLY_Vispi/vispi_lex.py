@@ -67,6 +67,7 @@ tokens = [
 ] + list(reserved.values())
 
 #Check these tokens first
+t_ignore_COMMENT = r'\#.*'
 t_LPAREN        = r'\('
 t_RPAREN        = r'\)'
 
@@ -118,8 +119,6 @@ t_TAB 			=r'\t'
 #Maybe we will need to define a rule to count tabs
 #def t_TAB(t)
 	#r'\t+'
-
-t_ignore_COMMENT = r'\#.*\n'
 
 # Define a rule so we can track line numbers
 def t_NEWLINE(t):
