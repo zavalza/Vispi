@@ -2,11 +2,22 @@ from ply import *
 import vispi_lex
 
 tokens = vispi_lex.tokens
+counter_modules = 0 #Will be the key to explore module dictionaries
+counter_variables = 0 #Will be the key to explore variable dictionaries
+module_variables={0:[]}
+module_names = {0:'global'}
+variable_names = {0:0}
+variable_types = {0:0}
 
 
 #Grammatic rules
 def p_program(p):
     'program : PROGRAM ID NEWLINE hardware vars assign functions'
+    print "programa exitoso"
+    print module_variables
+    print module_names
+    print variable_names
+    print variable_types
 
 def p_empty(p):
     'empty :'
@@ -22,24 +33,35 @@ def p_camDeclaration(p):
 
 def p_inputsDeclaration(p):
     '''inputsDeclaration : empty
-					     | INPUT pinList NEWLINE'''
+					     | INPUT saveType pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
     '''outputsDeclaration : empty
-					      | OUTPUT pinList NEWLINE'''
+					      | OUTPUT saveType pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
     '''pwmDeclaration : empty
-				      | PWM pinList NEWLINE'''
+				      | PWM saveType pinList NEWLINE'''
 
 def p_pinList(p):
     '''pinList : C_INT COLON ID
                | C_INT COLON ID COMMA pinList'''
+    global counter_variables
+    module_variables[counter_modules].append(p[3])
+    variable_names[counter_variables] = p[3]      
+    counter_variables += 1
 
 def p_vars(p):
-    '''vars : tipo idList NEWLINE vars
-            | tipo assign vars
+    '''vars : tipo saveType idList NEWLINE vars
+            | tipo saveType assign vars
             | empty'''
+
+def p_saveType(p):
+    'saveType :'
+    if((p[-1]=='INPUT')or(p[-1]=='OUTPUT')):
+        variable_types[counter_variables]= 'BOOL'
+    if(p[-1]=='PWM'):
+        variable_types[counter_variables]= 'INT'
 
 def p_idList(p):
     '''idList : ID
