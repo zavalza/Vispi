@@ -1,23 +1,5 @@
-Syntax error at 'tempImg'
-Syntax error at '='
-Syntax error at '
-'
-Syntax error at '
-'
-Syntax error at '
-'
-Syntax error at '
-'
-Syntax error at 'true'
-Syntax error at 'tempImg'
-Syntax error at 'tempImg'
-Syntax error at '
-'
-Syntax error at '	'
-Syntax error at '	'
-Syntax error at '	'
-Syntax error at '	'
-Syntax error at '	'
-Syntax error at 'tempImg'
-Syntax error at 'tempImg'
-Syntax error at 'mensajeAlerta'
+programa exitoso
+{0: ['boton', 'led2', 'led1', 'velocidad']}
+{0: 'global'}
+{0: 'boton', 1: 'led2', 2: 'led1', 3: 'velocidad'}
+{0: 'BOOL', 1: 'BOOL', 3: 'INT'}
