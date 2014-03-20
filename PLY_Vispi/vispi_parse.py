@@ -8,7 +8,8 @@ module_variables={0:[]}
 module_names = {0:'global'}
 variable_names = {0:0}
 variable_types = {0:0}
-
+typeOfData = 'VOID' #Used to store the last type detected
+declaration= False
 
 #Grammatic rules
 def p_program(p):
@@ -48,41 +49,72 @@ def p_pinList(p):
                | C_INT COLON ID COMMA pinList'''
     global counter_variables
     module_variables[counter_modules].append(p[3])
-    variable_names[counter_variables] = p[3]      
+    variable_names[counter_variables] = p[3]
+    variable_types[counter_variables] = typeOfData    
     counter_variables += 1
 
 def p_vars(p):
-    '''vars : tipo saveType idList NEWLINE vars
-            | tipo saveType assign vars
+    '''vars : tipo isDeclaration idList NEWLINE vars
+            | tipo isDeclaration assign vars
             | empty'''
+
+def p_isDeclaration(p):
+    'isDeclaration :'
+    global declaration
+    declaration = True
 
 def p_saveType(p):
     'saveType :'
+    global typeOfData
     if((p[-1]=='INPUT')or(p[-1]=='OUTPUT')):
-        variable_types[counter_variables]= 'BOOL'
-    if(p[-1]=='PWM'):
-        variable_types[counter_variables]= 'INT'
+        typeOfData = 'bool'
+    else:
+        if(p[-1]=='PWM'):
+            typeOfData = 'int'
+        else:
+            typeOfData = p[-1]
+
 
 def p_idList(p):
     '''idList : ID
               | ID COMMA idList'''
+    global counter_variables 
+    global declaration
+    if not(p[1] in module_variables[counter_modules]):
+        if(declaration):
+            module_variables[counter_modules].append(p[1])
+            variable_names[counter_variables] = p[1]
+            variable_types[counter_variables] = typeOfData    
+            counter_variables += 1
+            declaration = False
+    else:
+        if(declaration):
+            raise TypeError("'%s' is already defined" %(p[1]))
+            declaration = False
 
 def p_tipo(p):
-    '''tipo : BOOL
-            | INT
-            | FLOAT
-            | CHAR
-            | STRING
-            | IMAGE'''
+    '''tipo : BOOL saveType
+            | INT  saveType
+            | FLOAT saveType
+            | CHAR saveType
+            | STRING saveType
+            | IMAGE saveType'''
 
 def p_functions(p):
-    '''functions : DEF tipo ID LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF tipo ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+    '''functions : DEF tipo ID saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF tipo ID saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
                  | empty'''
+
+def p_saveModule(p):
+    'saveModule :'
+    global counter_modules, counter_variables
+    counter_modules += 1
+    module_variables[counter_modules] = []
+    module_names[counter_modules] = p[-1]
 
 def p_parameterList(p):
     '''parameterList : empty
