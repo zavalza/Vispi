@@ -17,9 +17,9 @@ def void main ():
 			led2 = TRUE
 			velocidad = 25
 		else: 
-			imagen tempImg = takePicture()
+			image tempImg = takePicture()
 			if(countObjects(tempImg,"Face") > personas):
-				print mensajeAlerta
+				print(mensajeAlerta)
 				led1 = TRUE 
 				velocidad = 75
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB
