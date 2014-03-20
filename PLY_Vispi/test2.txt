@@ -1,0 +1,10 @@
+PROGRAM buscaIntruso 
+CAM webcam:micamara 
+INPUT 17:boton 
+OUTPUT 22:led1,23:led2
+PWM 18:velocidad
+int personas = 5
+string mensajeAlerta = "Alerta de intruso!"
+string mensajeAlerta = "Oh no!"
+image imgInicial = takePicture()
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
