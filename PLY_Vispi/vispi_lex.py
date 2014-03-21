@@ -67,7 +67,7 @@ tokens = [
 ] + list(reserved.values())
 
 #Check these tokens first
-t_ignore_COMMENT = r'(\#.*)(\n*)'
+t_ignore_COMMENT = r'\#.*'
 t_LPAREN        = r'\('
 t_RPAREN        = r'\)'
 

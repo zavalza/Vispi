@@ -3,21 +3,31 @@ CAM webcam:micamara
 INPUT 17:boton 
 OUTPUT 22:led1,23:led2
 PWM 18:velocidad
-int personas = 5
-string mensajeAlerta = "Alerta de intruso!"
-image imgInicial = takePicture()
-def void comparaImagen():
-	image tempImg = takePicture()
-	image diferencias = imgInicial - tempImg
+int personas
+string mensajeAlerta
+image imgInicial
+
+personas = 5
+mensajeAlerta = "Alerta de intruso!"
+imgInicial = takePicture()
+
+def void comparaImagen(int i, float a):
+	image tempImg, diferencias
+	tempImg = takePicture()
+	diferencias = imgInicial - tempImg
 	imDisplay(diferencias)
+
 def void main ():
+	image tempImg
 	while (true): 
 		if(boton):
+		#comentario
 			comparaImagen()
 			led2 = TRUE
 			velocidad = 25
-		else: 
-			image tempImg = takePicture()
+			#comentario
+		else:
+			tempImg = takePicture()
 			if(countObjects(tempImg,"Face") > personas):
 				print(mensajeAlerta)
 				led1 = TRUE 
