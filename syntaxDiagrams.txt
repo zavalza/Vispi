@@ -9,7 +9,7 @@ PwmDeclaration ::= ( 'PWM' PinList '\n' )?
 PinList ::= 'c_int' ':' 'id' (',' 'c_int' ':' 'id')*
 Vars ::= (Tipo 'id' (',' 'id')* '\n')*
 Tipo ::= 'bool' | 'int' | 'float' | 'char' | 'string' | 'image'
-Functions ::= ( (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block )*
+Functions ::= ('def' (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block )*
 Assign ::= ( 'id' '=' Expression '\n' )*
 Main ::= 'void' 'main' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block
 Block ::= ('\t' Statement ('\n' '\t' Statement)* )?

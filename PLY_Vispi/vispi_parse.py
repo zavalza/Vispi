@@ -1,24 +1,122 @@
 from ply import *
 import vispi_lex
-
 tokens = vispi_lex.tokens
-counter_modules = 0 #Will be the key to explore module dictionaries
-counter_variables = 0 #Will be the key to explore variable dictionaries
-module_variables={0:[]}
-module_names = {0:'global'}
-variable_names = {0:0}
-variable_types = {0:0}
+
+#Semantic cube
+# order: type, type, operator
+#   type order: <NULL>, bool, char, int, float, string, image, -1 means error
+#       NULL operand is only valid on the first operand
+#       -1 is only valid as a result
+#   operator order: + - / * % > < <= >= != == && || ! 
+SemCube = [
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'bool'],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'image']
+        ],
+        [
+            [-1,-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool','bool','bool',-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+        ],
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['string',-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['string',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+        ],
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['int','int','int','int','int','bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+        ],
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+        ],
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['string','string','int',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], #string - char y string / char : a implementar
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['string',-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+        ],
+        [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]   #comparaciones entre image?
+        ]
+    ]
+
+#MACROS
+paramList = 0
+typeTable = 1
+addrTable = 2
+
+#Virtual Memory segment definitions
+DS_base = 0
+DS_len = 1200
+CS_base = DS_base + DS_len  #1200
+CS_len = 10000
+SS_base = CS_base + CS_len  #11200
+SS_len = 1200
+ES_base = SS_base + SS_len  #12400
+ES_len = 1200
+
+S_offsetTable = {'bool' : 0, 'char' : 200, 'int' : 400, 'float' : 600, 'string' : 800, 'image' : 1000}
+
+#variable counters
+DS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+SS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+ES_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+
+
+#data structures
+ProcTypes = {'Vispi':'prog'}
+ProcSize = {'Vispi':0}
+ProcAddr = {'Vispi':0}
+        # parameter list, {variable types dict}, {variable address dict}
+ProcVars = {'Vispi':[[],{},{}]}
+
+#variables
+moduleName = 'Vispi'
 typeOfData = 'VOID' #Used to store the last type detected
-declaration= False
 
 #Grammatic rules
 def p_program(p):
     'program : PROGRAM ID NEWLINE hardware vars assign functions'
-    print "programa exitoso"
-    print module_variables
-    print module_names
-    print variable_names
-    print variable_types
+    if ProcTypes.has_key('main'):
+        print "programa exitoso"
+        print ProcTypes
+        print '\n'
+        print ProcSize
+        print '\n'
+        print ProcAddr
+        print '\n'
+        print ProcVars
+        print '\n'
+        print SemCube
+    else:
+        raise TypeError("'main' module was not defined")
 
 def p_empty(p):
     'empty :'
@@ -34,37 +132,34 @@ def p_camDeclaration(p):
 
 def p_inputsDeclaration(p):
     '''inputsDeclaration : empty
-					     | INPUT saveType pinList NEWLINE'''
+					     | INPUT f_saveType pinList NEWLINE'''
 
 def p_ouputsDeclaration(p):
     '''outputsDeclaration : empty
-					      | OUTPUT saveType pinList NEWLINE'''
+					      | OUTPUT f_saveType pinList NEWLINE'''
 
 def p_pwmDeclaration(p):
     '''pwmDeclaration : empty
-				      | PWM saveType pinList NEWLINE'''
+				      | PWM f_saveType pinList NEWLINE'''
 
 def p_pinList(p):
     '''pinList : C_INT COLON ID
                | C_INT COLON ID COMMA pinList'''
-    global counter_variables
-    module_variables[counter_modules].append(p[3])
-    variable_names[counter_variables] = p[3]
-    variable_types[counter_variables] = typeOfData    
-    counter_variables += 1
+    ProcVars['Vispi'][typeTable][p[3]] = typeOfData
+    ProcVars['Vispi'][addrTable][p[3]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
+    DS_counterTable[typeOfData] += 1 # falta validar que no nos pasemos del tamanio del segmento
 
 def p_vars(p):
-    '''vars : tipo isDeclaration idList NEWLINE vars
-            | tipo isDeclaration assign vars
+    '''vars : tipo idList NEWLINE vars
             | empty'''
 
-def p_isDeclaration(p):
-    'isDeclaration :'
-    global declaration
-    declaration = True
+#def p_isDeclaration(p):
+#    'isDeclaration :'
+#    global declaration
+#    declaration = True
 
-def p_saveType(p):
-    'saveType :'
+def p_f_saveType(p):
+    'f_saveType :'
     global typeOfData
     if((p[-1]=='INPUT')or(p[-1]=='OUTPUT')):
         typeOfData = 'bool'
@@ -78,63 +173,84 @@ def p_saveType(p):
 def p_idList(p):
     '''idList : ID
               | ID COMMA idList'''
-    global counter_variables 
-    global declaration
-    if not(p[1] in module_variables[counter_modules]):
-        if(declaration):
-            module_variables[counter_modules].append(p[1])
-            variable_names[counter_variables] = p[1]
-            variable_types[counter_variables] = typeOfData    
-            counter_variables += 1
-            declaration = False
+    if ProcVars.has_key(moduleName): #falta validar si ya existe el ID
+        ProcVars[moduleName][typeTable][p[1]] = typeOfData
+        if moduleName == 'Vispi':
+            ProcVars[moduleName][addrTable][p[1]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
+            DS_counterTable[typeOfData] += 1
+        else:
+            ProcVars[moduleName][addrTable][p[1]] = SS_base + S_offsetTable[typeOfData] + SS_counterTable[typeOfData]
+            SS_counterTable[typeOfData] += 1 # falta validar que no nos pasemos del tamanio del segmento
     else:
-        if(declaration):
-            raise TypeError("'%s' is already defined" %(p[1]))
-            declaration = False
+        raise TypeError("'%s' module is not defined" %(moduleName))
 
 def p_tipo(p):
-    '''tipo : BOOL saveType
-            | INT  saveType
-            | FLOAT saveType
-            | CHAR saveType
-            | STRING saveType
-            | IMAGE saveType'''
+    '''tipo : BOOL f_saveType
+            | INT  f_saveType
+            | FLOAT f_saveType
+            | CHAR f_saveType
+            | STRING f_saveType
+            | IMAGE f_saveType'''
 
 def p_functions(p):
-    '''functions : DEF tipo ID saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF tipo ID saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN saveModule LPAREN tipo ID parameterList RPAREN COLON NEWLINE block functions
+    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block functions
+                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
                  | empty'''
 
-def p_saveModule(p):
-    'saveModule :'
-    global counter_modules, counter_variables
-    counter_modules += 1
-    module_variables[counter_modules] = []
-    module_names[counter_modules] = p[-1]
+def p_f_saveModule(p):
+    'f_saveModule :'
+    SS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+    global moduleName
+    moduleName = p[-1]
+    if ProcTypes.has_key(moduleName):
+        raise TypeError("'%s' is already defined" %(moduleName))
+    else:
+        ProcTypes[moduleName] = p[-2]
+        #ProcSize
+        #ProcAddr
+        ProcVars[moduleName] = [[],{},{}]
 
 def p_parameterList(p):
     '''parameterList : empty
-                     | COMMA tipo ID parameterList'''
+                     | COMMA tipo ID f_addToParam parameterList'''
+
+def p_f_addToParam(p):
+    'f_addToParam :'
+    ProcVars[moduleName][typeTable][p[-1]] = typeOfData
+    ProcVars[moduleName][addrTable][p[-1]] = SS_base + S_offsetTable[typeOfData] + SS_counterTable[typeOfData]
+    SS_counterTable[typeOfData] += 1 # falta validar que no nos pasemos del tamanio del segmento
+    ProcVars[moduleName][paramList].append(typeOfData)
+
 
 def p_assign(p):
-    '''assign : idList EQUAL expression NEWLINE assign
+    '''assign : ID f_checkID EQUAL expression NEWLINE assign
               | empty'''
 
+def p_f_checkID(p):
+    'f_checkID : '
+    if not ProcVars[moduleName][typeTable].has_key(p[-1]):
+        if not ProcVars['Vispi'][typeTable].has_key(p[-1]):
+            raise TypeError("variable '%s' not declared" %(p[-1]))
+
 # def p_main(p):
-#     '''main : DEF VOID MAIN LPAREN RPAREN COLON NEWLINE block 
-# 			| DEF VOID MAIN LPAREN tipo ID parameterList RPAREN COLON NEWLINE block'''
+#     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block 
+# 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block'''
 
 def p_block(p):
     '''block : empty
-             | TAB statement moreStatements'''
+             | TAB newline_tab statement moreStatements'''
 
 def p_moreStatements(p):
     '''moreStatements : empty
-                      | TAB statement moreStatements'''
+                      | TAB newline_tab statement moreStatements'''
+
+def p_newline_tab(p):
+    '''newline_tab : empty
+                    | NEWLINE TAB newline_tab'''
 
 def p_statement(p):
     '''statement : vars 
