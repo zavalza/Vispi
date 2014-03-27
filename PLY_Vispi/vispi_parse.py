@@ -373,7 +373,7 @@ def p_moreFactors(p):
                    | MOD factor moreFactors'''
 
 def p_factor(p):
-    '''factor : LPAREN  expression RPAREN  
+    '''factor : LPAREN expression RPAREN  
               | cvar
               | funct'''
 
@@ -404,14 +404,15 @@ def p_f_isConst(p):
     value = p[-1]
     constType = type(value)
     typeStr = ''
-    if constType is bool:
-        typeStr = 'bool'
-    elif constType is int:
+    if constType is int:
         typeStr = 'int'
     elif constType is float:
         typeStr = 'float'
     elif constType is str:
-        typeStr = 'string'
+        if value == 'true' or value == 'false':
+            typeStr = 'bool'
+        else:
+            typeStr = 'string'
 
     if not ProcVars['Vispi'][addrTable].has_key(value):
         ProcVars['Vispi'][typeTable][value] = typeStr
