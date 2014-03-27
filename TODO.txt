@@ -1,0 +1,6 @@
+0. Que onda con los TABS?
+1. Eliminar cualquier rastro del tipo CHAR
+2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
+
+
+x. test test test

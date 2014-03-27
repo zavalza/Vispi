@@ -74,19 +74,20 @@ typeTable = 1
 addrTable = 2
 
 #Virtual Memory segment definitions
-DS_base = 0
+DS_base = 0                 #globales
 DS_len = 1200
-CS_base = DS_base + DS_len  #1200
-CS_len = 10000
-SS_base = CS_base + CS_len  #11200
+CS_base = DS_base + DS_len  #constantes
+CS_len = 1200
+SS_base = CS_base + CS_len  #locales
 SS_len = 1200
-ES_base = SS_base + SS_len  #12400
+ES_base = SS_base + SS_len  #temporales
 ES_len = 1200
 
 S_offsetTable = {'bool' : 0, 'char' : 200, 'int' : 400, 'float' : 600, 'string' : 800, 'image' : 1000}
 
 #variable counters
 DS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+CS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
 SS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
 ES_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
 
@@ -97,6 +98,7 @@ ProcSize = {'Vispi':0}
 ProcAddr = {'Vispi':0}
         # parameter list, {variable types dict}, {variable address dict}
 ProcVars = {'Vispi':[[],{},{}]}
+ProcConst = {}
 
 #variables
 moduleName = 'Vispi'
@@ -127,7 +129,7 @@ def p_program(p):
         print '\n'
         print ProcVars
         print '\n'
-        print SemCube
+        #print SemCube
         print '\n'
         print Quadruples
         print '\n'
@@ -371,18 +373,58 @@ def p_moreFactors(p):
                    | MOD factor moreFactors'''
 
 def p_factor(p):
-    '''factor : LPAREN expression RPAREN
+    '''factor : LPAREN  expression RPAREN  
               | cvar
               | funct'''
 
+#def p_f_pushFF(p): f_pushFF f_popFF
+
+
 def p_cvar(p):
-    '''cvar : ID
-            | C_BOOL
-            | C_INT
-            | C_FLOAT
-            | C_CHAR
-            | C_STRING'''
-    #operandsStack.push(p[1])
+    '''cvar : ID f_isID
+            | C_BOOL f_isConst
+            | C_INT f_isConst
+            | C_FLOAT f_isConst
+            | C_CHAR f_isConst
+            | C_STRING f_isConst'''
+
+def p_f_isID(p):
+    'f_isID : '
+    if ProcVars[moduleName][addrTable].has_key(p[-1]):
+        address = ProcVars[moduleName][addrTable][p[-1]]
+        operandsStack.push(address)
+    elif ProcVars['Vispi'][addrTable].has_key(p[-1]):
+        address = ProcVars['Vispi'][addrTable][p[-1]]
+        operandsStack.push(address)
+    else:
+        raise TypeError("variable '%s' not declared" %(p[-1]))
+
+def p_f_isConst(p):
+    'f_isConst : '
+    value = p[-1]
+    constType = type(value)
+    typeStr = ''
+    if constType is bool:
+        typeStr = 'bool'
+    elif constType is int:
+        typeStr = 'int'
+    elif constType is float:
+        typeStr = 'float'
+    elif constType is str:
+        typeStr = 'string'
+
+    if not ProcVars['Vispi'][addrTable].has_key(value):
+        ProcVars['Vispi'][typeTable][value] = typeStr
+        ProcVars['Vispi'][addrTable][value] = CS_base + S_offsetTable[typeStr] + CS_counterTable[typeStr]
+        CS_counterTable[typeStr] += 1
+
+    operandsStack.push(ProcVars['Vispi'][addrTable][value])   
+
+    #ProcVars['Vispi'][typeTable][p[3]] = typeOfData
+    #ProcVars['Vispi'][addrTable][p[3]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
+    #DS_counterTable[typeOfData] += 1
+
+    #operandsStack.push( ProcAddr[] p[1])
 
 
 ### Following code is Little Duck code ###

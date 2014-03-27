@@ -24,8 +24,8 @@ reserved = {
     'else':'ELSE',
     'while':'WHILE',
     'do':'DO',
-	#'true':'TRUE',
-	#'false':'FALSE',
+	'true':'TRUE',
+	'false':'FALSE',
 	'main' : 'MAIN',
 	'return' : 'RETURN',
 	'def' : 'DEF'
@@ -71,6 +71,8 @@ t_ignore_COMMENT = r'\#.*'
 t_LPAREN        = r'\('
 t_RPAREN        = r'\)'
 
+t_C_BOOL = r'true|false'
+
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9_]*'
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
@@ -86,7 +88,6 @@ def t_C_INT(t):
     t.value = int(t.value)
     return t
 
-t_C_BOOL = r'(true|false)'
 t_C_CHAR = r'\'[^\']\''
 t_C_STRING = r'\"[^\"]*\"'
 
