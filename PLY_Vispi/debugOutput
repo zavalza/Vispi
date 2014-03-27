@@ -1,0 +1,19 @@
+programa exitoso
+{'main': 'void', 'comparaImagen': 'void', 'Vispi': 'prog'}
+
+
+{'Vispi': 0}
+
+
+{'Vispi': 0}
+
+
+{'main': [[], {'tempImg': 'image'}, {'tempImg': 3402}], 'comparaImagen': [['int', 'float'], {'i': 'int', 'a': 'float', 'tempImg': 'image', 'diferencias': 'image'}, {'i': 2800, 'a': 3000, 'tempImg': 3401, 'diferencias': 3400}], 'Vispi': [[], {'led1': 'bool', 'led2': 'bool', 5: 'int', 'velocidad': 'int', 'true': 'bool', 'mensajeAlerta': 'string', '"Face"': 'string', 'boton': 'bool', 75: 'int', '"Alerta de intruso!"': 'string', 'personas': 'int', 25: 'int', 'imgInicial': 'image'}, {'led1': 2, 'led2': 1, 5: 1600, 'velocidad': 400, 'true': 1200, 'mensajeAlerta': 800, '"Face"': 2001, 'boton': 0, 75: 1602, '"Alerta de intruso!"': 2000, 'personas': 401, 25: 1601, 'imgInicial': 1000}]}
+
+
+
+
+{0: ['GOTO', -1, -1, -1], 1: ['CAM', 'webcam', -1, -1], 2: ['INPUT', 17, -1, -1], 3: ['OUTPUT', 22, -1, -1], 4: ['OUTPUT', 23, -1, -1], 5: ['PWM', 18, -1, -1], 6: ['=', 0, -1, 1600], 7: ['=', 0, -1, 2000], 8: ['=', 0, -1, 1000], 9: ['=', 0, -1, 3401], 10: ['=', 0, -1, 3401], 11: ['=', 0, -1, 1200], 12: ['=', 0, -1, 1601], 13: ['=', 0, -1, 3402], 14: ['=', 0, -1, 1200], 15: ['=', 0, -1, 1602]}
+
+
+[0]

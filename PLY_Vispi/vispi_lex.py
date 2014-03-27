@@ -24,8 +24,8 @@ reserved = {
     'else':'ELSE',
     'while':'WHILE',
     'do':'DO',
-	'true':'TRUE',
-	'false':'FALSE',
+	'true':'C_BOOL',
+	'false':'C_BOOL',
 	'main' : 'MAIN',
 	'return' : 'RETURN',
 	'def' : 'DEF'
@@ -34,7 +34,7 @@ reserved = {
 tokens = [
     'ID',
 	#Constants
-	'C_BOOL',
+	#'C_BOOL',
     'C_INT',
     'C_FLOAT',
 	'C_CHAR',
@@ -71,7 +71,6 @@ t_ignore_COMMENT = r'\#.*'
 t_LPAREN        = r'\('
 t_RPAREN        = r'\)'
 
-t_C_BOOL = r'true|false'
 
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9_]*'
@@ -88,6 +87,7 @@ def t_C_INT(t):
     t.value = int(t.value)
     return t
 
+#t_C_BOOL = r'true | false'
 t_C_CHAR = r'\'[^\']\''
 t_C_STRING = r'\"[^\"]*\"'
 

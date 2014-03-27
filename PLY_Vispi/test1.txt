@@ -19,17 +19,17 @@ def void comparaImagen(int i, float a):
 
 def void main ():
 	image tempImg
-	while (true): 
+	while (personas > 5): 
 		if(boton):
 		#comentario
 			comparaImagen()
-			led2 = TRUE
+			led2 = true
 			velocidad = 25
 			#comentario
 		else:
 			tempImg = takePicture()
 			if(countObjects(tempImg,"Face") > personas):
 				print(mensajeAlerta)
-				led1 = TRUE 
+				led1 = true 
 				velocidad = 75
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB
