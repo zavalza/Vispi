@@ -9,13 +9,13 @@ image imgInicial
 
 personas = 5
 mensajeAlerta = "Alerta de intruso!"
-imgInicial = takePicture()
 
 def void comparaImagen(int i, float a):
-	image tempImg, diferencias
-	tempImg = takePicture()
-	if(personas < 6):
-		imDisplay(diferencias)
-
+	float resultado1, resultado2
+	image imgActual, imgResultante
+	resultado1 = 45.0 + 85 - 10
+	resultado2 = resultado1 * 45 - (20 * 3)
+	imgResultante = imgActual - imgInicial
+	imgResultante = imgResultante * 5
 def void main ():
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

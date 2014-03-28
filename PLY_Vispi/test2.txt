@@ -1,10 +1,16 @@
-PROGRAM buscaIntruso 
-CAM webcam:micamara 
-INPUT 17:boton 
-OUTPUT 22:led1,23:led2
-PWM 18:velocidad
-int personas = 5
-string mensajeAlerta = "Alerta de intruso!"
-string mensajeAlerta = "Oh no!"
-image imgInicial = takePicture()
-#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
+PROGRAM debugTabsEol
+
+int a, velocidad
+bool led1, led2
+
+def void main ():
+	while (1): 
+		if(a == 1):
+			led2 = true
+			velocidad = 25 
+		else:
+			b = 0    
+  		if(b > 3):
+  			print("Hola")
+		led1 = false 
+  		velocidad = 75

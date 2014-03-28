@@ -9,6 +9,9 @@ tokens = vispi_lex.tokens
 #       NULL operand is only valid on the first operand
 #       -1 is only valid as a result
 #   operator order: + - / * % > < <= >= != == && || ! 
+semIndex1={'<NULL>':0, 'bool':1, 'char':2, 'int':3, 'float':4, 'string':5, 'image':6}
+semIndex2={'bool':0, 'char':1, 'int':2, 'float':3, 'string':4, 'image':5}
+semIndex3={'+':0,'-':1,'/':2,'*':3,'%':4,'>':5,'<':6, '<=':7, '>=':8, '!=':9, '==':10, '&&':11, '||':12, '!':13}
 SemCube = [
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'bool'],
@@ -111,7 +114,8 @@ Quadruples={}
 branchStack = Stack()
 operatorsStack = Stack()
 operandsStack = Stack()
-
+typesStack = Stack()
+isCondition = False
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -132,7 +136,11 @@ def p_program(p):
         #print SemCube
         print '\n'
         print Quadruples
-        print '\n'
+        print 'operatorsStack\n'
+        print operatorsStack
+        print 'operandsStack\n'
+        print operandsStack
+        print 'branchStack\n'
         print branchStack
     else:
         raise TypeError("'main' module was not defined")
@@ -155,8 +163,9 @@ def p_camDeclaration(p):
 				      | CAM WEBCAM COLON ID NEWLINE
                       | CAM PICAM COLON ID NEWLINE'''
     global counterQuadruples
-    Quadruples[counterQuadruples]=["CAM", p[2], -1, -1]
-    counterQuadruples+=1
+    if(len(p)>2):
+        Quadruples[counterQuadruples]=["CAM", p[2], -1, -1]
+        counterQuadruples+=1
 
 def p_inputsDeclaration(p):
     '''inputsDeclaration : empty
@@ -277,7 +286,9 @@ def p_f_generateEqual(p):
     global counterQuadruples
     #Falta validar que sea una igualdad con tipos correctos
     #Sacar dos operandos y validarlos
-    Quadruples[counterQuadruples]=['=', 0, -1, operandsStack.pop()]
+    operand2 = operandsStack.pop()
+    operand1 = operandsStack.pop()
+    Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
     counterQuadruples+=1
 
 def p_f_checkID(p):
@@ -287,8 +298,10 @@ def p_f_checkID(p):
             raise TypeError("variable '%s' not declared" %(p[-1]))
         else: 
             operandsStack.push(ProcVars['Vispi'][addrTable][p[-1]])
+            typesStack.push(ProcVars['Vispi'][typeTable][p[-1]])
     else:
         operandsStack.push(ProcVars[moduleName][addrTable][p[-1]])
+        typesStack.push(ProcVars[moduleName][typeTable][p[-1]])
 # def p_main(p):
 #     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block 
 # 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block'''
@@ -314,12 +327,17 @@ def p_statement(p):
                  | RETURN expression NEWLINE'''
 
 def p_condition(p):
-    '''condition : IF expression COLON NEWLINE block
-                 | IF expression COLON NEWLINE block ELSE COLON NEWLINE block'''
+    '''condition : IF f_isCondition expression COLON NEWLINE block
+                 | IF f_isCondition expression COLON NEWLINE block ELSE COLON NEWLINE block'''
 
 def p_cycle(p):
-    '''cycle : WHILE expression COLON NEWLINE block
-             | DO COLON NEWLINE block WHILE expression NEWLINE'''
+    '''cycle : WHILE f_isCondition expression COLON NEWLINE block
+             | DO COLON NEWLINE block WHILE f_isCondition expression NEWLINE'''
+
+def p_f_isCondition(p):
+    'f_isCondition : '
+    global isCondition
+    isCondition = True
 
 def p_funct(p):
     '''funct : ID LPAREN RPAREN
@@ -331,20 +349,38 @@ def p_expressionList(p):
 
 def p_expression(p):
     '''expression : exp
-                  | exp compareToken exp f_generateComparation'''
+                  | exp compareToken exp f_popComparation'''
 
-def p_f_generateComparation(p):
-    'f_generateComparation : '
-    # global counterQuadruples
-    # global counterTemporals
-    # top = operatorsStack.pop()
-    # op1 = operandsStack.pop()
-    # op2 = operandsStack.pop()
-    # if(top == ('>' or '<' or '>=' or '<=' or '!=' or '==')):
-    #     #Calcular direccions, sacar operandos y checar su tipo
-    #     address = 0
-    #     counterTemporals+=1
-    #     Quadruples[counterQuadruples] = [top, op1, op2, address]
+def p_f_popComparation(p):
+    'f_popComparation : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '>')or(operator == '<')or(operator == '>=')or(operator == '<=')or(operator == '!=')or(operator == '=='):
+        operand2=operandsStack.pop()
+        operand1=operandsStack.pop()
+
+        type2=typesStack.pop()
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type dismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, operand2, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
 
 def p_compareToken(p):
     '''compareToken : GREATER_THAN
@@ -353,32 +389,110 @@ def p_compareToken(p):
                     | GREATER_EQUAL_THAN
                     | NOT_EQUAL_THAN
                     | SAME_AS'''
-    #operatorsStack.push(p[1])
+    operatorsStack.push(p[1])
 
 def p_exp(p):
     'exp : term moreTerms'
 
 def p_moreTerms(p):
     '''moreTerms : empty
-                 | PLUS term moreTerms
-                 | MINUS term moreTerms'''
+                 | PLUS f_pushOperator term f_popTerm moreTerms
+                 | MINUS f_pushOperator term f_popTerm moreTerms'''
+
+def p_f_popTerm(p):
+    'f_popTerm : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '+')or(operator == '-'):
+        operand2=operandsStack.pop()
+        operand1=operandsStack.pop()
+
+        type2=typesStack.pop()
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type dismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, operand2, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
 
 def p_term(p):
     'term : factor moreFactors'
 
 def p_moreFactors(p):
     '''moreFactors : empty
-                   | DIVIDE factor moreFactors
-                   | TIMES factor moreFactors
-                   | MOD factor moreFactors'''
+                   | DIVIDE f_pushOperator factor f_popFactor moreFactors
+                   | TIMES f_pushOperator factor f_popFactor moreFactors
+                   | MOD f_pushOperator factor f_popFactor moreFactors'''
 
 def p_factor(p):
-    '''factor : LPAREN expression RPAREN  
+    '''factor : LPAREN f_pushOperator expression RPAREN f_popOperator 
               | cvar
               | funct'''
 
-#def p_f_pushFF(p): f_pushFF f_popFF
+def p_f_pushOperator(p):
+    'f_pushOperator : '
+    if(not isCondition):
+        operatorsStack.push(p[-1])
 
+def p_f_popOperator(p):
+    'f_popOperator : '
+    global isCondition
+    if(isCondition):
+        isCondition = False
+    operatorsStack.pop()
+
+def p_f_popFactor(p):
+    'f_popFactor : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '*')or(operator == '/')or(operator=='%'):
+        operand2=operandsStack.pop()
+        operand1=operandsStack.pop()
+
+        type2=typesStack.pop()
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type dismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, operand2, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
+# def p_f_pushFF(p):
+#     'f_pushFF : '
+#     operandsStack.push(p[-1])
+
+# def p_f_popFF(p):
+#     'f_popFF : '
+    #operandsStack.pop()
 
 def p_cvar(p):
     '''cvar : ID f_isID
@@ -393,9 +507,11 @@ def p_f_isID(p):
     if ProcVars[moduleName][addrTable].has_key(p[-1]):
         address = ProcVars[moduleName][addrTable][p[-1]]
         operandsStack.push(address)
+        typesStack.push(ProcVars[moduleName][typeTable][p[-1]])
     elif ProcVars['Vispi'][addrTable].has_key(p[-1]):
         address = ProcVars['Vispi'][addrTable][p[-1]]
         operandsStack.push(address)
+        typesStack.push(ProcVars['Vispi'][typeTable][p[-1]])
     else:
         raise TypeError("variable '%s' not declared" %(p[-1]))
 
@@ -419,13 +535,8 @@ def p_f_isConst(p):
         ProcVars['Vispi'][addrTable][value] = CS_base + S_offsetTable[typeStr] + CS_counterTable[typeStr]
         CS_counterTable[typeStr] += 1
 
-    operandsStack.push(ProcVars['Vispi'][addrTable][value])   
-
-    #ProcVars['Vispi'][typeTable][p[3]] = typeOfData
-    #ProcVars['Vispi'][addrTable][p[3]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
-    #DS_counterTable[typeOfData] += 1
-
-    #operandsStack.push( ProcAddr[] p[1])
+    operandsStack.push(ProcVars['Vispi'][addrTable][value])
+    typesStack.push(ProcVars['Vispi'][typeTable][value])   
 
 
 ### Following code is Little Duck code ###
