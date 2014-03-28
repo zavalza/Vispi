@@ -17,7 +17,6 @@ reserved = {
     'bool':'BOOL',
 	'int':'INT',
 	'float':'FLOAT',
-	'char':'CHAR',
 	'string':'STRING',
 	'image':'IMAGE',
 	'if':'IF',
@@ -37,7 +36,6 @@ tokens = [
 	#'C_BOOL',
     'C_INT',
     'C_FLOAT',
-	'C_CHAR',
 	'C_STRING',
 	# Operators + - / * % > < <= >= != == && || ! 
 	'PLUS',
@@ -88,7 +86,7 @@ def t_C_INT(t):
     return t
 
 #t_C_BOOL = r'true | false'
-t_C_CHAR = r'\'[^\']\''
+#t_C_CHAR = r'\'[^\']\''
 t_C_STRING = r'\"[^\"]*\"'
 
 # Operators

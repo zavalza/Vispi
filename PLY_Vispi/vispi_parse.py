@@ -5,17 +5,16 @@ tokens = vispi_lex.tokens
 
 #Semantic cube
 # order: type, type, operator
-#   type order: <NULL>, bool, char, int, float, string, image, -1 means error
+#   type order: <NULL>, bool, int, float, string, image, -1 means error
 #       NULL operand is only valid on the first operand
 #       -1 is only valid as a result
 #   operator order: + - / * % > < <= >= != == && || ! 
-semIndex1={'<NULL>':0, 'bool':1, 'char':2, 'int':3, 'float':4, 'string':5, 'image':6}
-semIndex2={'bool':0, 'char':1, 'int':2, 'float':3, 'string':4, 'image':5}
+semIndex1={'<NULL>':0, 'bool':1, 'int':2, 'float':3, 'string':4, 'image':5}
+semIndex2={'bool':0, 'int':1, 'float':2, 'string':3, 'image':4}
 semIndex3={'+':0,'-':1,'/':2,'*':3,'%':4,'>':5,'<':6, '<=':7, '>=':8, '!=':9, '==':10, '&&':11, '||':12, '!':13}
 SemCube = [
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'bool'],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -26,19 +25,9 @@ SemCube = [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
         ],
         [
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            ['string',-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            ['string',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-        ],
-        [
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['int','int','int','int','int','bool','bool','bool','bool','bool','bool',-1,-1,-1],
             ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
@@ -47,7 +36,6 @@ SemCube = [
         ],
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
             ['float','float','float','float',-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -55,7 +43,6 @@ SemCube = [
         ],
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            ['string','string','int',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], #string - char y string / char : a implementar
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['string',-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool',-1,-1,-1],
@@ -63,13 +50,13 @@ SemCube = [
         ],
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            ['image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            ['image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]   #comparaciones entre image?
+            ['image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1] #comparaciones entre image?
         ]
     ]
+
 
 #MACROS
 paramList = 0
@@ -86,13 +73,13 @@ SS_len = 1200
 ES_base = SS_base + SS_len  #temporales
 ES_len = 1200
 
-S_offsetTable = {'bool' : 0, 'char' : 200, 'int' : 400, 'float' : 600, 'string' : 800, 'image' : 1000}
+S_offsetTable = {'bool' : 0, 'int' : 250, 'float' : 500, 'string' : 750, 'image' : 1000}
 
 #variable counters
-DS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-CS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-SS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-ES_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+DS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+CS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+SS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+ES_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
 
 
 #data structures
@@ -239,7 +226,6 @@ def p_tipo(p):
     '''tipo : BOOL f_saveType
             | INT  f_saveType
             | FLOAT f_saveType
-            | CHAR f_saveType
             | STRING f_saveType
             | IMAGE f_saveType'''
 
@@ -254,7 +240,6 @@ def p_functions(p):
 
 def p_f_saveModule(p):
     'f_saveModule :'
-    SS_counterTable = {'bool' : 0, 'char' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
     global moduleName
     moduleName = p[-1]
     if ProcTypes.has_key(moduleName):
@@ -499,7 +484,6 @@ def p_cvar(p):
             | C_BOOL f_isConst
             | C_INT f_isConst
             | C_FLOAT f_isConst
-            | C_CHAR f_isConst
             | C_STRING f_isConst'''
 
 def p_f_isID(p):
