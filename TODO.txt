@@ -1,11 +1,13 @@
 0. Que onda con los TABS?
 
-1. Eliminar cualquier rastro del tipo CHAR
-2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
-3. Terminar los cuadruplos
+	*1. Eliminar cualquier rastro del tipo CHAR ***
+!2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
+	*3. Terminar los cuadruplos
 
 Que pasa cuando haces esto?
-tempImg = takePicture()
-Todo en una funcion en la que solo mandes los operandos a verificar y que esten en una lista? OPTIMIZAR GENERACION DE CUADRUPLO
-CHECAR TIPOS EN IGUAL
+4. tempImg = takePicture()	#los 'funct' deben dejar el valor de retorno en el stack?
+	hay que dejar el valor de retorno en una global que tiene el nombre del proc y luego asignarla despues del GOSUB
+
+*5. CHECAR TIPOS EN IGUAL
+
 x. test test test
