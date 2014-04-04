@@ -32,5 +32,5 @@ def void main ():
 	float b
 	a = 1
 	b = 2.1
-	x = comparaImagen(a, b)
+	comparaImagen(a, b)
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB
