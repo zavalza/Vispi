@@ -1,0 +1,29 @@
+PROGRAM buscaIntruso
+CAM webcam:micamara 
+INPUT 17:boton 
+OUTPUT 22:led1,23:led2
+PWM 18:velocidad
+int personas
+string mensajeAlerta
+image imgInicial
+
+personas = 5
+mensajeAlerta = "Alerta de intruso!"
+
+def void comparaImagen(int i, float a):
+	do:
+		float resultado1, resultado2
+		image imgActual, imgResultante
+		resultado1 = 45.0 + 85 - 10
+		resultado2 = resultado1 * 45 - (20 * 3)
+		imgResultante = imgActual - imgInicial
+		imgResultante = imgResultante * 5
+		if(5 > 1):
+			resultado1= 4
+			resultado1 = 5
+		else:
+			resultado2 = 4
+			resultado2 = i * a
+while(true)
+def void main ():
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
