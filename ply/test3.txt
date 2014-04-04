@@ -10,7 +10,7 @@ image imgInicial
 personas = 5
 mensajeAlerta = "Alerta de intruso!"
 
-def void comparaImagen(int i, float a):
+def int comparaImagen(int i, float a):
 	do:
 		float resultado1, resultado2
 		image imgActual, imgResultante
@@ -25,5 +25,12 @@ def void comparaImagen(int i, float a):
 			resultado2 = 4
 			resultado2 = i * a
 while(true)
+	return a
+
 def void main ():
+	int x, a
+	float b
+	a = 1
+	b = 2.1
+	x = comparaImagen(a, b)
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

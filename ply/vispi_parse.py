@@ -84,7 +84,7 @@ ES_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0
 
 #data structures
 ProcTypes = {'Vispi':'prog'}
-ProcSize = {'Vispi':0}
+ProcSize = {'Vispi':[0,0,0,0,0]}
 ProcAddr = {'Vispi':0}
         # parameter list, {variable types dict}, {variable address dict}
 ProcVars = {'Vispi':[[],{},{}]}
@@ -105,6 +105,8 @@ typesStack = Stack()
 isCondition = False
 typeOfCondition = ""
 isDoWhile = False
+counterParam = 0
+functName = ''
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -112,6 +114,10 @@ counterTemporals = 0
 #Grammatic rules
 def p_program(p):
     'program : programName hardware vars assign functions'
+    global counterQuadruples
+    Quadruples[counterQuadruples] = ['ENDPROC', -1, -1, -1]
+    counterQuadruples += 1
+
     if ProcTypes.has_key('main'):
         print "programa exitoso"
         print ProcTypes
@@ -232,13 +238,30 @@ def p_tipo(p):
             | IMAGE f_saveType'''
 
 def p_functions(p):
-    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
+    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
+                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
+                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
+                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
+                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
+                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
                  | empty'''
+
+def p_f_endModule(p):
+    'f_endModule : '
+    global counterQuadruples
+
+    ProcSize[moduleName] = [
+        SS_counterTable['bool'] + ES_counterTable['bool'],
+        SS_counterTable['int'] + ES_counterTable['int'],
+        SS_counterTable['float'] + ES_counterTable['float'],
+        SS_counterTable['string'] + ES_counterTable['string'],
+        SS_counterTable['image'] + ES_counterTable['image']
+    ]
+    SS_counterTable['bool'] = SS_counterTable['int'] = SS_counterTable['float'] = SS_counterTable['string'] = SS_counterTable['image'] = 0
+    ES_counterTable['bool'] = ES_counterTable['int'] = ES_counterTable['float'] = ES_counterTable['string'] = ES_counterTable['image'] = 0
+
+    Quadruples[counterQuadruples] = ['RET', -1, -1, -1]
+    counterQuadruples += 1
 
 def p_f_saveModule(p):
     'f_saveModule :'
@@ -248,8 +271,8 @@ def p_f_saveModule(p):
         raise TypeError("'%s' is already defined" %(moduleName))
     else:
         ProcTypes[moduleName] = p[-2]
-        #ProcSize
-        #ProcAddr
+        ProcSize[moduleName] = [0,0,0,0,0]
+        ProcAddr[moduleName] = counterQuadruples
         ProcVars[moduleName] = [[],{},{}]
 
 def p_parameterList(p):
@@ -312,7 +335,15 @@ def p_statement(p):
                  | cycle
                  | doCycle
                  | funct NEWLINE
-                 | RETURN expression NEWLINE'''
+                 | RETURN expression f_return NEWLINE'''
+
+def p_f_return(p):
+    'f_return : '
+    global counterQuadruples
+    retVal = operandsStack.pop() # hay que sacar tipo y valor del stack al final de un proc?
+    typ = typesStack.pop()
+    Quadruples[counterQuadruples] = ['RETURN', retVal, -1, -1]
+    counterQuadruples += 1
 
 def p_condition(p):
     '''condition : IF f_isCondition expression COLON NEWLINE block 
@@ -366,12 +397,51 @@ def p_f_isCondition(p):
     #print typeOfCondition
 
 def p_funct(p):
-    '''funct : ID LPAREN RPAREN
-             | ID LPAREN expression expressionList RPAREN'''
+    '''funct : ID f_checkProc LPAREN RPAREN
+             | ID f_checkProc LPAREN expression f_genParam expressionList RPAREN'''
+    global counterQuadruples
+
+    Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
+    counterQuadruples += 1
+
+def p_f_checkProc(p):
+    'f_checkProc : '
+    global counterQuadruples
+    global counterParam
+    global functName
+
+    functName = p[-1]
+    if not ProcVars.has_key(functName):
+        raise TypeError("Function not declared")
+
+    Quadruples[counterQuadruples] = ['ERA', ProcSize[functName], -1, -1]
+    counterQuadruples += 1
+
+    counterParam = 0
 
 def p_expressionList(p):
     '''expressionList : empty
-                      | COMMA expression expressionList'''
+                      | COMMA expression f_genParam expressionList'''
+    paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
+    if not len(paramList) == counterParam:
+        raise TypeError("Invalid number of parameters")
+
+def p_f_genParam(p):
+    'f_genParam : '
+    global counterParam
+    global counterQuadruples
+
+    arg = operandsStack.pop()
+    typ = typesStack.pop()
+
+    paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
+    if not typ == paramList[counterParam]:
+        raise TypeError("Type mismatch on function call")
+    else:
+        #counterParam empieza en 0: primer parametro es param0
+        Quadruples[counterQuadruples] = ['PARAM', arg, -1, counterParam]
+        counterParam += 1
+        counterQuadruples += 1
 
 def p_expression(p):
     '''expression : exp
@@ -391,7 +461,7 @@ def p_f_popComparation(p):
         typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
 
         if(typeResult==-1):
-            raise TypeError("Type dismatch")
+            raise TypeError("Type mismatch")
 
         else:
             temporalVariable = "Temporal%s" %counterTemporals
