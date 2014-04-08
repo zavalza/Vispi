@@ -5,6 +5,9 @@
 # ------------------------------------------------------------
 import ply.lex as lex
 
+fileTabs = open('tabs.txt', 'w')
+counterTabs = 0
+
 reserved = {
    	'PROGRAM' : 'PROGRAM',
    	'CAM' : 'CAM',
@@ -112,18 +115,25 @@ t_EQUAL         = r'='
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
-t_TAB 			=r'\t'
+#t_TAB 			=r'\t'
 #t_NEWLINE		=r'\n+'
 
 #Maybe we will need to define a rule to count tabs
-#def t_TAB(t)
-	#r'\t+'
+def t_TAB(t):
+	r'\t'
+	global counterTabs
+	counterTabs +=1
+	return t
+
 
 # Define a rule so we can track line numbers
 def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
+	r'\n+'
+	global counterTabs
+	t.lexer.lineno += len(t.value)
+	fileTabs.write("%s \n" %counterTabs)
+	counterTabs = 0
+	return t
 
 # A string containing ignored characters (spaces)
 t_ignore  = ' '

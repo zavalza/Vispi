@@ -6,10 +6,8 @@ PWM 18:velocidad
 int personas
 string mensajeAlerta
 image imgInicial
-
 personas = 5
 mensajeAlerta = "Alerta de intruso!"
-
 def int comparaImagen(int i, float a):
 	do:
 		float resultado1, resultado2
@@ -26,7 +24,6 @@ def int comparaImagen(int i, float a):
 			resultado2 = i * a
 while(true)
 	return a
-
 def void main ():
 	int x, a
 	float b

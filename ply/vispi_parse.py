@@ -2,7 +2,8 @@ from ply import *
 from stack import Stack
 import vispi_lex
 tokens = vispi_lex.tokens
-
+counterTabs = 0
+expectedTabulation=0
 #Semantic cube
 # order: type, type, operator
 #   type order: <NULL>, bool, int, float, string, image, -1 means error
@@ -196,7 +197,7 @@ def p_pinList(p):
 
 
 def p_vars(p):
-    '''vars : tipo idList NEWLINE vars
+    '''vars : f_checkTab tipo idList NEWLINE f_resetTab vars
             | empty'''
 
 #def p_isDeclaration(p):
@@ -238,12 +239,12 @@ def p_tipo(p):
             | IMAGE f_saveType'''
 
 def p_functions(p):
-    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
-                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
-                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
-                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
-                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block f_endModule functions
-                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block f_endModule functions
+    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
                  | empty'''
 
 def p_f_endModule(p):
@@ -288,7 +289,7 @@ def p_f_addToParam(p):
 
 
 def p_assign(p):
-    '''assign : ID f_checkID EQUAL expression NEWLINE f_generateEqual assign
+    '''assign : f_checkTab ID f_checkID EQUAL expression NEWLINE f_resetTab f_generateEqual assign
               | empty'''
 
 def p_f_generateEqual(p):
@@ -318,24 +319,56 @@ def p_f_checkID(p):
 
 def p_block(p):
     '''block : empty
-             | TAB newline_tab statement moreStatements'''
+             | TAB f_addTab moreTabs statement moreStatements'''
+    global expectedTabulation 
+    global counterTabs
+    expectedTabulation-=1
+    counterTabs = 0
 
 def p_moreStatements(p):
     '''moreStatements : empty
-                      | TAB newline_tab statement moreStatements'''
+                      | TAB f_addTab moreTabs statement moreStatements'''
 
-def p_newline_tab(p):
-    '''newline_tab : empty
-                    | NEWLINE TAB newline_tab'''
+def p_moreTabs(p):
+    '''moreTabs : empty
+                    | TAB f_addTab moreTabs
+                    | NEWLINE f_resetTab TAB f_addTab moreTabs'''
+
+def p_f_incTab(p):
+    'f_incTab : '
+    global expectedTabulation
+    expectedTabulation +=1
+
+def p_f_addTab(p):
+    'f_addTab : '
+    global counterTabs
+    counterTabs +=1
+    if(counterTabs>expectedTabulation):
+        print counterTabs
+        print expectedTabulation
+        raise TypeError("Unexpected indent")
+
+def p_f_resetTab(p):
+    'f_resetTab : '
+    global counterTabs
+    counterTabs = 0
+
+def p_f_checkTab(p):
+    'f_checkTab : '
+    if(counterTabs < expectedTabulation):
+        print counterTabs
+        print expectedTabulation
+        raise TypeError("Identation error")
+
 
 def p_statement(p):
     '''statement : vars 
                  | assign
-                 | condition
-                 | cycle
-                 | doCycle
-                 | funct NEWLINE
-                 | RETURN expression f_return NEWLINE'''
+                 | f_checkTab condition
+                 | f_checkTab cycle
+                 | f_checkTab doCycle
+                 | f_checkTab funct NEWLINE f_resetTab
+                 | f_checkTab RETURN expression f_return NEWLINE f_resetTab'''
 
 def p_f_return(p):
     'f_return : '
@@ -346,13 +379,13 @@ def p_f_return(p):
     counterQuadruples += 1
 
 def p_condition(p):
-    '''condition : IF f_isCondition expression COLON NEWLINE block 
-                 | IF f_isCondition expression COLON NEWLINE block ELSE f_popIf COLON NEWLINE block'''
+    '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
+                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
     end = branchStack.pop()
     Quadruples[end][3]=counterQuadruples
 
 def p_cycle(p):
-    'cycle : WHILE f_isCondition expression COLON NEWLINE block'
+    'cycle : WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block'
     global counterQuadruples
     end = branchStack.pop()
     condition = branchStack.pop()
@@ -361,7 +394,7 @@ def p_cycle(p):
     Quadruples[end][3]=counterQuadruples
 
 def p_doCycle(p):
-    'doCycle : DO f_pushDo COLON NEWLINE block WHILE f_isDoWhile f_isCondition expression NEWLINE'
+    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block WHILE f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
 
 def p_f_popIf(p):
     'f_popIf : '
