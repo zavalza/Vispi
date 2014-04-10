@@ -10,4 +10,10 @@ Que pasa cuando haces esto?
 
 *5. CHECAR TIPOS EN IGUAL
 
+6. comparaImagen(comparaImagen(x, b), b) ??????
+7. Igualaciones anidadas
+8. Generar cuadruplos de funciones predefinidas por nosotros
+
 x. test test test
+
+Y. DOCUMENTACION

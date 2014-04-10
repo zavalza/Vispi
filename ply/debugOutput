@@ -1,3 +1,25 @@
-if
-do
-Syntax error at 'return'
+programa exitoso
+{'main': 'image', 'comparaImagen': 'int', 'Vispi': 'prog'}
+
+
+{'main': [0, 2, 1, 0, 0, 0, 3, 0, 0, 0], 'comparaImagen': [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], 'Vispi': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+
+
+{'main': 30, 'comparaImagen': 8, 'Vispi': 0}
+
+
+{'main': [[], {'a': 'int', 'b': 'float', 'Temporal9': 'int', 'x': 'int', 'Temporal11': 'int', 'Temporal10': 'int'}, {'a': 2650, 'b': 2900, 'Temporal9': 3850, 'x': 2651, 'Temporal11': 3852, 'Temporal10': 3851}], 'comparaImagen': [['int', 'float'], {'a': 'float', 'Temporal6': 'image', 'i': 'int', 'Temporal8': 'float', 'Temporal5': 'image', 'Temporal1': 'float', 'imgResultante': 'image', 'Temporal7': 'bool', 'resultado2': 'float', 'resultado1': 'float', 'Temporal4': 'float', 'Temporal3': 'int', 'Temporal2': 'float', 'imgActual': 'image', 'Temporal0': 'float'}, {'a': 2900, 'Temporal6': 4601, 'i': 2650, 'Temporal8': 4104, 'Temporal5': 4600, 'Temporal1': 4101, 'imgResultante': 3400, 'Temporal7': 3600, 'resultado2': 2901, 'resultado1': 2902, 'Temporal4': 4103, 'Temporal3': 3850, 'Temporal2': 4102, 'imgActual': 3401, 'Temporal0': 4100}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 4: 'int', 5: 'int', 'velocidad': 'int', 'true': 'bool', 'mensajeAlerta': 'string', 10: 'int', 1.2: 'float', 'boton': 'bool', 45.0: 'float', 2.1: 'float', 3: 'int', 20: 'int', '"Alerta de intruso!"': 'string', 'personas': 'int', 'main': 'image', 'comparaImagen': 'int', 'imgInicial': 'image', 85: 'int'}, {'led1': 2, 1: 1455, 'led2': 1, 4: 1456, 5: 1450, 'velocidad': 250, 'true': 1200, 'mensajeAlerta': 750, 10: 1452, 1.2: 1701, 'boton': 0, 45.0: 1700, 2.1: 1702, 3: 1454, 20: 1453, '"Alerta de intruso!"': 1950, 'personas': 251, 'main': 1001, 'comparaImagen': 252, 'imgInicial': 1000, 85: 1451}]}
+
+
+
+
+{0: ['GOTO', -1, -1, -1], 1: ['CAM', 'webcam', -1, -1], 2: ['INPUT', 17, -1, -1], 3: ['OUTPUT', 22, -1, -1], 4: ['OUTPUT', 23, -1, -1], 5: ['PWM', 18, -1, -1], 6: ['=', 1450, -1, 251], 7: ['=', 1950, -1, 750], 8: ['+', 1700, 1451, 4100], 9: ['-', 4100, 1452, 4101], 10: ['=', 4101, -1, 2902], 11: ['*', 2902, 1700, 4102], 12: ['*', 1453, 1454, 3850], 13: ['-', 4102, 3850, 4103], 14: ['=', 4103, -1, 2901], 15: ['-', 3401, 1000, 4600], 16: ['=', 4600, -1, 3400], 17: ['*', 3400, 1450, 4601], 18: ['=', 4601, -1, 3400], 19: ['>', 1450, 1455, 3600], 20: ['GOTOF', 3600, -1, 24], 21: ['=', 1456, -1, 2902], 22: ['=', 1450, -1, 2902], 23: ['GOTO', -1, -1, 27], 24: ['=', 1456, -1, 2901], 25: ['*', 2650, 2900, 4104], 26: ['=', 4104, -1, 2901], 27: ['GOTOT', 1200, -1, 8], 28: ['RETURN', 2650, -1, 252], 29: ['RET', -1, -1, -1], 30: ['=', 1455, -1, 2650], 31: ['=', 1701, -1, 2900], 32: ['=', 1450, -1, 2650], 33: ['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1], 34: ['PARAM', 2650, -1, 0], 35: ['PARAM', 2900, -1, 1], 36: ['GOSUB', 8, -1, -1], 37: ['=', 1702, -1, 2900], 38: ['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1], 39: ['PARAM', 2650, -1, 0], 40: ['PARAM', 2900, -1, 1], 41: ['GOSUB', 8, -1, -1], 42: ['=', 252, -1, 3850], 43: ['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1], 44: ['PARAM', 2651, -1, 0], 45: ['PARAM', 2900, -1, 1], 46: ['GOSUB', 8, -1, -1], 47: ['=', 252, -1, 3851], 48: ['+', 3850, 3851, 3852], 49: ['=', 3852, -1, 2651], 50: ['RET', -1, -1, -1], 51: ['ENDPROC', -1, -1, -1]}
+operatorsStack
+
+[]
+operandsStack
+
+[]
+branchStack
+
+[]
