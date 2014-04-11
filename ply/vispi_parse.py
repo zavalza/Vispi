@@ -85,18 +85,17 @@ ES_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0
 
 #data structures
 ProcTypes = {'Vispi':'prog'}
-ProcSize = {'Vispi':[0,0,0,0,0]}
+ProcSize = {'Vispi':[0,0,0,0,0,0,0,0,0,0]} #primero variables loc. y luego temporales
 ProcAddr = {'Vispi':0}
         # parameter list, {variable types dict}, {variable address dict}
 ProcVars = {'Vispi':[[],{},{}]}
-ProcConst = {}
 
 #variables
 moduleName = 'Vispi'
 typeOfData = 'VOID' #Used to store the last type detected
 
 #quadruples
-#fileQuadruples = open('quadruples.txt', 'w')
+fileQuadruples = open('vispi.obj', 'w')
 counterQuadruples = 0
 Quadruples={}
 branchStack = Stack()
@@ -108,6 +107,8 @@ typeOfCondition = ""
 isDoWhile = False
 counterParam = 0
 functName = ''
+functType = ''
+isAssign = False
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -138,6 +139,29 @@ def p_program(p):
         print operandsStack
         print 'branchStack\n'
         print branchStack
+
+        #guardar en archivo:
+        #   Dir. de Procs
+        #   %%
+        #   Constantes (addr, tipo y valor)
+        #   %%
+        #   Cuadruplos
+        fileQuadruples.write("%%\n")
+        
+        keys = ProcVars['Vispi'][addrTable].keys()
+        values = ProcVars['Vispi'][addrTable].values()
+        for i in range(len(keys)):
+            fileQuadruples.write("%s,%s\n" %(keys[i], values[i]))
+
+        fileQuadruples.write("%%\n")
+
+        for i in range(counterQuadruples):
+            line = str(Quadruples[i])
+            line = line.replace('[','{')
+            line = line.replace(']','}')
+            line = line.replace("'",'"')
+            fileQuadruples.write("%s\n" %line)
+
     else:
         raise TypeError("'main' module was not defined")
 def p_programName(p):
@@ -200,11 +224,6 @@ def p_vars(p):
     '''vars : f_checkTab tipo idList NEWLINE f_resetTab vars
             | empty'''
 
-#def p_isDeclaration(p):
-#    'isDeclaration :'
-#    global declaration
-#    declaration = True
-
 def p_f_saveType(p):
     'f_saveType :'
     global typeOfData
@@ -252,11 +271,16 @@ def p_f_endModule(p):
     global counterQuadruples
 
     ProcSize[moduleName] = [
-        SS_counterTable['bool'] + ES_counterTable['bool'],
-        SS_counterTable['int'] + ES_counterTable['int'],
-        SS_counterTable['float'] + ES_counterTable['float'],
-        SS_counterTable['string'] + ES_counterTable['string'],
-        SS_counterTable['image'] + ES_counterTable['image']
+        SS_counterTable['bool'],
+        SS_counterTable['int'],
+        SS_counterTable['float'],
+        SS_counterTable['string'],
+        SS_counterTable['image'],
+        ES_counterTable['bool'],
+        ES_counterTable['int'],
+        ES_counterTable['float'],
+        ES_counterTable['string'],
+        ES_counterTable['image']
     ]
     SS_counterTable['bool'] = SS_counterTable['int'] = SS_counterTable['float'] = SS_counterTable['string'] = SS_counterTable['image'] = 0
     ES_counterTable['bool'] = ES_counterTable['int'] = ES_counterTable['float'] = ES_counterTable['string'] = ES_counterTable['image'] = 0
@@ -271,10 +295,16 @@ def p_f_saveModule(p):
     if ProcTypes.has_key(moduleName):
         raise TypeError("'%s' is already defined" %(moduleName))
     else:
-        ProcTypes[moduleName] = p[-2]
-        ProcSize[moduleName] = [0,0,0,0,0]
+        ProcTypes[moduleName] = typeOfData
+        ProcSize[moduleName] = [0,0,0,0,0,0,0,0,0,0]
         ProcAddr[moduleName] = counterQuadruples
         ProcVars[moduleName] = [[],{},{}]
+        if not ProcVars['Vispi'][addrTable].has_key(moduleName):
+            ProcVars['Vispi'][typeTable][moduleName] = typeOfData
+            ProcVars['Vispi'][addrTable][moduleName] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
+            DS_counterTable[typeOfData] += 1
+        else:
+            raise TypeError('Function name is the same as global variable')
 
 def p_parameterList(p):
     '''parameterList : empty
@@ -289,8 +319,21 @@ def p_f_addToParam(p):
 
 
 def p_assign(p):
-    '''assign : f_checkTab ID f_checkID EQUAL expression NEWLINE f_resetTab f_generateEqual assign
+    '''assign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
               | empty'''
+    global isAssign
+    isAssign = False
+    #f_checkTab ID f_checkID EQUAL f_isAssign expression assign NEWLINE f_resetTab f_generateEqual
+    #f_checkTab ID f_checkID EQUAL f_moreIDs f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
+
+#def p_f_moreIDs(p):
+#    '''f_moreIDs : empty
+#                | ID f_checkID EQUAL'''
+
+def p_f_isAssign(p):
+    'f_isAssign : '
+    global isAssign 
+    isAssign = True
 
 def p_f_generateEqual(p):
     'f_generateEqual :'
@@ -373,10 +416,19 @@ def p_statement(p):
 def p_f_return(p):
     'f_return : '
     global counterQuadruples
+
+    if ProcTypes[moduleName]=='void':
+        raise TypeError("Unexpected return in void function")
+
     retVal = operandsStack.pop() # hay que sacar tipo y valor del stack al final de un proc?
     typ = typesStack.pop()
-    Quadruples[counterQuadruples] = ['RETURN', retVal, -1, -1]
-    counterQuadruples += 1
+    globalAddr = ProcVars['Vispi'][addrTable][moduleName]
+    globalType = ProcVars['Vispi'][typeTable][moduleName]
+    if typ == globalType:
+        Quadruples[counterQuadruples] = ['RETURN', retVal, -1, globalAddr]
+        counterQuadruples += 1
+    else:
+        raise TypeError("Type missmatch: function return value")
 
 def p_condition(p):
     '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
@@ -433,20 +485,39 @@ def p_funct(p):
     '''funct : ID f_checkProc LPAREN RPAREN
              | ID f_checkProc LPAREN expression f_genParam expressionList RPAREN'''
     global counterQuadruples
+    global counterTemporals
+
 
     Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
     counterQuadruples += 1
+
+    if (not functType == 'void') and isAssign:
+        globalAddr = ProcVars['Vispi'][addrTable][functName]
+        temporalVariable = "Temporal%s" %counterTemporals
+        if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+            ProcVars[moduleName][typeTable][temporalVariable] = functType
+            ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[functType] + ES_counterTable[functType]
+            ES_counterTable[functType] += 1
+        temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+        operandsStack.push(temporalAddress)
+        typesStack.push(functType)
+        Quadruples[counterQuadruples] = ['=', globalAddr, -1, temporalAddress]
+        counterTemporals+=1
+        counterQuadruples+=1
+        
 
 def p_f_checkProc(p):
     'f_checkProc : '
     global counterQuadruples
     global counterParam
     global functName
+    global functType
 
     functName = p[-1]
     if not ProcVars.has_key(functName):
         raise TypeError("Function not declared")
 
+    functType = ProcTypes[functName]
     Quadruples[counterQuadruples] = ['ERA', ProcSize[functName], -1, -1]
     counterQuadruples += 1
 
@@ -588,7 +659,7 @@ def p_f_popOperator(p):
         operand = operandsStack.pop()
         typeVariable = typesStack.pop()
         if(typeVariable == 'bool'):
-            print typeOfCondition
+            #print typeOfCondition
             if (typeOfCondition == 'if' or typeOfCondition=='while'):
                 Quadruples[counterQuadruples]=["GOTOF", operand, -1, -1]
                 branchStack.push(counterQuadruples)
