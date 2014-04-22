@@ -23,10 +23,10 @@ void parse(string line){
 	    	case 1: 
 	    	{
 
-	    	 int separator = line.find(',');
+	    	 int comma = line.find(',');
 	  		//Guardar cada valor de acuerdo a su tipo? Ahora solo se guardan como strings
-	    	 string value = line.substr(0, separator);
-	    	 int address = atoi(line.substr(separator+1).c_str());
+	    	 string value = line.substr(0, comma);
+	    	 int address = atoi(line.substr(comma+1).c_str());
 	    	 memory[address] = value;
 	    	 //cout<<value<<endl;
 	    	 //cout<<address<<endl;
