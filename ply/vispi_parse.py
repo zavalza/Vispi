@@ -65,16 +65,14 @@ typeTable = 1
 addrTable = 2
 
 #Virtual Memory segment definitions
-DS_base = 0                 #globales
-DS_len = 1200
-CS_base = DS_base + DS_len  #constantes
-CS_len = 1200
-SS_base = CS_base + CS_len  #locales
-SS_len = 1200
-ES_base = SS_base + SS_len  #temporales
-ES_len = 1200
+S_len = 1000
 
-S_offsetTable = {'bool' : 0, 'int' : 250, 'float' : 500, 'string' : 750, 'image' : 1000}
+DS_base = 0                #globales
+CS_base = DS_base + S_len  #constantes
+SS_base = CS_base + S_len  #locales
+ES_base = SS_base + S_len  #temporales
+
+S_offsetTable = {'bool' : 0, 'int' : 200, 'float' : 400, 'string' : 600, 'image' : 800}
 
 #variable counters
 DS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
@@ -96,6 +94,7 @@ typeOfData = 'VOID' #Used to store the last type detected
 
 #quadruples
 fileQuadruples = open('vispi.obj', 'w')
+programName = ''
 counterQuadruples = 0
 Quadruples={}
 branchStack = Stack()
@@ -141,11 +140,20 @@ def p_program(p):
         print branchStack
 
         #guardar en archivo:
-        #   Dir. de Procs
+        #   Dir. de Procs //no
         #   %%
         #   Constantes (addr, tipo y valor)
         #   %%
         #   Cuadruplos
+        fileQuadruples.write("%s\n" %(programName))
+        fileQuadruples.write("%d\n" %(DS_base))
+        fileQuadruples.write("%d\n" %(S_len))
+        fileQuadruples.write("%d\n" %(S_offsetTable['bool']))
+        fileQuadruples.write("%d\n" %(S_offsetTable['int']))
+        fileQuadruples.write("%d\n" %(S_offsetTable['float']))
+        fileQuadruples.write("%d\n" %(S_offsetTable['string']))
+        fileQuadruples.write("%d\n" %(S_offsetTable['image']))
+
         fileQuadruples.write("%%\n")
         
         keys = ProcVars['Vispi'][addrTable].keys()
@@ -157,9 +165,9 @@ def p_program(p):
 
         for i in range(counterQuadruples):
             line = str(Quadruples[i])
-            line = line.replace('[','{')
-            line = line.replace(']','}')
-            line = line.replace("'",'"')
+            #line = line.replace('[','{')
+            #line = line.replace(']','}')
+            #line = line.replace("'",'"')
             fileQuadruples.write("%s\n" %line)
 
     else:
@@ -167,9 +175,11 @@ def p_program(p):
 def p_programName(p):
     'programName : PROGRAM ID NEWLINE'
     global counterQuadruples
+    global programName
     Quadruples[counterQuadruples]=["GOTO", -1, -1, -1]
     #branchStack.push(counterQuadruples)
     counterQuadruples+=1
+    programName = p[2]
 
 def p_empty(p):
     'empty :'
