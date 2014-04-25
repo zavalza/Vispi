@@ -10,35 +10,47 @@ import vispi_parse
 # If a filename has been specified, we try to run it.
 # If a runtime error occurs, we bail out and enter
 # the other mode below
+TypeMap = ['bool', 'int', 'float', 'string', 'image']
+LinfMap = []
+LsupMap = []
+MemBase = 0
+MemLen = 0
+
 if len(sys.argv) == 2:
     data = open(sys.argv[1]).read()
     prog = vispi_parse.parse(data)
+
+    OBJ = open('vispi.obj', 'r')
+    Name = OBJ.readline().splitlines()[0]
+    CPP = open('%s.cpp' %(Name), 'w')
+    CPP.write('#include "vispi.h"\n\nusing namespace std;\nusing namespace cv;\n\n')
+
+    MemBase = int(OBJ.readline().splitlines()[0])
+    MemLen = int(OBJ.readline().splitlines()[0])
+    for i in range(5):
+    	LinfMap.append(int(OBJ.readline().splitlines()[0]))
+
+    for i in range(4):
+    	LsupMap.append(LinfMap[i+1] - 1)
+
+    LsupMap.append(MemLen - 1)
+
+    OBJ.readline()	#reads the %%
+
+    line = OBJ.readline().splitlines()[0]
+    while line != '%%':
+    	data = line.split(',')
+    	
+
+
+    	line = OBJ.readline().splitlines()[0]
+
+    line = OBJ.readline().splitlines()[0]
+    #while line != '%%':        while not eof() ?
+
+        # read the line and save it as it is in a list
+
+        #line = OBJ.readline().splitlines()[0]
     
 else:
-    vispi_parse.parse('''
-    	PROGRAM primerTest
-		CAM webcam : cam1
-		INPUT 8 : boton1, 9: boton2
-		OUTPUT 5: led1
-
-		int elefante, paloma
-		float tigre
-		bool si_o_no
-
-		int funcionextra(int parametro1)
-			int otroAnimal
-			otroAnimal = parametro1 - 1
-			if (otroAnimal != 0)
-				funcionextra(4)
-			else 
-				funcionextra(3)
-
-		void main()
-			string estoEsUnMensaje
-		    char letra
-
-			estoEsUnMensaje = "el elefante rosa corre en la pradera"
-		    esteEsUnChar = 'a'
-
-			print(estoEsUnMensaje)
-			tigre = tigre + 5 * 8 - elefante / (si_o_no + 9)''')
+    print 'Error: syntax is "python vispi.py <source code>"'

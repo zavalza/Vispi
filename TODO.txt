@@ -1,6 +1,5 @@
 0. Que onda con los TABS? (casos else, while)
 
-	*1. Eliminar cualquier rastro del tipo CHAR ***
 !2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
 	*3. Terminar los cuadruplos
 
