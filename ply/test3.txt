@@ -1,8 +1,8 @@
 PROGRAM buscaIntruso
 CAM webcam:micamara 
-INPUT 17:boton 
-OUTPUT 22:led1,23:led2
-PWM 18:velocidad
+INPUT 22:boton 
+OUTPUT 15:led1,16:led2
+PWM 12:velocidad
 int personas
 string mensajeAlerta
 image imgInicial

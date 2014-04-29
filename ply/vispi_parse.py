@@ -169,6 +169,7 @@ def p_program(p):
             #line = line.replace(']','}')
             #line = line.replace("'",'"')
             fileQuadruples.write("%s\n" %line)
+        fileQuadruples.close()
 
     else:
         raise TypeError("'main' module was not defined")
@@ -202,7 +203,7 @@ def p_inputsDeclaration(p):
 					     | INPUT f_saveType pinList NEWLINE'''
     global counterQuadruples
     while(not operandsStack.isEmpty()):
-        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, -1]
+        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, operandsStack.pop()]
         counterQuadruples+=1
 
 def p_ouputsDeclaration(p):
@@ -210,7 +211,7 @@ def p_ouputsDeclaration(p):
 					      | OUTPUT f_saveType pinList NEWLINE'''
     global counterQuadruples
     while(not operandsStack.isEmpty()):
-        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, -1]
+        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, operandsStack.pop()]
         counterQuadruples+=1
 
 def p_pwmDeclaration(p):
@@ -218,7 +219,7 @@ def p_pwmDeclaration(p):
 				      | PWM f_saveType pinList NEWLINE'''
     global counterQuadruples
     while(not operandsStack.isEmpty()):
-        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, -1]
+        Quadruples[counterQuadruples]=[p[1], operandsStack.pop(), -1, operandsStack.pop()]
         counterQuadruples+=1
 
 def p_pinList(p):
@@ -228,6 +229,7 @@ def p_pinList(p):
     ProcVars['Vispi'][addrTable][p[3]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
     DS_counterTable[typeOfData] += 1 # falta validar que no nos pasemos del tamanio del segmento
     operandsStack.push(p[1])
+    operandsStack.push(p[3])
 
 
 def p_vars(p):

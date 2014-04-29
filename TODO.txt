@@ -14,6 +14,7 @@ Que pasa cuando haces esto?
 8. Generar cuadruplos de funciones predefinidas por nosotros
 9. Guardar cada valor de acuerdo a su tipo en maquina virtual. Ahora solo se guardan como strings
 
+10. El tipo void del main se está guardando diferente, como imagen
 x. test test test
 
 Y. DOCUMENTACION
