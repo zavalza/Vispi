@@ -153,6 +153,8 @@ def p_program(p):
         fileQuadruples.write("%d\n" %(S_offsetTable['float']))
         fileQuadruples.write("%d\n" %(S_offsetTable['string']))
         fileQuadruples.write("%d\n" %(S_offsetTable['image']))
+        fileQuadruples.write("%d\n" %(S_offsetTable['void']))
+        fileQuadruples.write("%s\n" %(ProcAddr))
 
         fileQuadruples.write("%%\n")
         

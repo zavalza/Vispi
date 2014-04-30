@@ -6,6 +6,8 @@ buscaIntruso
 400
 600
 800
+900
+{'main': 30, 'comparaImagen': 8, 'Vispi': 0}
 %%
 led1,2
 1,1205

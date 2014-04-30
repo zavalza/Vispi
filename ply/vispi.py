@@ -14,8 +14,9 @@ import string
 TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
-VarDict={}  #dictionary to find name using address
+VarDict={}  #dictionary to find name of variable using its address
 HwVars={}   #dictionary to find pins using names
+ProcBegin={} #dictionary to map the begin of each proccedure
 LinfMap = []
 LsupMap = []
 MemBase = 0
@@ -53,16 +54,22 @@ if len(sys.argv) == 2:
     MemLen = int(OBJ.readline().splitlines()[0])
     print MemBase
     print MemLen
-    for i in range(5):
+    for i in range(6):
     	LinfMap.append(int(OBJ.readline().splitlines()[0]))
 
-    for i in range(4):
+    for i in range(5):
     	LsupMap.append(LinfMap[i+1] - 1)
 
     LsupMap.append(MemLen - 1)
 
     print LinfMap
     print LsupMap
+    procAdd= eval(OBJ.readline().splitlines()[0])
+    addresses = procAdd.values()
+    modules = procAdd.keys()
+    for i in range(len(modules)):
+        ProcBegin[addresses[i]]=modules[i]
+    print ProcBegin
 
     OBJ.readline()	#reads the %%
 
@@ -98,7 +105,11 @@ if len(sys.argv) == 2:
     CPP.write('int main()\n{\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
     #how to print correctly the tabs?
     #interpret each quadruple to instructions in main of cpp
-    for quadruple in quadruples:
+    for number, quadruple in enumerate(quadruples):
+        if(ProcBegin.has_key(number)):
+            if(ProcBegin[number] is not 'Vispi' and ProcBegin[number] is not 'main'): 
+                #create the new module in CPP, i think we need a structure for this
+                print ProcBegin[number]
         if(quadruple[0] == 'GOTO'):
             print "GOTO"
         if(quadruple[0] == 'CAM'):
@@ -109,25 +120,28 @@ if len(sys.argv) == 2:
         if(quadruple[0] == 'INPUT'):
             pin = int(quadruple[3])
             if(pin in GPIO): #validate pin
+                name = quadruple[1]
                 CPP.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(pin))
                 CPP.write('pinMode(%s, INPUT); \n'%(pin))
-                HwVars[quadruple[1]]= pin
+                HwVars[name]= pin
             else:
                 print "Pin %s is not a valid GPIO pin"%(pin)
         if(quadruple[0] == 'OUTPUT'):
             pin = int(quadruple[3])
             if(pin in GPIO):
+                name = quadruple[1]
                 CPP.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin));
                 CPP.write('pinMode(%s, OUTPUT); \n'%(pin))
-                HwVars[quadruple[1]]= pin
+                HwVars[name]= pin
             else:
                 print "Pin %s is not a valid GPIO pin"%(pin)
         if(quadruple[0] == 'PWM'):
             pin = int(quadruple[3])
             if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for PWM
+                name = quadruple[1]
                 CPP.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin))
                 CPP.write('pinMode(%s, PWM_OUTPUT); \n'%(pin))
-                HwVars[quadruple[1]]= pin
+                HwVars[name]= pin
             else:
                 print "Only pin #12 can be used as pwm"
 
