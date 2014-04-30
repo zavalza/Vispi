@@ -72,13 +72,13 @@ CS_base = DS_base + S_len  #constantes
 SS_base = CS_base + S_len  #locales
 ES_base = SS_base + S_len  #temporales
 
-S_offsetTable = {'bool' : 0, 'int' : 200, 'float' : 400, 'string' : 600, 'image' : 800}
+S_offsetTable = {'bool' : 0, 'int' : 200, 'float' : 400, 'string' : 600, 'image' : 800, 'void': 900}
 
 #variable counters
-DS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-CS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-SS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
-ES_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0}
+DS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0, 'void': 0}
+CS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0, 'void': 0}
+SS_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0, 'void': 0}
+ES_counterTable = {'bool' : 0, 'int' : 0, 'float' : 0, 'string' : 0, 'image' : 0, 'void': 0}
 
 
 #data structures
@@ -272,11 +272,16 @@ def p_tipo(p):
 def p_functions(p):
     '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
                  | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
-                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
-                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
-                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
-                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID f_setVoid ID f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID f_setVoid ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID f_setVoid MAIN f_saveModule LPAREN RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
+                 | DEF VOID f_setVoid MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE f_resetTab f_incTab block f_endModule functions
                  | empty'''
+
+def p_f_setVoid(p):
+    'f_setVoid : '
+    global typeOfData
+    typeOfData = 'void'
 
 def p_f_endModule(p):
     'f_endModule : '

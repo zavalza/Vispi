@@ -11,7 +11,7 @@ import string
 # If a filename has been specified, we try to run it.
 # If a runtime error occurs, we bail out and enter
 # the other mode below
-TypeMap = ['bool', 'int', 'float', 'string', 'Mat']
+TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
 VarDict={}  #dictionary to find name using address
@@ -84,7 +84,7 @@ if len(sys.argv) == 2:
             print "Error" #we are suppose to have only globals and constants in this section
         
         VarDict[address] = name  
-    	print data
+    	#print data
     	line = OBJ.readline().splitlines()[0]
     CPP.write('\n')
     print VarDict
@@ -94,7 +94,7 @@ if len(sys.argv) == 2:
     for line in OBJ:    #reads rest of the file
         quadruples.append(eval(line.splitlines()[0]))
     
-    #print quadruples
+    print quadruples
     CPP.write('int main()\n{\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
     #how to print correctly the tabs?
     #interpret each quadruple to instructions in main of cpp

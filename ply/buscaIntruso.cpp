@@ -4,26 +4,26 @@ using namespace std;
 using namespace cv;
 
 bool led1;
-int UluJB = 1;
+int yXCIC = 1;
 bool led2;
-int EDHLt = 4;
-int pfIIh = 5;
+int thu0x = 4;
+int fY50E = 5;
 int velocidad;
-bool EhRnm = true;
+bool Sw3nu = true;
 string mensajeAlerta;
-int Dqw5v = 10;
-float 6Y0Kj = 1.2;
+int RukC3 = 10;
+float kDvqz = 1.2;
 bool boton;
-float tdw6H = 45.0;
-float ZX9fI = 2.1;
-int 1tavt = 3;
-int ofRPM = 20;
-string U51nK = "Alerta de intruso!";
+float iydQ7 = 45.0;
+float yDJG1 = 2.1;
+int dEupG = 3;
+int KeJY2 = 20;
+string W0lyi = "Alerta de intruso!";
 int personas;
 Mat main;
 int comparaImagen;
 Mat imgInicial;
-int n7DGC = 85;
+int pcqVg = 85;
 
 int main()
 {
