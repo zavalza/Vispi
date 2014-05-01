@@ -14,14 +14,17 @@ import string
 TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
-VarDict={}  #dictionary to find name of variable using its address
+VarDict={}  #dictionary to find name of GLOBAL variable using its address
 HwVars={}   #dictionary to find pins using names
 ProcBegin={} #dictionary to map the begin of each proccedure
+LocalVarName = {} #dictonary to fine name of LOCAL variable by address
+procVars = {} #directory of procedures, as is in the parse file
 LinfMap = []
 LsupMap = []
 MemBase = 0
 MemLen = 0
 VarNames = []
+counterOfUserProcedures = 0
 
 def resolveType(address):
     address = (address - MemBase) % MemLen #check just the offset
@@ -30,12 +33,15 @@ def resolveType(address):
             return TypeMap[i]
     return 'void' #default
 
+def resolveLocalAddr(type):
+    return MemLen * 2 + MemBase + LinfMap[TypeMap.index(type)]
+
 def resolveMemSection(address):
     section = (address - MemBase) / MemLen
     return MemSectionMap[section] 
 
 def getRandomName():
-    name = ''.join(random.choice(string.letters+string.digits) for i in xrange(5))
+    name = ''.join(random.choice(string.letters) for i in xrange(5))
     while(name in VarNames):
         name = os.urandom(5)
     return name
@@ -49,6 +55,7 @@ if len(sys.argv) == 2:
     Name = OBJ.readline().splitlines()[0]
     CPP = open('%s.cpp' %(Name), 'w')
     CPP.write('#include "vispi.h"\n\nusing namespace std;\nusing namespace cv;\n\n')
+    MAIN = open('tempMain.cpp', 'w')
 
     MemBase = int(OBJ.readline().splitlines()[0])
     MemLen = int(OBJ.readline().splitlines()[0])
@@ -71,6 +78,11 @@ if len(sys.argv) == 2:
         ProcBegin[addresses[i]]=modules[i]
     print ProcBegin
 
+    procVars = eval(OBJ.readline().splitlines()[0])
+    paramList = 0
+    typeTable = 1
+    addrTable = 2
+
     OBJ.readline()	#reads the %%
 
     #Define constants and globals in cpp
@@ -82,7 +94,8 @@ if len(sys.argv) == 2:
         name = " "
         if(resolveMemSection(address)=='globals'):
             name = data[0]
-            CPP.write('%s %s;\n'%(typeOfData,name))
+            if not procAdd.has_key(name):
+                CPP.write('%s %s;\n'%(typeOfData,name))
         elif(resolveMemSection(address)=='constants'):
             value = (data[0])
             name = getRandomName()
@@ -102,27 +115,62 @@ if len(sys.argv) == 2:
         quadruples.append(eval(line.splitlines()[0]))
     
     print quadruples
-    CPP.write('int main()\n{\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
+    MAIN.write('int main()\n{\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
     #how to print correctly the tabs?
     #interpret each quadruple to instructions in main of cpp
     for number, quadruple in enumerate(quadruples):
         if(ProcBegin.has_key(number)):
-            if(ProcBegin[number] is not 'Vispi' and ProcBegin[number] is not 'main'): 
+            if(ProcBegin[number] is not 'Vispi' and ProcBegin[number] is not 'main'): #######
+                global counterOfUserProcedures
+                global LocalVarName
                 #create the new module in CPP, i think we need a structure for this
+                name = ProcBegin[number]
+                
+                if not counterOfUserProcedures == 0:
+                    CPP.write('\n}\n\n')
+                CPP.write('%s %s (' %(procVars['Vispi'][typeTable][name],name) )
+
+                addresses = procVars[name][addrTable].values()
+                varnames = procVars[name][addrTable].keys()
+                for i in range(len(addresses)):
+                    LocalVarName[addresses[i]]=varnames[i]
+
+                counterOfParametersOfEachType = {'bool':0, 'int':0, 'float':0, 'string':0, 'image':0}
+                for n, parameterType in enumerate(procVars[name][paramList]):
+                    x = counterOfParametersOfEachType[parameterType]
+                    parameterName = LocalVarName[resolveLocalAddr(parameterType) + x]
+                    counterOfParametersOfEachType[parameterType] = x + 1
+
+                    if n > 0:
+                        CPP.write(', ')
+                    if parameterType == 'image':
+                        parameterType = 'Mat'
+                    CPP.write('%s %s' %(parameterType, parameterName))
+                
+                CPP.write(') {')
+                    
                 print ProcBegin[number]
+                counterOfUserProcedures = counterOfUserProcedures + 1
+            #################################################################################
+            elif (ProcBegin[number] is 'main'):
+                CPP.write('\n}\n\n')
+                MAIN.close();
+                MAIN = open('tempMain.cpp', 'r')
+                CPP.write(MAIN.read())
+                MAIN.close();
         if(quadruple[0] == 'GOTO'):
             print "GOTO"
         if(quadruple[0] == 'CAM'):
             if(quadruple[1] == 'webcam'):
-                CPP.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\nreturn -1;\n\n');
+                MAIN.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
             else: #raspicam
                 print"raspicam"
         if(quadruple[0] == 'INPUT'):
             pin = int(quadruple[3])
             if(pin in GPIO): #validate pin
                 name = quadruple[1]
-                CPP.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(pin))
-                CPP.write('pinMode(%s, INPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(pin))
+                MAIN.write('pinMode(%s, INPUT); \n'%(pin))
                 HwVars[name]= pin
             else:
                 print "Pin %s is not a valid GPIO pin"%(pin)
@@ -130,8 +178,8 @@ if len(sys.argv) == 2:
             pin = int(quadruple[3])
             if(pin in GPIO):
                 name = quadruple[1]
-                CPP.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin));
-                CPP.write('pinMode(%s, OUTPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin));
+                MAIN.write('pinMode(%s, OUTPUT); \n'%(pin))
                 HwVars[name]= pin
             else:
                 print "Pin %s is not a valid GPIO pin"%(pin)
@@ -139,11 +187,16 @@ if len(sys.argv) == 2:
             pin = int(quadruple[3])
             if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for PWM
                 name = quadruple[1]
-                CPP.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin))
-                CPP.write('pinMode(%s, PWM_OUTPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin))
+                MAIN.write('pinMode(%s, PWM_OUTPUT); \n'%(pin))
                 HwVars[name]= pin
             else:
                 print "Only pin #12 can be used as pwm"
+
+    # Quadruples have ended
+        #insert MAIN
+    CPP.write('\nreturn 0;\n}\n')
+    CPP.close()
 
     print HwVars
 

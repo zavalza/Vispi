@@ -155,6 +155,7 @@ def p_program(p):
         fileQuadruples.write("%d\n" %(S_offsetTable['image']))
         fileQuadruples.write("%d\n" %(S_offsetTable['void']))
         fileQuadruples.write("%s\n" %(ProcAddr))
+        fileQuadruples.write("%s\n" %(ProcVars))
 
         fileQuadruples.write("%%\n")
         
@@ -179,7 +180,7 @@ def p_programName(p):
     'programName : PROGRAM ID NEWLINE'
     global counterQuadruples
     global programName
-    Quadruples[counterQuadruples]=["GOTO", -1, -1, -1]
+    Quadruples[counterQuadruples]=["GOTO", -1, 'main', -1]
     #branchStack.push(counterQuadruples)
     counterQuadruples+=1
     programName = p[2]
@@ -460,7 +461,7 @@ def p_cycle(p):
     global counterQuadruples
     end = branchStack.pop()
     condition = branchStack.pop()
-    Quadruples[counterQuadruples]=['GOTO', -1, -1, condition]
+    Quadruples[counterQuadruples]=['GOTO', -1, 'while', condition]
     counterQuadruples+=1
     Quadruples[end][3]=counterQuadruples
 
@@ -470,7 +471,7 @@ def p_doCycle(p):
 def p_f_popIf(p):
     'f_popIf : '
     global counterQuadruples
-    Quadruples[counterQuadruples] = ['GOTO', -1, -1, -1]
+    Quadruples[counterQuadruples] = ['GOTO', -1, 'else', -1]
     counterQuadruples+=1
     endFalse = branchStack.pop()
     Quadruples[endFalse][3]=counterQuadruples
@@ -680,12 +681,12 @@ def p_f_popOperator(p):
         if(typeVariable == 'bool'):
             #print typeOfCondition
             if (typeOfCondition == 'if' or typeOfCondition=='while'):
-                Quadruples[counterQuadruples]=["GOTOF", operand, -1, -1]
+                Quadruples[counterQuadruples]=["GOTOF", operand, typeOfCondition, -1]
                 branchStack.push(counterQuadruples)
                 counterQuadruples+=1
             elif(typeOfCondition=='do'):
                 code = branchStack.pop()
-                Quadruples[counterQuadruples]=['GOTOT', operand, -1, code]
+                Quadruples[counterQuadruples]=['GOTOT', operand, typeOfCondition, code]
                 counterQuadruples+=1
             else:
                 #print typeOfCondition
