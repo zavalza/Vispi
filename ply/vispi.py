@@ -16,7 +16,7 @@ MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
 VarDict={}  #dictionary to find name of GLOBAL and CONSTANT variable using its address
 HwVars={}   #dictionary to find pins using names
-ProcBegin={} #dictionary to map the begin of each proccedure
+ProcBegin={} #dictionary to map the begin of each proccedure, addresses are keys, modules are values
 LocalVarName = {} #dictonary to fine name of LOCAL variable by address
 procVars = {} #directory of procedures, as is in the parse file
 TemporalMemory = {} #dictionary, returns values using a temporal address
@@ -28,6 +28,8 @@ VarNames = []
 counterOfUserProcedures = 0
 operatorAuxList = ['+','-','/','*','%','>','<','<=','>=','!=','==','&&','||']
 GotoFList = []
+paramString = ''
+mainFileIsOpen = False
 
 def resolveType(address):
     address = (address - MemBase) % MemLen #check just the offset
@@ -59,6 +61,7 @@ if len(sys.argv) == 2:
     CPP = open('%s.cpp' %(Name), 'w')
     CPP.write('#include "vispi.h"\n\nusing namespace std;\nusing namespace cv;\n\n')
     MAIN = open('tempMain.cpp', 'w')
+    mainFileIsOpen = True
 
     MemBase = int(OBJ.readline().splitlines()[0])
     MemLen = int(OBJ.readline().splitlines()[0])
@@ -161,6 +164,7 @@ if len(sys.argv) == 2:
 
                 if (name is 'main'):
                     MAIN.close();
+                    mainFileIsOpen = False
                     MAIN = open('tempMain.cpp', 'r')
                     CPP.write(MAIN.read())
                     MAIN.close();
@@ -226,20 +230,30 @@ if len(sys.argv) == 2:
                     TemporalMemory[destAdd] = TemporalMemory[origAdd]
                 elif destZone is 'temporals' and (origZone is 'globals' or origZone is 'constants'):
                     TemporalMemory[destAdd] = VarDict[origAdd]
+                    VarDict[origAdd] = VarDict[origAdd].split('(')[0]
                 elif destZone is 'temporals' and origZone is 'locals':
                     TemporalMemory[destAdd] = LocalVarName[origAdd]
                 elif destZone is 'globals' and origZone is 'temporals':
                     x = VarDict[destAdd]
                     y = TemporalMemory[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
+                    if mainFileIsOpen:
+                        MAIN.write('%s = %s;\n' %(x, y))
+                    else:
+                        CPP.write('%s = %s;\n' %(x, y))
                 elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
                     x = VarDict[destAdd]
                     y = VarDict[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
+                    if mainFileIsOpen:
+                        MAIN.write('%s = %s;\n' %(x, y))
+                    else:
+                        CPP.write('%s = %s;\n' %(x, y))
                 elif destZone is 'globals' and origZone is 'locals':
                     x = VarDict[destAdd]
                     y = LocalVarName[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
+                    if mainFileIsOpen:
+                        MAIN.write('%s = %s;\n' %(x, y))
+                    else:
+                        CPP.write('%s = %s;\n' %(x, y))
                 elif destZone is 'locals' and origZone is 'temporals':
                     x = LocalVarName[destAdd]
                     y = TemporalMemory[origAdd]
@@ -286,6 +300,53 @@ if len(sys.argv) == 2:
                     y = LocalVarName[orig2Add]
                 
                 TemporalMemory[destAdd] = '(' + x + ' ' + operator + ' ' + y + ')'
+
+        if (quadruple[0] is 'RETURN'):
+            origAdd = quadruple[1]
+            destAdd = quadruple[3]
+            origTyp = resolveType(origAdd)
+            destTyp = resolveType(destAdd)
+            origZone = resolveMemSection(origAdd)
+            destZone = resolveMemSection(destAdd)
+
+            if origZone is 'temporals':
+                CPP.write('return %s;\n' %(TemporalMemory[origAdd]))
+            elif (origZone is 'globals' or origZone is 'constants'):
+                CPP.write('return %s;\n' %(VarDict[origAdd]))
+            elif origZone is 'locals':
+                CPP.write('return %s;\n' %(LocalVarName[origAdd]))
+
+        if (quadruple[0] is 'PARAM'):
+            global paramString
+            numberOfParam = quadruple[3]
+            origAdd = quadruple[1]
+            origZone = resolveMemSection(origAdd)
+
+            if (numberOfParam is 0):
+                if origZone is 'temporals':
+                    paramString = TemporalMemory[origAdd]
+                elif (origZone is 'globals' or origZone is 'constants'):
+                    paramString = VarDict[origAdd]
+                elif origZone is 'locals':
+                    paramString = LocalVarName[origAdd]
+            else:
+                if origZone is 'temporals':
+                    paramString += ', ' + TemporalMemory[origAdd]
+                elif (origZone is 'globals' or origZone is 'constants'):
+                    paramString += ', ' + VarDict[origAdd]
+                elif origZone is 'locals':
+                    paramString += ', ' + LocalVarName[origAdd]
+
+        if (quadruple[0] is 'GOSUB'):
+            global paramString
+            quadNumber = quadruple[1]
+            moduleName = ProcBegin[quadNumber]
+            #CPP.write('%s(%s);' %(moduleName, paramString))
+            addrOfModuleGlobal = procVars['Vispi'][addrTable][moduleName]
+            VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
+            paramString = ''
+
+        # Leave the following quadruples at the end. More quadruples go above here /\
 
         if(quadruple[0] is 'GOTOF'):
             conditionAdd = quadruple[1]

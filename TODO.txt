@@ -3,18 +3,18 @@
 !1. RESOLVER WHILE
 	. Operador NOT !
 
-3. RECURSIVIDAD no, m'as bien el RETURN, Falta escribir el return al CPP
+*3. RECURSIVIDAD no, m'as bien el RETURN, Falta escribir el return al CPP
 
 !2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
 	*3. Terminar los cuadruplos
 
 Que pasa cuando haces esto?
-4. tempImg = takePicture()	#los 'funct' deben dejar el valor de retorno en el stack?
+*4. tempImg = takePicture()	#los 'funct' deben dejar el valor de retorno en el stack?
 	hay que dejar el valor de retorno en una global que tiene el nombre del proc y luego asignarla despues del GOSUB
 
 x. Anidar IF dentro de DO, y en general anidar condiciones
 
-6. comparaImagen(comparaImagen(x, b), b) ??????
+*6. comparaImagen(comparaImagen(x, b), b) ??????
 7. Igualaciones anidadas
 8. Generar cuadruplos de funciones predefinidas por nosotros
 9. Guardar cada valor de acuerdo a su tipo en maquina virtual. Ahora solo se guardan como strings

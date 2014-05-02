@@ -114,6 +114,7 @@ counterParam = 0
 functName = ''
 functType = ''
 isAssign = False
+isReturn = False
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -249,7 +250,10 @@ def p_pinList(p):
 
 
 def p_vars(p):
-    '''vars : f_checkTab tipo idList NEWLINE f_resetTab vars
+    'vars : f_checkTab tipo idList NEWLINE f_resetTab moreVars'
+
+def p_moreVars(p):
+    '''moreVars : f_checkTab tipo idList NEWLINE f_resetTab moreVars
             | empty'''
 
 def p_f_saveType(p):
@@ -352,12 +356,15 @@ def p_f_addToParam(p):
 
 
 def p_assign(p):
-    '''assign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
-              | empty'''
+    'assign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign'
     global isAssign
     isAssign = False
     #f_checkTab ID f_checkID EQUAL f_isAssign expression assign NEWLINE f_resetTab f_generateEqual
     #f_checkTab ID f_checkID EQUAL f_moreIDs f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
+
+def p_moreAssign(p):
+    '''moreAssign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign
+                    | empty'''
 
 #def p_f_moreIDs(p):
 #    '''f_moreIDs : empty
@@ -397,17 +404,16 @@ def p_f_checkID(p):
 #     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block 
 # 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block'''
 
-def p_block(p):
-    '''block : empty
-             | TAB f_addTab moreTabs statement moreStatements'''
-    global expectedTabulation 
-    global counterTabs
-    expectedTabulation-=1
-    counterTabs = 0
-
 def p_moreStatements(p):
     '''moreStatements : empty
                       | TAB f_addTab moreTabs statement moreStatements'''
+
+def p_block(p):
+    'block : TAB f_addTab moreTabs statement moreStatements'
+    global expectedTabulation 
+    #global counterTabs
+    expectedTabulation -= 1
+    #counterTabs = 0
 
 def p_moreTabs(p):
     '''moreTabs : empty
@@ -448,12 +454,18 @@ def p_statement(p):
                  | f_checkTab cycle
                  | f_checkTab doCycle
                  | f_checkTab funct NEWLINE f_resetTab
-                 | f_checkTab RETURN expression f_return NEWLINE f_resetTab'''
+                 | f_checkTab RETURN f_isReturn expression f_return NEWLINE f_resetTab'''
+    global isReturn 
+    isReturn = False
+
+def p_f_isReturn(p):
+    'f_isReturn : '
+    global isReturn 
+    isReturn = True
 
 def p_f_return(p):
     'f_return : '
     global counterQuadruples
-
     if ProcTypes[moduleName]=='void':
         raise TypeError("Unexpected return in void function")
 
@@ -533,7 +545,7 @@ def p_funct(p):
     Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
     counterQuadruples += 1
 
-    if (not functType == 'void') and isAssign:
+    if (not functType == 'void') and (isAssign or isReturn):
         globalAddr = ProcVars['Vispi'][addrTable][functName]
         temporalVariable = "Temporal%s" %counterTemporals
         if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
@@ -561,7 +573,7 @@ def p_f_checkProc(p):
         raise TypeError("Function not declared")
 
     functType = ProcTypes[functName]
-    Quadruples[counterQuadruples] = ['ERA', ProcSize[functName], -1, -1]
+    Quadruples[counterQuadruples] = ['ERA', functName, -1, -1]
     counterQuadruples += 1
 
     counterParam = 0

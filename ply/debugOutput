@@ -1,20 +1,19 @@
-[3201, 2200, 3200]
 programa exitoso
-{'factorial': 'int', 'main': 'void', 'Vispi': 'prog'}
+{'main': 'void', 'Vispi': 'prog'}
 
 
-{'factorial': [0, 1, 0, 0, 0, 1, 2, 0, 0, 0], 'main': [0, 1, 0, 0, 0, 0, 1, 0, 0, 0], 'Vispi': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+{'main': [0, 2, 0, 0, 0, 1, 0, 0, 0, 0], 'Vispi': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
 
 
-{'factorial': 8, 'main': 19, 'Vispi': 0}
+{'main': 7, 'Vispi': 0}
 
 
-{'factorial': [['int'], {'i': 'int', 'Temporal2': 'int', 'Temporal1': 'int', 'Temporal0': 'bool'}, {'i': 2200, 'Temporal2': 3201, 'Temporal1': 3200, 'Temporal0': 3000}], 'main': [[], {'x': 'int', 'Temporal3': 'int'}, {'x': 2200, 'Temporal3': 3200}], 'Vispi': [[], {'led1': 'bool', 'a': 'int', 2: 'int', 'led2': 'bool', 5: 'int', 'velocidad': 'int', 1: 'int', 'factorial': 'int', 'mensajeAlerta': 'string', 'boton': 'bool', '"Alerta de intruso!"': 'string', 'personas': 'int', 'main': 'void', 'imgInicial': 'image'}, {'led1': 2, 'a': 202, 2: 1201, 'led2': 1, 5: 1200, 'velocidad': 200, 1: 1202, 'factorial': 203, 'mensajeAlerta': 600, 'boton': 0, '"Alerta de intruso!"': 1600, 'personas': 201, 'main': 900, 'imgInicial': 800}]}
+{'main': [[], {'y': 'int', 'x': 'int', 'Temporal0': 'bool'}, {'y': 2200, 'x': 2201, 'Temporal0': 3000}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 'velocidad': 'int', 'boton': 'bool', 'x': 'int', 'main': 'void', 0: 'int'}, {'led1': 2, 1: 1200, 'led2': 1, 'velocidad': 200, 'boton': 0, 'x': 201, 'main': 900, 0: 1201}]}
 
 
 
 
-{0: ['GOTO', -1, 'main', -1], 1: ['CAM', 'webcam', -1, -1], 2: ['INPUT', 'boton', -1, 22], 3: ['OUTPUT', 'led1', -1, 15], 4: ['OUTPUT', 'led2', -1, 16], 5: ['PWM', 'velocidad', -1, 12], 6: ['=', 1200, -1, 201], 7: ['=', 1600, -1, 600], 8: ['<', 2200, 1201, 3000], 9: ['GOTOF', 3000, 'if', 12], 10: ['RETURN', 1202, -1, 203], 11: ['GOTO', -1, 'else', 18], 12: ['ERA', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], -1, -1], 13: ['-', 2200, 1202, 3200], 14: ['PARAM', 3200, -1, 0], 15: ['GOSUB', 8, -1, -1], 16: ['*', 1202, 2200, 3201], 17: ['RETURN', 3201, -1, 203], 18: ['RET', -1, -1, -1], 19: ['ERA', [0, 1, 0, 0, 0, 1, 2, 0, 0, 0], -1, -1], 20: ['PARAM', 1202, -1, 0], 21: ['GOSUB', 8, -1, -1], 22: ['=', 203, -1, 3200], 23: ['=', 3200, -1, 2200], 24: ['RET', -1, -1, -1], 25: ['ENDPROC', -1, -1, -1]}
+{0: ['GOTO', -1, 'main', -1], 1: ['CAM', 'webcam', -1, -1], 2: ['INPUT', 'boton', -1, 22], 3: ['OUTPUT', 'led1', -1, 15], 4: ['OUTPUT', 'led2', -1, 16], 5: ['PWM', 'velocidad', -1, 12], 6: ['=', 1200, -1, 201], 7: ['=', 2201, -1, 2200], 8: ['>', 2200, 2201, 3000], 9: ['GOTOF', 3000, 'while', 12], 10: ['=', 1201, -1, 2200], 11: ['GOTO', -1, 'while', 8], 12: ['RET', -1, -1, -1], 13: ['ENDPROC', -1, -1, -1]}
 
 
 operatorsStack
@@ -22,11 +21,11 @@ operatorsStack
 
 
 operandsStack
-[3201]
+[]
 
 
 typesStack
-['int']
+[]
 
 
 branchStack
@@ -37,11 +36,10 @@ branchStack
 1000
 [0, 200, 400, 600, 800, 900]
 [199, 399, 599, 799, 899, 999]
-{8: 'factorial', 0: 'Vispi', 19: 'main'}
-{0: 'boton', 1: 'led2', 2: 'led1', 900: 'main', 200: 'velocidad', 201: 'personas', 202: 'a', 203: 'factorial', 1200: 'HExrV', 1201: 'AJTbq', 1202: 'NJbyz', 600: 'mensajeAlerta', 1600: 'sKXAo', 800: 'imgInicial'}
-[['GOTO', -1, 'main', -1], ['CAM', 'webcam', -1, -1], ['INPUT', 'boton', -1, 22], ['OUTPUT', 'led1', -1, 15], ['OUTPUT', 'led2', -1, 16], ['PWM', 'velocidad', -1, 12], ['=', 1200, -1, 201], ['=', 1600, -1, 600], ['<', 2200, 1201, 3000], ['GOTOF', 3000, 'if', 12], ['RETURN', 1202, -1, 203], ['GOTO', -1, 'else', 18], ['ERA', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], -1, -1], ['-', 2200, 1202, 3200], ['PARAM', 3200, -1, 0], ['GOSUB', 8, -1, -1], ['*', 1202, 2200, 3201], ['RETURN', 3201, -1, 203], ['RET', -1, -1, -1], ['ERA', [0, 1, 0, 0, 0, 1, 2, 0, 0, 0], -1, -1], ['PARAM', 1202, -1, 0], ['GOSUB', 8, -1, -1], ['=', 203, -1, 3200], ['=', 3200, -1, 2200], ['RET', -1, -1, -1], ['ENDPROC', -1, -1, -1]]
-GOTO
-factorial
+{0: 'Vispi', 7: 'main'}
+{0: 'boton', 1: 'led2', 2: 'led1', 900: 'main', 200: 'velocidad', 201: 'x', 1200: 'DTugQ', 1201: 'bLCJL'}
+[['GOTO', -1, 'main', -1], ['CAM', 'webcam', -1, -1], ['INPUT', 'boton', -1, 22], ['OUTPUT', 'led1', -1, 15], ['OUTPUT', 'led2', -1, 16], ['PWM', 'velocidad', -1, 12], ['=', 1200, -1, 201], ['=', 2201, -1, 2200], ['>', 2200, 2201, 3000], ['GOTOF', 3000, 'while', 12], ['=', 1201, -1, 2200], ['GOTO', -1, 'while', 8], ['RET', -1, -1, -1], ['ENDPROC', -1, -1, -1]]
 GOTO
 main
+GOTO
 {'led1': 15, 'led2': 16, 'boton': 22, 'velocidad': 12}

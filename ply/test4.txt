@@ -18,5 +18,5 @@ def int factorial(int i):
 
 def void main ():
 	int x
-	x = factorial(1)
+	x = factorial(3)
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

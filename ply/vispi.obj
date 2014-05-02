@@ -1,4 +1,4 @@
-buscaIntruso
+pruebaTabs
 0
 1000
 0
@@ -7,23 +7,17 @@ buscaIntruso
 600
 800
 900
-{'factorial': 8, 'main': 19, 'Vispi': 0}
-{'factorial': [['int'], {'i': 'int', 'Temporal2': 'int', 'Temporal1': 'int', 'Temporal0': 'bool'}, {'i': 2200, 'Temporal2': 3201, 'Temporal1': 3200, 'Temporal0': 3000}], 'main': [[], {'x': 'int', 'Temporal3': 'int'}, {'x': 2200, 'Temporal3': 3200}], 'Vispi': [[], {'led1': 'bool', 'a': 'int', 2: 'int', 'led2': 'bool', 5: 'int', 'velocidad': 'int', 1: 'int', 'factorial': 'int', 'mensajeAlerta': 'string', 'boton': 'bool', '"Alerta de intruso!"': 'string', 'personas': 'int', 'main': 'void', 'imgInicial': 'image'}, {'led1': 2, 'a': 202, 2: 1201, 'led2': 1, 5: 1200, 'velocidad': 200, 1: 1202, 'factorial': 203, 'mensajeAlerta': 600, 'boton': 0, '"Alerta de intruso!"': 1600, 'personas': 201, 'main': 900, 'imgInicial': 800}]}
+{'main': 7, 'Vispi': 0}
+{'main': [[], {'y': 'int', 'x': 'int', 'Temporal0': 'bool'}, {'y': 2200, 'x': 2201, 'Temporal0': 3000}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 'velocidad': 'int', 'boton': 'bool', 'x': 'int', 'main': 'void', 0: 'int'}, {'led1': 2, 1: 1200, 'led2': 1, 'velocidad': 200, 'boton': 0, 'x': 201, 'main': 900, 0: 1201}]}
 %%
 led1,2
-a,202
-2,1201
+1,1200
 led2,1
-5,1200
 velocidad,200
-1,1202
-factorial,203
-mensajeAlerta,600
 boton,0
-"Alerta de intruso!",1600
-personas,201
+x,201
 main,900
-imgInicial,800
+0,1201
 %%
 ['GOTO', -1, 'main', -1]
 ['CAM', 'webcam', -1, -1]
@@ -32,22 +26,10 @@ imgInicial,800
 ['OUTPUT', 'led2', -1, 16]
 ['PWM', 'velocidad', -1, 12]
 ['=', 1200, -1, 201]
-['=', 1600, -1, 600]
-['<', 2200, 1201, 3000]
-['GOTOF', 3000, 'if', 12]
-['RETURN', 1202, -1, 203]
-['GOTO', -1, 'else', 18]
-['ERA', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], -1, -1]
-['-', 2200, 1202, 3200]
-['PARAM', 3200, -1, 0]
-['GOSUB', 8, -1, -1]
-['*', 1202, 2200, 3201]
-['RETURN', 3201, -1, 203]
-['RET', -1, -1, -1]
-['ERA', [0, 1, 0, 0, 0, 1, 2, 0, 0, 0], -1, -1]
-['PARAM', 1202, -1, 0]
-['GOSUB', 8, -1, -1]
-['=', 203, -1, 3200]
-['=', 3200, -1, 2200]
+['=', 2201, -1, 2200]
+['>', 2200, 2201, 3000]
+['GOTOF', 3000, 'while', 12]
+['=', 1201, -1, 2200]
+['GOTO', -1, 'while', 8]
 ['RET', -1, -1, -1]
 ['ENDPROC', -1, -1, -1]
