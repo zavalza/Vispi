@@ -6,14 +6,16 @@ PWM 12:velocidad
 int personas
 string mensajeAlerta
 image imgInicial
+int a
 personas = 5
 mensajeAlerta = "Alerta de intruso!"
 def int comparaImagen(int i, float a):
+	float resultado1
 	do:
-		float resultado1, resultado2
+		float resultado2
 		image imgActual, imgResultante
 		resultado1 = 45.0 + 85 - 10
-		resultado2 = resultado1 * 45 - (20 * 3)
+		resultado2 = resultado1 * (45 - 20) * 3
 		imgResultante = imgActual - imgInicial
 		imgResultante = imgResultante * 5
 		if(5 > 1):
@@ -23,6 +25,7 @@ def int comparaImagen(int i, float a):
 			resultado2 = 4
 			resultado2 = i * a
 while(true)
+
 	return i
 
 def void main ():

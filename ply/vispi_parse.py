@@ -58,6 +58,12 @@ SemCube = [
         ]
     ]
 
+ValidAssign = {'bool':['bool'], 
+                'int':['int','float'],
+                'float':['int','float'],
+                'string':['string'],
+                'image':['image']}
+
 
 #MACROS
 paramList = 0
@@ -132,12 +138,19 @@ def p_program(p):
         #print SemCube
         print '\n'
         print Quadruples
-        print 'operatorsStack\n'
+        print '\n'
+        print 'operatorsStack'
         print operatorsStack
-        print 'operandsStack\n'
+        print '\n'
+        print 'operandsStack'
         print operandsStack
-        print 'branchStack\n'
+        print '\n'
+        print 'typesStack'
+        print typesStack
+        print '\n'
+        print 'branchStack'
         print branchStack
+        print '\n'
 
         #guardar en archivo:
         #   Dir. de Procs //no
@@ -358,12 +371,16 @@ def p_f_isAssign(p):
 def p_f_generateEqual(p):
     'f_generateEqual :'
     global counterQuadruples
-    #Falta validar que sea una igualdad con tipos correctos
     #Sacar dos operandos y validarlos
     operand2 = operandsStack.pop()
     operand1 = operandsStack.pop()
-    Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
-    counterQuadruples+=1
+    type2 = typesStack.pop()
+    type1 = typesStack.pop()
+    if type2 in ValidAssign[type1]:
+        Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
+        counterQuadruples+=1
+    else:
+        raise TypeError("Invalid types in assignment")
 
 def p_f_checkID(p):
     'f_checkID : '
@@ -449,6 +466,8 @@ def p_f_return(p):
         counterQuadruples += 1
     else:
         raise TypeError("Type missmatch: function return value")
+    operandsStack.push(retVal)      ###########   Not sure if
+    typesStack.push(typ)            ###########   fixed the return problem
 
 def p_condition(p):
     '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
@@ -479,7 +498,10 @@ def p_f_popIf(p):
 
 def p_f_pushDo(p):
     'f_pushDo : '
+    global counterQuadruples
     branchStack.push(counterQuadruples)
+    Quadruples[counterQuadruples] = ['DO', -1, -1, -1]
+    counterQuadruples += 1
 
 def p_f_isDoWhile(p):
     'f_isDoWhile : '
@@ -498,7 +520,7 @@ def p_f_isCondition(p):
         typeOfCondition = p[-1]
         if(typeOfCondition == 'while'):
             branchStack.push(counterQuadruples)
-        isDoWhile=False
+    isDoWhile=False ################################################ not sure
     #print typeOfCondition
 
 def p_funct(p):
@@ -524,6 +546,7 @@ def p_funct(p):
         Quadruples[counterQuadruples] = ['=', globalAddr, -1, temporalAddress]
         counterTemporals+=1
         counterQuadruples+=1
+        print operandsStack
         
 
 def p_f_checkProc(p):

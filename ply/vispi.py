@@ -14,17 +14,20 @@ import string
 TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
-VarDict={}  #dictionary to find name of GLOBAL variable using its address
+VarDict={}  #dictionary to find name of GLOBAL and CONSTANT variable using its address
 HwVars={}   #dictionary to find pins using names
 ProcBegin={} #dictionary to map the begin of each proccedure
 LocalVarName = {} #dictonary to fine name of LOCAL variable by address
 procVars = {} #directory of procedures, as is in the parse file
+TemporalMemory = {} #dictionary, returns values using a temporal address
 LinfMap = []
 LsupMap = []
 MemBase = 0
 MemLen = 0
 VarNames = []
 counterOfUserProcedures = 0
+operatorAuxList = ['+','-','/','*','%','>','<','<=','>=','!=','==','&&','||']
+GotoFList = []
 
 def resolveType(address):
     address = (address - MemBase) % MemLen #check just the offset
@@ -115,20 +118,26 @@ if len(sys.argv) == 2:
         quadruples.append(eval(line.splitlines()[0]))
     
     print quadruples
-    MAIN.write('int main()\n{\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
+    MAIN.write('\n\twiringPiSetup(); //allow the use of wiringPi interface library\n\t');
     #how to print correctly the tabs?
     #interpret each quadruple to instructions in main of cpp
     for number, quadruple in enumerate(quadruples):
+
         if(ProcBegin.has_key(number)):
-            if(ProcBegin[number] is not 'Vispi' and ProcBegin[number] is not 'main'): #######
+            if(ProcBegin[number] is not 'Vispi'): #######
                 global counterOfUserProcedures
                 global LocalVarName
+                LocalVarName = {} #RESET local variables
                 #create the new module in CPP, i think we need a structure for this
                 name = ProcBegin[number]
-                
+                listOfParameters = []
+
                 if not counterOfUserProcedures == 0:
                     CPP.write('\n}\n\n')
-                CPP.write('%s %s (' %(procVars['Vispi'][typeTable][name],name) )
+                if name is 'main':
+                    CPP.write('int %s (' %(name) )
+                else:
+                    CPP.write('%s %s (' %(procVars['Vispi'][typeTable][name],name) )
 
                 addresses = procVars[name][addrTable].values()
                 varnames = procVars[name][addrTable].keys()
@@ -139,6 +148,7 @@ if len(sys.argv) == 2:
                 for n, parameterType in enumerate(procVars[name][paramList]):
                     x = counterOfParametersOfEachType[parameterType]
                     parameterName = LocalVarName[resolveLocalAddr(parameterType) + x]
+                    listOfParameters.append(parameterName)
                     counterOfParametersOfEachType[parameterType] = x + 1
 
                     if n > 0:
@@ -147,17 +157,25 @@ if len(sys.argv) == 2:
                         parameterType = 'Mat'
                     CPP.write('%s %s' %(parameterType, parameterName))
                 
-                CPP.write(') {')
-                    
+                CPP.write(') {\n')
+
+                if (name is 'main'):
+                    MAIN.close();
+                    MAIN = open('tempMain.cpp', 'r')
+                    CPP.write(MAIN.read())
+                    MAIN.close();
+                
+                #Local variable declaration
+                for i in range(len(addresses)):
+                    ty = resolveType(addresses[i])
+                    nm = varnames[i]
+                    if nm not in listOfParameters and not resolveMemSection(addresses[i]) == 'temporals':
+                        CPP.write('%s %s;\n' %(ty, nm))
+
                 print ProcBegin[number]
                 counterOfUserProcedures = counterOfUserProcedures + 1
             #################################################################################
-            elif (ProcBegin[number] is 'main'):
-                CPP.write('\n}\n\n')
-                MAIN.close();
-                MAIN = open('tempMain.cpp', 'r')
-                CPP.write(MAIN.read())
-                MAIN.close();
+
         if(quadruple[0] == 'GOTO'):
             print "GOTO"
         if(quadruple[0] == 'CAM'):
@@ -192,6 +210,125 @@ if len(sys.argv) == 2:
                 HwVars[name]= pin
             else:
                 print "Only pin #12 can be used as pwm"
+
+        if(quadruple[0] is '='):
+            origAdd = quadruple[1]
+            destAdd = quadruple[3]
+            origTyp = resolveType(origAdd)
+            destTyp = resolveType(destAdd)
+            origZone = resolveMemSection(origAdd)
+            destZone = resolveMemSection(destAdd)
+
+            if origTyp is 'Mat' or destTyp is 'Mat':
+                print 'x'                               # CODIGO DE MAT
+            else:
+                if destZone is 'temporals' and origZone is 'temporals':
+                    TemporalMemory[destAdd] = TemporalMemory[origAdd]
+                elif destZone is 'temporals' and (origZone is 'globals' or origZone is 'constants'):
+                    TemporalMemory[destAdd] = VarDict[origAdd]
+                elif destZone is 'temporals' and origZone is 'locals':
+                    TemporalMemory[destAdd] = LocalVarName[origAdd]
+                elif destZone is 'globals' and origZone is 'temporals':
+                    x = VarDict[destAdd]
+                    y = TemporalMemory[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+                elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
+                    x = VarDict[destAdd]
+                    y = VarDict[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+                elif destZone is 'globals' and origZone is 'locals':
+                    x = VarDict[destAdd]
+                    y = LocalVarName[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+                elif destZone is 'locals' and origZone is 'temporals':
+                    x = LocalVarName[destAdd]
+                    y = TemporalMemory[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+                elif destZone is 'locals' and (origZone is 'globals' or origZone is 'constants'):
+                    x = LocalVarName[destAdd]
+                    y = VarDict[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+                elif destZone is 'locals' and origZone is 'locals':
+                    x = LocalVarName[destAdd]
+                    y = LocalVarName[origAdd]
+                    CPP.write('%s = %s;\n' %(x, y))
+
+        if(quadruple[0] in operatorAuxList):
+            orig1Add = quadruple[1]
+            orig2Add = quadruple[2]
+            destAdd = quadruple[3]
+
+            orig1Typ = resolveType(orig1Add)
+            orig2Typ = resolveType(orig2Add)
+            destTyp = resolveType(destAdd)
+
+            orig1Zone = resolveMemSection(orig1Add)
+            orig2Zone = resolveMemSection(orig2Add)
+            destZone = resolveMemSection(destAdd)
+
+            operator = quadruple[0]
+
+            if orig1Typ is 'Mat' or orig2Typ is 'Mat' or destTyp is 'Mat':
+                print 'x'                               # CODIGO DE MAT
+            else:
+                if orig1Zone is 'temporals':
+                    x = TemporalMemory[orig1Add]
+                elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
+                    x = VarDict[orig1Add]
+                elif orig1Zone is 'locals':
+                    x = LocalVarName[orig1Add]
+
+                if orig2Zone is 'temporals':
+                    y = TemporalMemory[orig2Add]
+                elif (orig2Zone is 'globals' or orig2Zone is 'constants'):
+                    y = VarDict[orig2Add]
+                elif orig2Zone is 'locals':
+                    y = LocalVarName[orig2Add]
+                
+                TemporalMemory[destAdd] = '(' + x + ' ' + operator + ' ' + y + ')'
+
+        if(quadruple[0] is 'GOTOF'):
+            conditionAdd = quadruple[1]
+            typeOfCondition = quadruple[2]
+            GotoFList.append(quadruple[3])
+
+            conditionZone = resolveMemSection(conditionAdd)
+
+            if conditionZone is 'temporals':
+                x = TemporalMemory[conditionAdd]
+            elif (conditionZone is 'globals' or conditionZone is 'constants'):
+                x = VarDict[conditionAdd]
+            elif conditionZone is 'locals':
+                x = LocalVarName[conditionAdd]
+
+            CPP.write('%s (%s) {\n' %(typeOfCondition, x))
+
+        if number + 1 in GotoFList:
+            CPP.write('}\n')
+            GotoFList.remove(number + 1)
+
+        if(quadruple[0] is 'GOTO'):
+            typeOfCondition = quadruple[2]
+
+            if typeOfCondition is 'else':
+                CPP.write('else {\n')
+                GotoFList.append(quadruple[3])
+
+        if(quadruple[0] is 'DO') :
+            CPP.write('do {\n')
+
+        if(quadruple[0] is 'GOTOT'):
+            conditionAdd = quadruple[1]
+            conditionZone = resolveMemSection(conditionAdd)
+
+            if conditionZone is 'temporals':
+                x = TemporalMemory[conditionAdd]
+            elif (conditionZone is 'globals' or conditionZone is 'constants'):
+                x = VarDict[conditionAdd]
+            elif conditionZone is 'locals':
+                x = LocalVarName[conditionAdd]
+
+            CPP.write('} while(%s);\n' %(x))
 
     # Quadruples have ended
         #insert MAIN

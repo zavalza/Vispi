@@ -1,5 +1,4 @@
-int main()
-{
+
 	wiringPiSetup(); //allow the use of wiringPi interface library
 	VideoCapture cap(0); // open the default camera
 if(!cap.isOpened()) // check if we succeeded
