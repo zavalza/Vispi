@@ -58,6 +58,12 @@ SemCube = [
         ]
     ]
 
+ValidAssign = {'bool':['bool'], 
+                'int':['int','float'],
+                'float':['int','float'],
+                'string':['string'],
+                'image':['image']}
+
 
 #MACROS
 paramList = 0
@@ -108,6 +114,7 @@ counterParam = 0
 functName = ''
 functType = ''
 isAssign = False
+isReturn = False
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -132,12 +139,19 @@ def p_program(p):
         #print SemCube
         print '\n'
         print Quadruples
-        print 'operatorsStack\n'
+        print '\n'
+        print 'operatorsStack'
         print operatorsStack
-        print 'operandsStack\n'
+        print '\n'
+        print 'operandsStack'
         print operandsStack
-        print 'branchStack\n'
+        print '\n'
+        print 'typesStack'
+        print typesStack
+        print '\n'
+        print 'branchStack'
         print branchStack
+        print '\n'
 
         #guardar en archivo:
         #   Dir. de Procs //no
@@ -236,7 +250,10 @@ def p_pinList(p):
 
 
 def p_vars(p):
-    '''vars : f_checkTab tipo idList NEWLINE f_resetTab vars
+    'vars : f_checkTab tipo idList NEWLINE f_resetTab moreVars'
+
+def p_moreVars(p):
+    '''moreVars : f_checkTab tipo idList NEWLINE f_resetTab moreVars
             | empty'''
 
 def p_f_saveType(p):
@@ -339,12 +356,15 @@ def p_f_addToParam(p):
 
 
 def p_assign(p):
-    '''assign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
-              | empty'''
+    'assign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign'
     global isAssign
     isAssign = False
     #f_checkTab ID f_checkID EQUAL f_isAssign expression assign NEWLINE f_resetTab f_generateEqual
     #f_checkTab ID f_checkID EQUAL f_moreIDs f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
+
+def p_moreAssign(p):
+    '''moreAssign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign
+                    | empty'''
 
 #def p_f_moreIDs(p):
 #    '''f_moreIDs : empty
@@ -358,12 +378,16 @@ def p_f_isAssign(p):
 def p_f_generateEqual(p):
     'f_generateEqual :'
     global counterQuadruples
-    #Falta validar que sea una igualdad con tipos correctos
     #Sacar dos operandos y validarlos
     operand2 = operandsStack.pop()
     operand1 = operandsStack.pop()
-    Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
-    counterQuadruples+=1
+    type2 = typesStack.pop()
+    type1 = typesStack.pop()
+    if type2 in ValidAssign[type1]:
+        Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
+        counterQuadruples+=1
+    else:
+        raise TypeError("Invalid types in assignment")
 
 def p_f_checkID(p):
     'f_checkID : '
@@ -380,17 +404,16 @@ def p_f_checkID(p):
 #     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block 
 # 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block'''
 
-def p_block(p):
-    '''block : empty
-             | TAB f_addTab moreTabs statement moreStatements'''
-    global expectedTabulation 
-    global counterTabs
-    expectedTabulation-=1
-    counterTabs = 0
-
 def p_moreStatements(p):
     '''moreStatements : empty
                       | TAB f_addTab moreTabs statement moreStatements'''
+
+def p_block(p):
+    'block : TAB f_addTab moreTabs statement moreStatements'
+    global expectedTabulation 
+    #global counterTabs
+    expectedTabulation -= 1
+    #counterTabs = 0
 
 def p_moreTabs(p):
     '''moreTabs : empty
@@ -431,12 +454,18 @@ def p_statement(p):
                  | f_checkTab cycle
                  | f_checkTab doCycle
                  | f_checkTab funct NEWLINE f_resetTab
-                 | f_checkTab RETURN expression f_return NEWLINE f_resetTab'''
+                 | f_checkTab RETURN f_isReturn expression f_return NEWLINE f_resetTab'''
+    global isReturn 
+    isReturn = False
+
+def p_f_isReturn(p):
+    'f_isReturn : '
+    global isReturn 
+    isReturn = True
 
 def p_f_return(p):
     'f_return : '
     global counterQuadruples
-
     if ProcTypes[moduleName]=='void':
         raise TypeError("Unexpected return in void function")
 
@@ -449,6 +478,8 @@ def p_f_return(p):
         counterQuadruples += 1
     else:
         raise TypeError("Type missmatch: function return value")
+    operandsStack.push(retVal)      ###########   Not sure if
+    typesStack.push(typ)            ###########   fixed the return problem
 
 def p_condition(p):
     '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
@@ -479,7 +510,10 @@ def p_f_popIf(p):
 
 def p_f_pushDo(p):
     'f_pushDo : '
+    global counterQuadruples
     branchStack.push(counterQuadruples)
+    Quadruples[counterQuadruples] = ['DO', -1, -1, -1]
+    counterQuadruples += 1
 
 def p_f_isDoWhile(p):
     'f_isDoWhile : '
@@ -498,7 +532,7 @@ def p_f_isCondition(p):
         typeOfCondition = p[-1]
         if(typeOfCondition == 'while'):
             branchStack.push(counterQuadruples)
-        isDoWhile=False
+    isDoWhile=False ################################################ not sure
     #print typeOfCondition
 
 def p_funct(p):
@@ -511,7 +545,7 @@ def p_funct(p):
     Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
     counterQuadruples += 1
 
-    if (not functType == 'void') and isAssign:
+    if (not functType == 'void') and (isAssign or isReturn):
         globalAddr = ProcVars['Vispi'][addrTable][functName]
         temporalVariable = "Temporal%s" %counterTemporals
         if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
@@ -524,6 +558,7 @@ def p_funct(p):
         Quadruples[counterQuadruples] = ['=', globalAddr, -1, temporalAddress]
         counterTemporals+=1
         counterQuadruples+=1
+        print operandsStack
         
 
 def p_f_checkProc(p):
@@ -538,7 +573,7 @@ def p_f_checkProc(p):
         raise TypeError("Function not declared")
 
     functType = ProcTypes[functName]
-    Quadruples[counterQuadruples] = ['ERA', ProcSize[functName], -1, -1]
+    Quadruples[counterQuadruples] = ['ERA', functName, -1, -1]
     counterQuadruples += 1
 
     counterParam = 0

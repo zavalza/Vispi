@@ -1,4 +1,4 @@
-buscaIntruso
+pruebaTabs
 0
 1000
 0
@@ -7,30 +7,17 @@ buscaIntruso
 600
 800
 900
-{'main': 30, 'comparaImagen': 8, 'Vispi': 0}
-{'main': [[], {'a': 'int', 'b': 'float', 'Temporal9': 'int', 'x': 'int', 'Temporal11': 'int', 'Temporal10': 'int'}, {'a': 2200, 'b': 2400, 'Temporal9': 3200, 'x': 2201, 'Temporal11': 3202, 'Temporal10': 3201}], 'comparaImagen': [['int', 'float'], {'a': 'float', 'Temporal6': 'image', 'i': 'int', 'Temporal8': 'float', 'Temporal5': 'image', 'Temporal1': 'float', 'imgResultante': 'image', 'Temporal7': 'bool', 'resultado2': 'float', 'resultado1': 'float', 'Temporal4': 'float', 'Temporal3': 'int', 'Temporal2': 'float', 'imgActual': 'image', 'Temporal0': 'float'}, {'a': 2400, 'Temporal6': 3801, 'i': 2200, 'Temporal8': 3404, 'Temporal5': 3800, 'Temporal1': 3401, 'imgResultante': 2800, 'Temporal7': 3000, 'resultado2': 2401, 'resultado1': 2402, 'Temporal4': 3403, 'Temporal3': 3200, 'Temporal2': 3402, 'imgActual': 2801, 'Temporal0': 3400}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 4: 'int', 5: 'int', 'velocidad': 'int', 'true': 'bool', 'mensajeAlerta': 'string', 10: 'int', 1.2: 'float', 'boton': 'bool', 45.0: 'float', 2.1: 'float', 3: 'int', 20: 'int', '"Alerta de intruso!"': 'string', 'personas': 'int', 'main': 'void', 'comparaImagen': 'int', 'imgInicial': 'image', 85: 'int'}, {'led1': 2, 1: 1205, 'led2': 1, 4: 1206, 5: 1200, 'velocidad': 200, 'true': 1000, 'mensajeAlerta': 600, 10: 1202, 1.2: 1401, 'boton': 0, 45.0: 1400, 2.1: 1402, 3: 1204, 20: 1203, '"Alerta de intruso!"': 1600, 'personas': 201, 'main': 900, 'comparaImagen': 202, 'imgInicial': 800, 85: 1201}]}
+{'main': 7, 'Vispi': 0}
+{'main': [[], {'y': 'int', 'x': 'int', 'Temporal0': 'bool'}, {'y': 2200, 'x': 2201, 'Temporal0': 3000}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 'velocidad': 'int', 'boton': 'bool', 'x': 'int', 'main': 'void', 0: 'int'}, {'led1': 2, 1: 1200, 'led2': 1, 'velocidad': 200, 'boton': 0, 'x': 201, 'main': 900, 0: 1201}]}
 %%
 led1,2
-1,1205
+1,1200
 led2,1
-4,1206
-5,1200
 velocidad,200
-true,1000
-mensajeAlerta,600
-10,1202
-1.2,1401
 boton,0
-45.0,1400
-2.1,1402
-3,1204
-20,1203
-"Alerta de intruso!",1600
-personas,201
+x,201
 main,900
-comparaImagen,202
-imgInicial,800
-85,1201
+0,1201
 %%
 ['GOTO', -1, 'main', -1]
 ['CAM', 'webcam', -1, -1]
@@ -39,48 +26,10 @@ imgInicial,800
 ['OUTPUT', 'led2', -1, 16]
 ['PWM', 'velocidad', -1, 12]
 ['=', 1200, -1, 201]
-['=', 1600, -1, 600]
-['+', 1400, 1201, 3400]
-['-', 3400, 1202, 3401]
-['=', 3401, -1, 2402]
-['*', 2402, 1400, 3402]
-['*', 1203, 1204, 3200]
-['-', 3402, 3200, 3403]
-['=', 3403, -1, 2401]
-['-', 2801, 800, 3800]
-['=', 3800, -1, 2800]
-['*', 2800, 1200, 3801]
-['=', 3801, -1, 2800]
-['>', 1200, 1205, 3000]
-['GOTOF', 3000, 'if', 24]
-['=', 1206, -1, 2402]
-['=', 1200, -1, 2402]
-['GOTO', -1, 'else', 27]
-['=', 1206, -1, 2401]
-['*', 2200, 2400, 3404]
-['=', 3404, -1, 2401]
-['GOTOT', 1000, 'do', 8]
-['RETURN', 2200, -1, 202]
-['RET', -1, -1, -1]
-['=', 1205, -1, 2200]
-['=', 1401, -1, 2400]
-['=', 1200, -1, 2200]
-['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1]
-['PARAM', 2200, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 1402, -1, 2400]
-['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1]
-['PARAM', 2200, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 202, -1, 3200]
-['ERA', [0, 1, 3, 0, 2, 1, 1, 5, 0, 2], -1, -1]
-['PARAM', 2201, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 202, -1, 3201]
-['+', 3200, 3201, 3202]
-['=', 3202, -1, 2201]
+['=', 2201, -1, 2200]
+['>', 2200, 2201, 3000]
+['GOTOF', 3000, 'while', 12]
+['=', 1201, -1, 2200]
+['GOTO', -1, 'while', 8]
 ['RET', -1, -1, -1]
 ['ENDPROC', -1, -1, -1]

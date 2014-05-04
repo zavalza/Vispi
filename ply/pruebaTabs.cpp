@@ -1,3 +1,17 @@
+#include "vispi.h"
+
+using namespace std;
+using namespace cv;
+
+bool led1;
+int DTugQ = 1;
+bool led2;
+int velocidad;
+bool boton;
+int x;
+int bLCJL = 0;
+
+int main () {
 
 	wiringPiSetup(); //allow the use of wiringPi interface library
 	VideoCapture cap(0); // open the default camera
@@ -13,3 +27,12 @@ pinMode(16, OUTPUT);
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
 x = DTugQ;
+int y;
+int x;
+y = x;
+while ((y > x)) {
+y = bLCJL;
+}
+
+return 0;
+}
