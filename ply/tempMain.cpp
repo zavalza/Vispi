@@ -12,4 +12,5 @@ pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
 pinMode(16, OUTPUT); 
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
-x = HINIy;
+personas = Xeswa;
+mensajeAlerta = YMEmA;

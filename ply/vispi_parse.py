@@ -441,7 +441,7 @@ def p_f_resetTab(p):
 
 def p_f_checkTab(p):
     'f_checkTab : '
-    if(counterTabs < expectedTabulation):
+    if(counterTabs < expectedTabulation)or(counterTabs>expectedTabulation):
         print counterTabs
         print expectedTabulation
         raise TypeError("Identation error")
@@ -493,7 +493,7 @@ def p_cycle(p):
 
 def p_condition(p):
     '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
+                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
     end = branchStack.pop()
     Quadruples[end][3]=counterQuadruples
 
@@ -503,7 +503,7 @@ def p_f_decTab(p):
     expectedTabulation -=1
 
 def p_doCycle(p):
-    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
+    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
 
 def p_f_popIf(p):
     'f_popIf : '

@@ -77,9 +77,9 @@ Rule 64    f_isReturn -> <empty>
 Rule 65    f_return -> <empty>
 Rule 66    cycle -> f_checkTab WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
 Rule 67    condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-Rule 68    condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+Rule 68    condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
 Rule 69    f_decTab -> <empty>
-Rule 70    doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+Rule 70    doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
 Rule 71    f_popIf -> <empty>
 Rule 72    f_pushDo -> <empty>
 Rule 73    f_isDoWhile -> <empty>
@@ -193,7 +193,7 @@ f_addTab             : 47 48 50 51
 f_addToParam         : 28 30 32 38
 f_checkID            : 40 42
 f_checkProc          : 75 76
-f_checkTab           : 16 17 40 42 58 59 61 62 66
+f_checkTab           : 16 17 40 42 58 59 61 62 66 68 70
 f_decTab             : 
 f_endModule          : 27 28 29 30 31 32
 f_genParam           : 76 79
@@ -3408,8 +3408,8 @@ state 232
     (40) assign -> f_checkTab . ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign
     (66) cycle -> f_checkTab . WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
     (67) condition -> . IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-    (68) condition -> . IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
-    (70) doCycle -> . DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (68) condition -> . IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (70) doCycle -> . DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
     (75) funct -> . ID f_checkProc LPAREN RPAREN
     (76) funct -> . ID f_checkProc LPAREN expression f_genParam expressionList RPAREN
     (22) tipo -> . BOOL f_saveType
@@ -3567,7 +3567,7 @@ state 242
 
 state 243
 
-    (70) doCycle -> DO . f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO . f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
     (72) f_pushDo -> .
 
     COLON           reduce using rule 72 (f_pushDo -> .)
@@ -3648,7 +3648,7 @@ state 249
 state 250
 
     (67) condition -> IF . f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-    (68) condition -> IF . f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF . f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
     (74) f_isCondition -> .
 
     LPAREN          reduce using rule 74 (f_isCondition -> .)
@@ -3797,7 +3797,7 @@ state 259
 
 state 260
 
-    (70) doCycle -> DO f_pushDo . COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo . COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
 
     COLON           shift and go to state 271
 
@@ -3882,7 +3882,7 @@ state 263
 state 264
 
     (67) condition -> IF f_isCondition . expression COLON NEWLINE f_resetTab f_incTab block
-    (68) condition -> IF f_isCondition . expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition . expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
     (81) expression -> . exp
     (82) expression -> . exp compareToken exp f_popComparation
     (90) exp -> . term moreTerms
@@ -4049,7 +4049,7 @@ state 270
 
 state 271
 
-    (70) doCycle -> DO f_pushDo COLON . NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON . NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
 
     NEWLINE         shift and go to state 282
 
@@ -4084,7 +4084,7 @@ state 274
 state 275
 
     (67) condition -> IF f_isCondition expression . COLON NEWLINE f_resetTab f_incTab block
-    (68) condition -> IF f_isCondition expression . COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression . COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
 
     COLON           shift and go to state 285
 
@@ -4184,7 +4184,7 @@ state 281
 
 state 282
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE . f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE . f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
     (54) f_resetTab -> .
 
     TAB             reduce using rule 54 (f_resetTab -> .)
@@ -4208,7 +4208,7 @@ state 284
 state 285
 
     (67) condition -> IF f_isCondition expression COLON . NEWLINE f_resetTab f_incTab block
-    (68) condition -> IF f_isCondition expression COLON . NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON . NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
 
     NEWLINE         shift and go to state 290
 
@@ -4234,7 +4234,7 @@ state 286
 
 state 287
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab . f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab . f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
     (52) f_incTab -> .
 
     TAB             reduce using rule 52 (f_incTab -> .)
@@ -4266,7 +4266,7 @@ state 289
 state 290
 
     (67) condition -> IF f_isCondition expression COLON NEWLINE . f_resetTab f_incTab block
-    (68) condition -> IF f_isCondition expression COLON NEWLINE . f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE . f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
     (54) f_resetTab -> .
 
     TAB             reduce using rule 54 (f_resetTab -> .)
@@ -4286,7 +4286,7 @@ state 291
 
 state 292
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab . block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab . block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
     (48) block -> . TAB f_addTab moreTabs statement moreStatements
 
     TAB             shift and go to state 200
@@ -4316,7 +4316,7 @@ state 294
 state 295
 
     (67) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab . f_incTab block
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab . f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab . f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
     (52) f_incTab -> .
 
     TAB             reduce using rule 52 (f_incTab -> .)
@@ -4325,10 +4325,12 @@ state 295
 
 state 296
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block . LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block . f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (55) f_checkTab -> .
 
-    LOOP            shift and go to state 299
+    LOOP            reduce using rule 55 (f_checkTab -> .)
 
+    f_checkTab                     shift and go to state 299
 
 state 297
 
@@ -4342,7 +4344,7 @@ state 297
 state 298
 
     (67) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab . block
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab . block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab . block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
     (48) block -> . TAB f_addTab moreTabs statement moreStatements
 
     TAB             shift and go to state 200
@@ -4351,17 +4353,10 @@ state 298
 
 state 299
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP . f_isDoWhile f_isCondition expression NEWLINE f_resetTab
-    (73) f_isDoWhile -> .
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab . LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab
 
-    LPAREN          reduce using rule 73 (f_isDoWhile -> .)
-    ID              reduce using rule 73 (f_isDoWhile -> .)
-    C_BOOL          reduce using rule 73 (f_isDoWhile -> .)
-    C_INT           reduce using rule 73 (f_isDoWhile -> .)
-    C_FLOAT         reduce using rule 73 (f_isDoWhile -> .)
-    C_STRING        reduce using rule 73 (f_isDoWhile -> .)
+    LOOP            shift and go to state 302
 
-    f_isDoWhile                    shift and go to state 302
 
 state 300
 
@@ -4377,21 +4372,44 @@ state 300
 state 301
 
     (67) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block . ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block . f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (55) f_checkTab -> .
 
-  ! shift/reduce conflict for ELSE resolved as shift
+  ! reduce/reduce conflict for ELSE resolved using rule 55 (f_checkTab -> .)
     TAB             reduce using rule 67 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .)
     DEF             reduce using rule 67 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .)
     $end            reduce using rule 67 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .)
     LOOP            reduce using rule 67 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .)
-    ELSE            shift and go to state 303
+    ELSE            reduce using rule 55 (f_checkTab -> .)
 
   ! ELSE            [ reduce using rule 67 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block .) ]
 
+    f_checkTab                     shift and go to state 303
 
 state 302
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile . f_isCondition expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP . f_isDoWhile f_isCondition expression NEWLINE f_resetTab
+    (73) f_isDoWhile -> .
+
+    LPAREN          reduce using rule 73 (f_isDoWhile -> .)
+    ID              reduce using rule 73 (f_isDoWhile -> .)
+    C_BOOL          reduce using rule 73 (f_isDoWhile -> .)
+    C_INT           reduce using rule 73 (f_isDoWhile -> .)
+    C_FLOAT         reduce using rule 73 (f_isDoWhile -> .)
+    C_STRING        reduce using rule 73 (f_isDoWhile -> .)
+
+    f_isDoWhile                    shift and go to state 304
+
+state 303
+
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab . ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block
+
+    ELSE            shift and go to state 305
+
+
+state 304
+
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile . f_isCondition expression NEWLINE f_resetTab
     (74) f_isCondition -> .
 
     LPAREN          reduce using rule 74 (f_isCondition -> .)
@@ -4401,20 +4419,20 @@ state 302
     C_FLOAT         reduce using rule 74 (f_isCondition -> .)
     C_STRING        reduce using rule 74 (f_isCondition -> .)
 
-    f_isCondition                  shift and go to state 304
+    f_isCondition                  shift and go to state 306
 
-state 303
+state 305
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE . f_popIf COLON NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE . f_popIf COLON NEWLINE f_resetTab f_incTab block
     (71) f_popIf -> .
 
     COLON           reduce using rule 71 (f_popIf -> .)
 
-    f_popIf                        shift and go to state 305
+    f_popIf                        shift and go to state 307
 
-state 304
+state 306
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition . expression NEWLINE f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition . expression NEWLINE f_resetTab
     (81) expression -> . exp
     (82) expression -> . exp compareToken exp f_popComparation
     (90) exp -> . term moreTerms
@@ -4442,32 +4460,32 @@ state 304
     factor                         shift and go to state 82
     term                           shift and go to state 87
     exp                            shift and go to state 88
-    expression                     shift and go to state 306
-
-state 305
-
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf . COLON NEWLINE f_resetTab f_incTab block
-
-    COLON           shift and go to state 307
-
-
-state 306
-
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression . NEWLINE f_resetTab
-
-    NEWLINE         shift and go to state 308
-
+    expression                     shift and go to state 308
 
 state 307
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON . NEWLINE f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf . COLON NEWLINE f_resetTab f_incTab block
 
-    NEWLINE         shift and go to state 309
+    COLON           shift and go to state 309
 
 
 state 308
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE . f_resetTab
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression . NEWLINE f_resetTab
+
+    NEWLINE         shift and go to state 310
+
+
+state 309
+
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON . NEWLINE f_resetTab f_incTab block
+
+    NEWLINE         shift and go to state 311
+
+
+state 310
+
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE . f_resetTab
     (54) f_resetTab -> .
 
     TAB             reduce using rule 54 (f_resetTab -> .)
@@ -4476,55 +4494,55 @@ state 308
     LOOP            reduce using rule 54 (f_resetTab -> .)
     ELSE            reduce using rule 54 (f_resetTab -> .)
 
-    f_resetTab                     shift and go to state 310
+    f_resetTab                     shift and go to state 312
 
-state 309
+state 311
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE . f_resetTab f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE . f_resetTab f_incTab block
     (54) f_resetTab -> .
 
     TAB             reduce using rule 54 (f_resetTab -> .)
 
-    f_resetTab                     shift and go to state 311
+    f_resetTab                     shift and go to state 313
 
-state 310
+state 312
 
-    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .
+    (70) doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .
 
-    TAB             reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
-    DEF             reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
-    $end            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
-    LOOP            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
-    ELSE            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
+    TAB             reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
+    DEF             reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
+    $end            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
+    LOOP            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
+    ELSE            reduce using rule 70 (doCycle -> DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab .)
 
 
-state 311
+state 313
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab . f_incTab block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab . f_incTab block
     (52) f_incTab -> .
 
     TAB             reduce using rule 52 (f_incTab -> .)
 
-    f_incTab                       shift and go to state 312
+    f_incTab                       shift and go to state 314
 
-state 312
+state 314
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab . block
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab . block
     (48) block -> . TAB f_addTab moreTabs statement moreStatements
 
     TAB             shift and go to state 200
 
-    block                          shift and go to state 313
+    block                          shift and go to state 315
 
-state 313
+state 315
 
-    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .
+    (68) condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .
 
-    TAB             reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
-    DEF             reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
-    $end            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
-    LOOP            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
-    ELSE            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
+    TAB             reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
+    DEF             reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
+    $end            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
+    LOOP            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
+    ELSE            reduce using rule 68 (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -4535,4 +4553,5 @@ WARNING: shift/reduce conflict for TAB in state 237 resolved as shift
 WARNING: shift/reduce conflict for TAB in state 265 resolved as shift
 WARNING: shift/reduce conflict for TAB in state 266 resolved as shift
 WARNING: shift/reduce conflict for TAB in state 286 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 301 resolved as shift
+WARNING: reduce/reduce conflict in state 301 resolved using rule (f_checkTab -> <empty>)
+WARNING: rejected rule (condition -> IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block) in state 301
