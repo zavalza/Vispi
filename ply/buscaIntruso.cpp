@@ -3,46 +3,44 @@
 using namespace std;
 using namespace cv;
 
-int GaISZ = 1;
-int OWaZp = 3;
-int hKwAH = 4;
-int hjSyC = 5;
+int rNANI = 1;
+int fCuIA = 3;
+int UFDHE = 4;
+int lIOUx = 5;
 int velocidad;
-int wRlJq = 10;
-int uLTCe = 20;
+int CUWxd = 10;
+int EwiHm = 20;
 bool led1;
 bool led2;
-float MlEIa = 45.0;
-float sKSRb = 2.1;
+float iLzbG = 45.0;
+float mLMpP = 2.1;
 int personas;
 Mat imgInicial;
 string mensajeAlerta;
-float cYfyb = 1.2;
+float IUDzJ = 1.2;
 bool boton;
-string txnDD = "Alerta de intruso!";
-bool ZdSEW = true;
+string acxKV = "Alerta de intruso!";
+bool aofbp = true;
 int a;
-int JOajH = 85;
+int EpWGZ = 85;
 
-personas = hjSyC;
-mensajeAlerta = txnDD;
 int comparaImagen (int i, float a) {
 Mat imgResultante;
 float resultado1;
 Mat imgActual;
 float resultado2;
 do {
-resultado1 = ((MlEIa + JOajH) - wRlJq);
-resultado2 = ((resultado1 * (MlEIa - uLTCe)) * OWaZp);
-if ((hjSyC > GaISZ)) {
-resultado1 = hKwAH;
-resultado1 = hjSyC;
+resultado1 = ((iLzbG + EpWGZ) - CUWxd);
+resultado2 = ((resultado1 * (iLzbG - EwiHm)) * fCuIA);
+if ((lIOUx > rNANI)) {
+resultado1 = UFDHE;
+resultado1 = lIOUx;
 }
 else {
-resultado2 = hKwAH;
+resultado2 = UFDHE;
 resultado2 = (i * a);
 }
-} while(ZdSEW);
+} while(aofbp);
 return i;
 
 }
@@ -62,13 +60,15 @@ pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
 pinMode(16, OUTPUT); 
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
+personas = lIOUx;
+mensajeAlerta = acxKV;
 int a;
 float b;
 int x;
-a = GaISZ;
-b = cYfyb;
-a = hjSyC;
-b = sKSRb;
+a = rNANI;
+b = IUDzJ;
+a = lIOUx;
+b = mLMpP;
 x = (comparaImagen(a, b)(a, b) + comparaImagen(x, b));
 
 return 0;

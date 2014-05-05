@@ -363,8 +363,8 @@ def p_assign(p):
     #f_checkTab ID f_checkID EQUAL f_moreIDs f_isAssign expression NEWLINE f_resetTab f_generateEqual assign
 
 def p_moreAssign(p):
-    '''moreAssign : f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign
-                    | empty'''
+    '''moreAssign : empty 
+                | f_checkTab ID f_checkID EQUAL f_isAssign expression NEWLINE f_resetTab f_generateEqual moreAssign'''
 
 #def p_f_moreIDs(p):
 #    '''f_moreIDs : empty
@@ -451,10 +451,11 @@ def p_statement(p):
     '''statement : vars 
                  | assign
                  | f_checkTab condition
-                 | f_checkTab cycle
                  | f_checkTab doCycle
+                 | cycle
                  | f_checkTab funct NEWLINE f_resetTab
-                 | f_checkTab RETURN f_isReturn expression f_return NEWLINE f_resetTab'''
+                 | f_checkTab RETURN f_isReturn expression f_return NEWLINE f_resetTab
+                 | empty'''
     global isReturn 
     isReturn = False
 
@@ -481,14 +482,8 @@ def p_f_return(p):
     operandsStack.push(retVal)      ###########   Not sure if
     typesStack.push(typ)            ###########   fixed the return problem
 
-def p_condition(p):
-    '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
-    end = branchStack.pop()
-    Quadruples[end][3]=counterQuadruples
-
 def p_cycle(p):
-    'cycle : WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block'
+    'cycle : f_checkTab WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block'
     global counterQuadruples
     end = branchStack.pop()
     condition = branchStack.pop()
@@ -496,8 +491,19 @@ def p_cycle(p):
     counterQuadruples+=1
     Quadruples[end][3]=counterQuadruples
 
+def p_condition(p):
+    '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
+                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
+    end = branchStack.pop()
+    Quadruples[end][3]=counterQuadruples
+
+def p_f_decTab(p):
+    'f_decTab : '
+    global expectedTabulation
+    expectedTabulation -=1
+
 def p_doCycle(p):
-    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block WHILE f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
+    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
 
 def p_f_popIf(p):
     'f_popIf : '

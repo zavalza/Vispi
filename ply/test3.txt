@@ -24,7 +24,7 @@ def int comparaImagen(int i, float a):
 		else:
 			resultado2 = 4
 			resultado2 = i * a
-	while(true)
+	loop(true)
 
 	return i
 

@@ -4,12 +4,12 @@ using namespace std;
 using namespace cv;
 
 bool led1;
-int DTugQ = 1;
+int HINIy = 1;
 bool led2;
 int velocidad;
 bool boton;
 int x;
-int bLCJL = 0;
+int jtwWe = 0;
 
 int main () {
 
@@ -26,12 +26,12 @@ pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
 pinMode(16, OUTPUT); 
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
-x = DTugQ;
+x = HINIy;
 int y;
 int x;
 y = x;
 while ((y > x)) {
-y = bLCJL;
+y = jtwWe;
 }
 
 return 0;

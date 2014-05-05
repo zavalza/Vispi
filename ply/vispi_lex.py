@@ -22,6 +22,7 @@ reserved = {
 	'if':'IF',
     'else':'ELSE',
     'while':'WHILE',
+    'loop':'LOOP',
     'do':'DO',
 	'true':'C_BOOL',
 	'false':'C_BOOL',
