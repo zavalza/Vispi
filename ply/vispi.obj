@@ -1,0 +1,49 @@
+pruebaTabs
+%%
+{'imLoad': [['string'], 'image'], 'imDisplay': [['image'], 'void'], 'takePicture': [[], 'image'], 'imBW': [['image'], 'image'], 'print': [['all'], 'void'], 'filterColor': [['image', 'string'], 'image'], 'imGray': [['image'], 'image']}
+0
+1000
+0
+200
+400
+600
+800
+900
+{'main': 7, 'Vispi': 0}
+{'main': [[], {'y': 'int', 'x': 'int', 'prueba': 'image', 'Temporal1': 'image', 'Temporal0': 'bool'}, {'y': 2200, 'x': 2201, 'prueba': 2800, 'Temporal1': 3800, 'Temporal0': 3000}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 'velocidad': 'int', 'imLoad': 'image', 'boton': 'bool', 'imDisplay': 'void', 'takePicture': 'image', 'imBW': 'image', 'print': 'void', 'x': 'int', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {'led1': 2, 1: 1200, 'led2': 1, 'velocidad': 200, 'imLoad': 800, 'boton': 0, 'imDisplay': 900, 'takePicture': 801, 'imBW': 802, 'print': 901, 'x': 201, 'main': 902, 'filterColor': 803, 'imGray': 804}]}
+%%
+led1,2
+1,1200
+led2,1
+velocidad,200
+imLoad,800
+boton,0
+imDisplay,900
+takePicture,801
+imBW,802
+print,901
+x,201
+main,902
+filterColor,803
+imGray,804
+%%
+['GOTO', -1, 'main', -1]
+['CAM', 'webcam', -1, -1]
+['INPUT', 'boton', -1, 22]
+['OUTPUT', 'led1', -1, 15]
+['OUTPUT', 'led2', -1, 16]
+['PWM', 'velocidad', -1, 12]
+['=', 1200, -1, 201]
+['=', 2201, -1, 2200]
+['>', 2200, 2201, 3000]
+['GOTOF', 3000, 'while', 18]
+['ERA', 'print', -1, -1]
+['PARAM', 2200, -1, 0]
+['CALL', 'print', -1, -1]
+['ERA', 'takePicture', -1, -1]
+['CALL', 'takePicture', -1, -1]
+['=', 801, -1, 3800]
+['=', 3800, -1, 2800]
+['GOTO', -1, 'while', 8]
+['RET', -1, -1, -1]
+['ENDPROC', -1, -1, -1]

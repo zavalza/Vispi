@@ -20,6 +20,7 @@ ProcBegin={} #dictionary to map the begin of each proccedure, addresses are keys
 LocalVarName = {} #dictonary to fine name of LOCAL variable by address
 procVars = {} #directory of procedures, as is in the parse file
 TemporalMemory = {} #dictionary, returns values using a temporal address
+Functions = {} #dictionary of Vispi Functions
 LinfMap = []
 LsupMap = []
 MemBase = 0
@@ -63,6 +64,9 @@ if len(sys.argv) == 2:
     MAIN = open('tempMain.cpp', 'w')
     mainFileIsOpen = True
 
+    OBJ.readline()  #reads the %%
+    Functions = eval(OBJ.readline().splitlines()[0])
+
     MemBase = int(OBJ.readline().splitlines()[0])
     MemLen = int(OBJ.readline().splitlines()[0])
     print MemBase
@@ -100,7 +104,7 @@ if len(sys.argv) == 2:
         name = " "
         if(resolveMemSection(address)=='globals'):
             name = data[0]
-            if not procAdd.has_key(name):
+            if (not procAdd.has_key(name)) and (not Functions.has_key(name)):
                 CPP.write('%s %s;\n'%(typeOfData,name))
         elif(resolveMemSection(address)=='constants'):
             value = (data[0])
@@ -127,11 +131,11 @@ if len(sys.argv) == 2:
     for number, quadruple in enumerate(quadruples):
 
         if(ProcBegin.has_key(number)):
-            if(ProcBegin[number] is not 'Vispi'): #######
+            if(ProcBegin[number] is not 'Vispi'): # if this is a user function
                 global counterOfUserProcedures
                 global LocalVarName
                 LocalVarName = {} #RESET local variables
-                #create the new module in CPP, i think we need a structure for this
+                #create the new module in CPP
                 name = ProcBegin[number]
                 listOfParameters = []
 
@@ -341,11 +345,22 @@ if len(sys.argv) == 2:
             global paramString
             quadNumber = quadruple[1]
             moduleName = ProcBegin[quadNumber]
-            #CPP.write('%s(%s);' %(moduleName, paramString))
-            addrOfModuleGlobal = procVars['Vispi'][addrTable][moduleName]
-            VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
+            if procVars['Vispi'][typeTable][moduleName] is 'void':
+                CPP.write('%s(%s);\n' %(moduleName, paramString))
+            else:
+                addrOfModuleGlobal = procVars['Vispi'][addrTable][moduleName]
+                VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
             paramString = ''
 
+        if(quadruple[0] is 'CALL'):
+            global paramString
+            functName = quadruple[1]
+            if procVars['Vispi'][typeTable][functName] is 'void':
+                CPP.write('%s(%s);\n' %(functName, paramString))
+            else:
+                addrOfModuleGlobal = procVars['Vispi'][addrTable][functName]
+                VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
+            paramString = ''
         # Leave the following quadruples at the end. More quadruples go above here /\
 
         if(quadruple[0] is 'GOTOF'):

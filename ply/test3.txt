@@ -21,6 +21,7 @@ def int comparaImagen(int i, float a):
 		if(5 > 1):
 			resultado1= 4
 			resultado1 = 5
+			
 		else:
 			resultado2 = 4
 			resultado2 = i * a

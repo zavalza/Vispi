@@ -8,7 +8,9 @@ x = 1
 
 def void main ():
 	int x, y
+	image prueba
 	y = x
 	while (y > x):
-		y = 0
+		print(y)
+		prueba = takePicture()
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

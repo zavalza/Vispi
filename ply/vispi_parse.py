@@ -68,6 +68,7 @@ ValidAssign = {'bool':['bool'],
 #MACROS
 paramList = 0
 typeTable = 1
+returnType = 1
 addrTable = 2
 
 #Virtual Memory segment definitions
@@ -92,7 +93,18 @@ ProcTypes = {'Vispi':'prog'}
 ProcSize = {'Vispi':[0,0,0,0,0,0,0,0,0,0]} #primero variables loc. y luego temporales
 ProcAddr = {'Vispi':0}
         # parameter list, {variable types dict}, {variable address dict}
-ProcVars = {'Vispi':[[],{},{}]}
+ProcVars = {'Vispi':[[],{},{}]} #global scope 
+
+#predefined functions of Vispi
+            #name, list of parameter types, return type
+Functions = {'print':[['all'], 'void'],#receives one parameter that can be of all types 
+             'takePicture':[[], 'image'], #no parameters
+             'imDisplay':[['image'],'void'],
+             'filterColor':[['image', 'string'], 'image'],
+             'imBW':[['image'], 'image'],
+             'imGray':[['image'], 'image'],
+             'imLoad':[['string'], 'image']
+            }   
 
 #variables
 moduleName = 'Vispi'
@@ -121,7 +133,7 @@ counterTemporals = 0
 
 #Grammatic rules
 def p_program(p):
-    'program : programName hardware vars assign functions'
+    'program : programName f_loadVispiFunctions hardware vars assign functions'
     global counterQuadruples
     Quadruples[counterQuadruples] = ['ENDPROC', -1, -1, -1]
     counterQuadruples += 1
@@ -160,6 +172,11 @@ def p_program(p):
         #   %%
         #   Cuadruplos
         fileQuadruples.write("%s\n" %(programName))
+
+        fileQuadruples.write("%%\n")
+
+        fileQuadruples.write("%s\n" %(Functions))
+
         fileQuadruples.write("%d\n" %(DS_base))
         fileQuadruples.write("%d\n" %(S_len))
         fileQuadruples.write("%d\n" %(S_offsetTable['bool']))
@@ -190,6 +207,16 @@ def p_program(p):
 
     else:
         raise TypeError("'main' module was not defined")
+
+def p_f_loadVispiFunctions(p):
+    'f_loadVispiFunctions : '
+    names = Functions.keys()
+    for i in range(len(Functions)):
+        typeOfData = Functions[names[i]][returnType]
+        ProcVars['Vispi'][typeTable][names[i]] = typeOfData
+        ProcVars['Vispi'][addrTable][names[i]] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
+        DS_counterTable[typeOfData] += 1
+
 def p_programName(p):
     'programName : PROGRAM ID NEWLINE'
     global counterQuadruples
@@ -341,7 +368,7 @@ def p_f_saveModule(p):
             ProcVars['Vispi'][addrTable][moduleName] = DS_base + S_offsetTable[typeOfData] + DS_counterTable[typeOfData]
             DS_counterTable[typeOfData] += 1
         else:
-            raise TypeError('Function name is the same as global variable')
+            raise TypeError('Function name is already defined')
 
 def p_parameterList(p):
     '''parameterList : empty
@@ -467,7 +494,9 @@ def p_f_isReturn(p):
 def p_f_return(p):
     'f_return : '
     global counterQuadruples
-    if ProcTypes[moduleName]=='void':
+    if ProcTypes.has_key(moduleName) and ProcTypes[moduleName]=='void':
+        raise TypeError("Unexpected return in void function")
+    if Functions.has_key(moduleName) and Functions[moduleName][returnType] is 'void':
         raise TypeError("Unexpected return in void function")
 
     retVal = operandsStack.pop() # hay que sacar tipo y valor del stack al final de un proc?
@@ -547,9 +576,12 @@ def p_funct(p):
     global counterQuadruples
     global counterTemporals
 
-
-    Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
-    counterQuadruples += 1
+    if ProcVars.has_key(functName):
+        Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
+        counterQuadruples += 1
+    else:
+        Quadruples[counterQuadruples] = ['CALL', functName, -1, -1]
+        counterQuadruples += 1
 
     if (not functType == 'void') and (isAssign or isReturn):
         globalAddr = ProcVars['Vispi'][addrTable][functName]
@@ -564,8 +596,8 @@ def p_funct(p):
         Quadruples[counterQuadruples] = ['=', globalAddr, -1, temporalAddress]
         counterTemporals+=1
         counterQuadruples+=1
-        print operandsStack
-        
+    elif functType is 'void' and  (isAssign or isReturn):
+        raise TypeError("Invalid assign or return with void function")
 
 def p_f_checkProc(p):
     'f_checkProc : '
@@ -575,10 +607,14 @@ def p_f_checkProc(p):
     global functType
 
     functName = p[-1]
-    if not ProcVars.has_key(functName):
+    if (not ProcVars.has_key(functName)) and (not Functions.has_key(functName)) :
         raise TypeError("Function not declared")
 
-    functType = ProcTypes[functName]
+    if (ProcTypes.has_key(functName)):
+        functType = ProcTypes[functName]
+    else:
+        functType = Functions[functName][returnType]
+
     Quadruples[counterQuadruples] = ['ERA', functName, -1, -1]
     counterQuadruples += 1
 
@@ -587,7 +623,11 @@ def p_f_checkProc(p):
 def p_expressionList(p):
     '''expressionList : empty
                       | COMMA expression f_genParam expressionList'''
-    paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
+    if(ProcVars.has_key(functName)):
+        paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
+    else:
+        paramList = Functions[functName][0]
+
     if not len(paramList) == counterParam:
         raise TypeError("Invalid number of parameters")
 
@@ -599,9 +639,20 @@ def p_f_genParam(p):
     arg = operandsStack.pop()
     typ = typesStack.pop()
 
-    paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
-    if not typ == paramList[counterParam]:
+    if(ProcVars.has_key(functName)):
+        paramList = ProcVars[functName][0]  #traemos la lista de parametros del proc.
+    else:
+        paramList = Functions[functName][0]
+
+
+    if paramList[counterParam] is 'all':    #parameter allows all types 
+        Quadruples[counterQuadruples] = ['PARAM', arg, -1, counterParam]
+        counterParam += 1
+        counterQuadruples += 1
+
+    elif (not typ == paramList[counterParam]):
         raise TypeError("Type mismatch on function call")
+
     else:
         #counterParam empieza en 0: primer parametro es param0
         Quadruples[counterQuadruples] = ['PARAM', arg, -1, counterParam]

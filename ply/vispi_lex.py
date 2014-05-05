@@ -28,7 +28,7 @@ reserved = {
 	'false':'C_BOOL',
 	'main' : 'MAIN',
 	'return' : 'RETURN',
-	'def' : 'DEF'
+	'def' : 'DEF',
 }
 # List of token names.
 tokens = [

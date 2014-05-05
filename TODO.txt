@@ -17,8 +17,7 @@ x. Anidar IF dentro de DO, y en general anidar condiciones
 *6. comparaImagen(comparaImagen(x, b), b) ??????
 7. Igualaciones anidadas
 8. Generar cuadruplos de funciones predefinidas por nosotros
-9. Guardar cada valor de acuerdo a su tipo en maquina virtual. Ahora solo se guardan como strings
-
+9. llamdas a funciones que no son void y que no tienen asignacion no se escriben en el cpp 
 x. test test test
 
 Y. DOCUMENTACION
