@@ -507,7 +507,7 @@ def p_f_return(p):
         Quadruples[counterQuadruples] = ['RETURN', retVal, -1, globalAddr]
         counterQuadruples += 1
     else:
-        raise TypeError("Type missmatch: function return value")
+        raise TypeError("Type mismatch: function return value")
     operandsStack.push(retVal)      ###########   Not sure if
     typesStack.push(typ)            ###########   fixed the return problem
 
@@ -597,7 +597,7 @@ def p_funct(p):
         counterTemporals+=1
         counterQuadruples+=1
     elif functType is 'void' and  (isAssign or isReturn):
-        raise TypeError("Invalid assign or return with void function")
+        raise TypeError("Invalid assign with void function")
 
 def p_f_checkProc(p):
     'f_checkProc : '
@@ -608,7 +608,7 @@ def p_f_checkProc(p):
 
     functName = p[-1]
     if (not ProcVars.has_key(functName)) and (not Functions.has_key(functName)) :
-        raise TypeError("Function not declared")
+        raise TypeError("%s module is not defined" %(functName))
 
     if (ProcTypes.has_key(functName)):
         functType = ProcTypes[functName]
@@ -725,7 +725,7 @@ def p_f_popTerm(p):
         typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
 
         if(typeResult==-1):
-            raise TypeError("Type dismatch")
+            raise TypeError("Type mismatch")
 
         else:
             temporalVariable = "Temporal%s" %counterTemporals
@@ -802,7 +802,7 @@ def p_f_popFactor(p):
         typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
 
         if(typeResult==-1):
-            raise TypeError("Type dismatch")
+            raise TypeError("Type mismatch")
 
         else:
             temporalVariable = "Temporal%s" %counterTemporals
