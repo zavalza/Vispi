@@ -1,24 +1,59 @@
 /* Code to run on http://www.bottlecaps.de/rr/ui to get the syntax diagrams*/
 
-Program ::= 'program' 'id' '\n' Hardware Vars Assign Functions Main
+Program ::= ProgramName f_loadVispiFunctions Hardware Vars Assign Functions 'genera cuádruplo ENDPROC y prepara el archivo de cuádruplos'
+ProgramName ::= 'program' 'id' '\n' 'genera el GOTO main y guarda el nombre del programa'
 Hardware ::= CamDeclaration InputsDeclaration OutputsDeclaration PwmDeclaration
-CamDeclaration ::= ( 'CAM' ('webcam' | 'picam') ':' 'id' '\n' )?
-InputsDeclaration ::= ( 'INPUT' PinList '\n' )?
-OutputsDeclaration ::= ( 'OUTPUT' PinList '\n' )?
-PwmDeclaration ::= ( 'PWM' PinList '\n' )?
-PinList ::= 'c_int' ':' 'id' (',' 'c_int' ':' 'id')*
-Vars ::= (Tipo 'id' (',' 'id')* '\n')*
-Tipo ::= 'bool' | 'int' | 'float' | 'char' | 'string' | 'image'
-Functions ::= ('def' (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block )*
-Assign ::= ( 'id' '=' Expression '\n' )*
-Main ::= 'void' 'main' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block
-Block ::= ('\t' Statement ('\n' '\t' Statement)* )?
-Statement ::= Assign | Condition | Cycle | Funct '\n' | 'return' Expression '\n'
-Condition ::= 'if' Expression ':' '\n' Block ('else' ':' '\n' Block)?
-Cycle ::= 'while' Expression ':' '\n' Block | 'do' ':' '\n' Block 'while' Expression '\n'
-Funct ::= 'id' '(' (Expression (',' Expression)* )? ')'
-Expression ::= Exp (('>'|'<'|'>='|'<='|'!='|'==') Exp)?
-Exp ::= Term ( ('+'|'-') Term )*
-Term ::= Factor ( ('*'|'/'|'%') Factor )*
-Factor ::= '(' Expression ')' | Cvar | Funct
-Cvar ::= 'id' | 'c_int' | 'c_float' | 'c_bool' | 'c_char' | 'c_string' 
+CamDeclaration ::= ( 'CAM' ('webcam' | 'picam') ':' 'id' '\n' 'genera el cuádruplo CAM')?
+InputsDeclaration ::= ( 'INPUT' f_savetype PinList '\n' )? 'genera los cuádruplos INPUT'
+OutputsDeclaration ::= ( 'OUTPUT' f_savetype PinList '\n' )? 'genera los cuádruplos OUTPUT'
+PwmDeclaration ::= ( 'PWM' f_savetype PinList '\n' )? 'genera los cuádruplos PWM'
+PinList ::= 'c_int' ':' 'id' (',' 'c_int' ':' 'id')* 'guarda los id de pines como var. globales'
+Vars ::= (f_checktab Tipo idList '\n' f_resetTab)+
+idList ::= 'id' (',' 'id')* 'guarda los id en el dir. de proc. ya sea como locales o como globales y su tipo'
+Tipo ::= ('bool' | 'int' | 'float' | 'char' | 'string' | 'image') f_saveType
+Functions ::= ('def' (Tipo 'id' | 'void' f_setVoid ('id' | 'main')) f_saveModule '(' (Tipo 'id' f_addToParam (',' Tipo 'id' f_addToParam)* )? ')' ':' '\n' f_resetTab f_incTab Block   f_endModule)*
+Assign ::= (f_checkTab 'id' f_checkID '=' f_isAssign Expression '\n' f_resetTab f_generateEqual)+
+
+Block ::= ('\t' f_addTab moreTabs Statement)+ 'decrementa la tabulación esperada en 1' //
+moreTabs ::= ( ('\t' f_addTab) | ('\n' f_resetTab '\t' f_addTab) )*
+Statement ::= (Vars | Assign | f_checkTab Condition | f_checkTab DoCycle | Cycle | f_checkTab Funct '\n' f_resetTab | f_checkTab 'return' f_isReturn Expression f_return '\n' f_resetTab)? 'resetea la bandera de estatuto return'
+Condition ::= 'if' f_isCondition Expression ':' '\n' f_resetTab f_incTab Block (f_checkTab 'else' f_popIf ':' '\n' f_resetTab f_incTab Block)? 'rellena la dirección destino del GOTOF del if'
+Cycle ::= f_checkTab 'while' f_isCondition Expression ':' '\n' f_resetTab f_incTab Block 'Genera cuádruplo GOTO correspondiente al fin del while'
+DoCycle ::= 'do' f_pushDo ':' '\n' f_resetTab f_incTab Block f_checkTab 'loop' f_isDoWhile f_isCondition Expression '\n' f_resetTab
+Funct ::= 'id' f_checkProc '(' (Expression f_genParam (',' Expression f_genParam 'verifica número de parámetros')* )? ')' 'genera cuádruplos GOSUB o CALL así como la asignación del valor de retorno de la función a una variable temporal, si es que no es void'
+Expression ::= Exp (('>'|'<'|'>='|'<='|'!='|'==') Exp f_popComparation)?
+Exp ::= Term ( ('+'|'-') f_pushOperator Term f_popTerm)*
+Term ::= Factor ( ('*'|'/'|'%') f_pushOperator Factor f_popFactor)*
+Factor ::= '(' f_pushOperator Expression ')' f_popOperator | Cvar | Funct
+Cvar ::= 'id' f_isID | ('c_int' | 'c_float' | 'c_bool' | 'c_string') f_isConst
+
+
+f_loadVispiFunctions ::= 'carga las funciones predefinidas de nuestro lenguaje en el dir. de procedimientos'
+f_saveType ::= 'guarda el tipo de dato correspondiente al HW o variable primitiva declarada para su uso futuro'
+f_setVoid ::= 'guarda "void" en el tipo de dato'
+f_saveModule ::= 'verifica si el id definido ya existe. Declara un nuevo procedimiento en el directorio'
+f_addToParam ::= 'agrega el parametro declarado a su lugar en el dir. de procedimientos'
+f_resetTab ::= 'reinicia el contador de tabs a 0'
+f_incTab ::= 'incrementa en 1 la tabulación esperada a partir de este punto'
+f_decTab ::= 'decrementa en 1 la tabulación esperada a partir de este punto'
+f_endModule ::= 'guarda el tamaño de la funcion declarada, reinicia contadores de variables y genera el cuad. RET'
+f_checkTab ::= 'verifica que el contador de tabs corresponda con lo esperado'
+f_checkID ::= 'verifica que el id ya haya sido declarado como local o global. Si sí, inserta operando y tipo en sus pilas respectivas'
+f_isAssign ::= 'enciende una bandera para saber que se procesa una asignación'
+f_generateEqual ::= 'hace 2 pop de la pila de tipos y de operandos, verifica tipos y genera el cuádruplo de la asignación'
+f_addTab ::= 'incrementa en 1 el contador de tabs y verifica que corresponda con la tabulación esperada'
+f_return ::= 'marca error si hay return en función void. Verifica que el valor de retorno (top de pila) sea del tipo adecuado. Genera el cuádruplo RETURN'
+f_isReturn ::= 'enciende una bandera que indica que el estatuto es un return'
+f_isCondition ::= 'enciende una bandera para indicar que se está procesando una condición o ciclo. Si es del tipo while, se inserta el número de cuádruplo en pilaDeBranch'
+f_popIf ::= 'dado que vino un else, genera el GOTO del final del if e inserta en una pilaDeBranch el número del siguiente cuádruplo'
+f_pushDo ::= 'genera un cuádruplo DO que indica el inicio de un do..loop e inserta su número en la pilaDeBranch'
+f_isDoWhile ::= 'enciende una bandera que indica que se está procesando un do..loop'
+f_checkProc ::= 'verifica que el módulo llamado esté definido y genera el cuádruplo ERA'
+f_genParam ::= 'dados los parámetros de la función, genera los cuádruplos PARAM verificando el tipo'
+f_popComparation ::= 'si se hizo una comparación: verifica tipo en el cubo semántico, genera una temporal con el resultado (a la pilaOperandos) y genera el cuádruplo correspondiente'
+f_pushOperator ::= 'siempre que la bandera de condición esté apagada inserta el operador en su pila'
+f_popTerm ::= 'si la operación fue + o -: verifica tipos en el cubo semántico, genera una temporal con el resultado (a la pila pilaOperandos) y genera el cuádruplo'
+f_popFactor ::= 'si es * / o % la operación: verifica tipos en el cubo semántico y genera el cuádruplo'
+f_popOperator ::= 'si se procesa una condición: verifica que el tipo del operando en la cima del stack sea bool o int, luego genera GOTOF y hace push a pilaDeBranch si es if o while, o hace pop a pilaDeBranch y genera GOTOT si es do. Si no es condición sólo hace pop del operador'
+f_isID ::= 'verifica que el id esté declarado como local o global'
+f_isConst ::= 'guarda la constante en la tabla de constantes junto con su tipo y los inserta en la pila de operandos y tipos'
