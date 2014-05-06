@@ -3,20 +3,20 @@
 using namespace std;
 using namespace cv;
 
-int DpHjP = 0;
-int giTZL = 1;
-int bNcUF = 2;
-int ozvTM = 5;
+int TCkTD = 0;
+int AXSKw = 1;
+int BWONR = 2;
+int OyxUo = 5;
 int velocidad;
-int bleaq = 25;
+int bQBPH = 25;
 int led1;
 int led2;
 int personas;
 Mat imgInicial;
 string mensajeAlerta;
-int dIHbU = 75;
+int kYEFJ = 75;
 int boton;
-string nfdfe = "Alerta de intruso!";
+string rXMtj = "Alerta de intruso!";
 
 void comparaImagen (int i, float a) {
 Mat tempImg;
@@ -34,30 +34,30 @@ int main () {
 if(!cap.isOpened()) // check if we succeeded
 	return -1;
 
-pullUpDnControl(22, PUD_DOWN); //Enable PullUp Resistor connected to GND 
-pinMode(22, INPUT); 
-pullUpDnControl(15, PUD_OFF); //Disable PullUp Resistor
-pinMode(15, OUTPUT); 
-pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
-pinMode(16, OUTPUT); 
-pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
-pinMode(12, PWM_OUTPUT); 
-personas = ozvTM;
-mensajeAlerta = nfdfe;
+pullUpDnControl(6, PUD_DOWN); //Enable PullUp Resistor connected to GND 
+pinMode(6, INPUT); 
+pullUpDnControl(3, PUD_OFF); //Disable PullUp Resistor
+pinMode(3, OUTPUT); 
+pullUpDnControl(4, PUD_OFF); //Disable PullUp Resistor
+pinMode(4, OUTPUT); 
+pullUpDnControl(1, PUD_OFF); //Disable PullUp Resistor
+pinMode(1, PWM_OUTPUT); 
+personas = OyxUo;
+mensajeAlerta = rXMtj;
 imgInicial = takePicture();
 Mat tempImg;
-while ((personas > ozvTM)) {
-if (digitalRead(22)) {
+while ((personas > OyxUo)) {
+if (digitalRead(6)) {
 comparaImagen();
-digitalWrite(16, giTZL);
-pwmWrite(12, bleaq);
+digitalWrite(4, AXSKw);
+pwmWrite(1, bQBPH);
 }
 else {
 tempImg = takePicture();
-if ((bNcUF > personas)) {
+if ((BWONR > personas)) {
 print(mensajeAlerta);
-digitalWrite(15, DpHjP);
-pwmWrite(12, dIHbU);
+digitalWrite(3, TCkTD);
+pwmWrite(1, kYEFJ);
 }
 }
 }

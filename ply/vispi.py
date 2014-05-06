@@ -13,7 +13,7 @@ import string
 # the other mode below
 TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
-GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
+GPIO = {7:7, 11:0, 12:1, 13:2, 15:3, 16:4, 22:6} #physical pins of the RaspberryPi mapped to GPIOpins
 VarDict={}  #dictionary to find name of GLOBAL and CONSTANT variable using its address
 GlobalAdd={} #dictionary to find GLOBAL and CONSTANT address using its name
 HwVars = {} #dictionary to find pin number using names
@@ -205,22 +205,22 @@ if len(sys.argv) == 2:
                 print"raspicam"
         if(quadruple[0] == 'INPUT'):
             pin = int(quadruple[3])
-            if(pin in GPIO): #validate pin
+            if(GPIO.has_key(pin)): #validate pin
                 name = quadruple[1]
-                MAIN.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(pin))
-                MAIN.write('pinMode(%s, INPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(GPIO[pin]))
+                MAIN.write('pinMode(%s, INPUT); \n'%(GPIO[pin]))
                 HwModes[name]= 'input'
                 HwVars[name] = pin
                 address = GlobalAdd[name]
-                VarDict[address] = 'digitalRead(%s)'%(pin)
+                VarDict[address] = 'digitalRead(%s)'%(GPIO[pin])
             else:
                 raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
         if(quadruple[0] == 'OUTPUT'):
             pin = int(quadruple[3])
-            if(pin in GPIO):
+            if(GPIO.has_key(pin)):
                 name = quadruple[1]
-                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin));
-                MAIN.write('pinMode(%s, OUTPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(GPIO[pin]));
+                MAIN.write('pinMode(%s, OUTPUT); \n'%(GPIO[pin]))
                 HwModes[name]= 'output'
                 HwVars[name] = pin
             else:
@@ -229,8 +229,8 @@ if len(sys.argv) == 2:
             pin = int(quadruple[3])
             if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for PWM
                 name = quadruple[1]
-                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin))
-                MAIN.write('pinMode(%s, PWM_OUTPUT); \n'%(pin))
+                MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(GPIO[pin]))
+                MAIN.write('pinMode(%s, PWM_OUTPUT); \n'%(GPIO[pin]))
                 HwModes[name]= 'pwm'
                 HwVars[name] = pin
             else:
@@ -262,9 +262,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     else:
                         MAIN.write('%s = %s;\n' %(x, y))
                 else:
@@ -272,9 +272,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
             elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
@@ -285,9 +285,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     elif HwModes.has_key(y):
                         mode = HwModes[y]
                         if mode is not 'input':
@@ -299,9 +299,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     elif HwModes.has_key(y):
                         mode = HwModes[y]
                         if mode is not 'input':
@@ -316,9 +316,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     else:
                         MAIN.write('%s = %s;\n' %(x, y))
                 else:
@@ -326,9 +326,9 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
-                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
                         elif mode is 'pwm':
-                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
+                            CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
             elif destZone is 'locals' and origZone is 'temporals':
