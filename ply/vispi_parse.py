@@ -498,7 +498,7 @@ def p_f_return(p):
     if Functions.has_key(moduleName) and Functions[moduleName][returnType] is 'void':
         raise TypeError("Unexpected return in void function")
 
-    retVal = operandsStack.pop() # hay que sacar tipo y valor del stack al final de un proc?
+    retVal = operandsStack.pop() # hay que sacar tipo y valor del stack al final de un proc.
     typ = typesStack.pop()
     globalAddr = ProcVars['Vispi'][addrTable][moduleName]
     globalType = ProcVars['Vispi'][typeTable][moduleName]
@@ -507,8 +507,8 @@ def p_f_return(p):
         counterQuadruples += 1
     else:
         raise TypeError("Type mismatch: function return value")
-    operandsStack.push(retVal)      ###########   Not sure if
-    typesStack.push(typ)            ###########   fixed the return problem
+    operandsStack.push(retVal)      #
+    typesStack.push(typ)            #
 
 def p_cycle(p):
     'cycle : f_checkTab WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block'
@@ -566,7 +566,7 @@ def p_f_isCondition(p):
         typeOfCondition = p[-1]
         if(typeOfCondition == 'while'):
             branchStack.push(counterQuadruples)
-    isDoWhile=False ################################################ not sure
+    isDoWhile=False #
     #print typeOfCondition
 
 def p_funct(p):
