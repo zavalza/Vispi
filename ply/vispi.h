@@ -19,11 +19,11 @@ Mat imGray(Mat);
 Mat resizeUp(Mat,int);
 Mat resizeDown(Mat,int);
 Mat filterColor(Mat, string); /*Incompleta*/
-void print(Mat); /*Incompleta*/
+void showInfo(Mat); /*Incompleta*/
+void print(Mat);
 void print(int);
 void print(double);
 void print(String);
-void imDisplay(Mat);
 
 
 Mat takePicture(void)
@@ -31,15 +31,9 @@ Mat takePicture(void)
 	Mat frame;
 	VideoCapture inputCam(0);
 	inputCam >> frame;
+	inputCam >> frame;
+	inputCam >> frame;
 	return frame;
-}
-
-void imDisplay(Mat image)
-{
-	string name = "Image" + std::to_string(rand());
-	namedWindow(name, CV_WINDOW_AUTOSIZE);
-	imshow(name, image);
-	waitKey(30);
 }
 
 Mat imLoad(String name)
@@ -51,7 +45,7 @@ Mat imLoad(String name)
 	return image;
 }
 
-void print(Mat image)
+void showInfo(Mat image)
 {
 	cout << "Ancho: ";
 	cout << image.cols;
@@ -65,6 +59,16 @@ void print(Mat image)
 	cout << image.rows;
 	cout << '\n';
 	/*Pendiente el tamaño que ocupa la imagen*/
+
+}
+
+void print(Mat image)
+{
+	string name = "Image";
+	namedWindow(name, CV_WINDOW_AUTOSIZE);
+	imshow(name, image);
+	waitKey(30);
+
 
 }
 

@@ -3,5 +3,5 @@ LXXLIBS+=-lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_imgproc -lw
 LXXLIBS+=-L/home/pi/Desktop/git/robidouille/raspicam_cv -lraspicamcv
 LXXLIBS+=-L/home/pi/Desktop/git/raspberry/userland/build/lib -lmmal_core -lmmal -l mmal_util -lvcos -lbcm_host
 
-all: buscaIntruso.cpp
-	g++ buscaIntruso.cpp -o buscaIntruso $(LXXLIBS)
+all: vispi.cpp
+	g++ vispi.cpp -o vispi $(LXXLIBS)
