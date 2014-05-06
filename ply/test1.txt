@@ -1,8 +1,8 @@
 PROGRAM buscaIntruso 
 CAM webcam:micamara 
-INPUT 17:boton 
-OUTPUT 22:led1,23:led2
-PWM 18:velocidad
+INPUT 22:boton 
+OUTPUT 15:led1,16:led2
+PWM 12:velocidad
 int personas
 string mensajeAlerta
 image imgInicial
@@ -15,7 +15,7 @@ def void comparaImagen(int i, float a):
 	image tempImg, diferencias
 	tempImg = takePicture()
 	diferencias = imgInicial - tempImg
-	imDisplay(diferencias)
+	print(diferencias)
 
 def void main ():
 	image tempImg
@@ -23,13 +23,13 @@ def void main ():
 		if(boton):
 		#comentario
 			comparaImagen()
-			led2 = true
+			led2 = 1
 			velocidad = 25
 			#comentario
 		else:
 			tempImg = takePicture()
-			if(countObjects(tempImg,"Face") > personas):
+			if(2 > personas):
 				print(mensajeAlerta)
-				led1 = true 
+				led1 = 0 
 				velocidad = 75
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

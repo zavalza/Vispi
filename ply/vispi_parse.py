@@ -19,7 +19,7 @@ SemCube = [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'image']
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 1]
         ],
         [
             [-1,-1,-1,-1,-1,'bool','bool','bool','bool','bool','bool','bool','bool',-1],
@@ -52,7 +52,7 @@ SemCube = [
         [
             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-            [-1,-1,'image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
             ['image','image',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1] #comparaciones entre image?
         ]
@@ -99,11 +99,10 @@ ProcVars = {'Vispi':[[],{},{}]} #global scope
             #name, list of parameter types, return type
 Functions = {'print':[['all'], 'void'],#receives one parameter that can be of all types 
              'takePicture':[[], 'image'], #no parameters
-             'imDisplay':[['image'],'void'],
-             'filterColor':[['image', 'string'], 'image'],
              'imBW':[['image'], 'image'],
+             'imLoad':[['string'], 'image'],
              'imGray':[['image'], 'image'],
-             'imLoad':[['string'], 'image']
+             'filterColor':[['image', 'string'], 'image'],
             }   
 
 #variables
@@ -287,7 +286,7 @@ def p_f_saveType(p):
     'f_saveType :'
     global typeOfData
     if((p[-1]=='INPUT')or(p[-1]=='OUTPUT')):
-        typeOfData = 'bool'
+        typeOfData = 'int'
     else:
         if(p[-1]=='PWM'):
             typeOfData = 'int'
@@ -770,7 +769,7 @@ def p_f_popOperator(p):
         isCondition = False
         operand = operandsStack.pop()
         typeVariable = typesStack.pop()
-        if(typeVariable == 'bool'):
+        if(typeVariable == 'bool')or(typeVariable == 'int'): #follow c/c++ sintax
             #print typeOfCondition
             if (typeOfCondition == 'if' or typeOfCondition=='while'):
                 Quadruples[counterQuadruples]=["GOTOF", operand, typeOfCondition, -1]
@@ -784,7 +783,7 @@ def p_f_popOperator(p):
                 #print typeOfCondition
                 raise TypeError("Not a valid condition")
         else:
-            raise TypeError("Result of condition is not bool")
+            raise TypeError("Result of condition is not valid")
     else:
         operatorsStack.pop()
 

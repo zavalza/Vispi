@@ -3,45 +3,27 @@
 using namespace std;
 using namespace cv;
 
-int zRLYy = 1;
-int vbnGu = 3;
-int SgTpL = 4;
-int ZOBMK = 5;
+int FsfRA = 0;
+int atfrB = 1;
+int BzWkF = 2;
+int WUOQN = 5;
 int velocidad;
-int RxFKJ = 10;
-int llRYb = 20;
-bool led1;
-bool led2;
-bool yufxn = true;
-float SvKoB = 45.0;
-float cdsUc = 2.1;
+int tSrYX = 25;
+int led1;
+int led2;
 int personas;
 Mat imgInicial;
 string mensajeAlerta;
-float LqndU = 1.2;
-bool boton;
-string pklVF = "Alerta de intruso!";
-int a;
-int WRCtP = 85;
+int GimcP = 75;
+int boton;
+string mOWnL = "Alerta de intruso!";
 
-int comparaImagen (int i, float a) {
-Mat imgResultante;
-float resultado1;
-Mat imgActual;
-float resultado2;
-do {
-resultado1 = ((SvKoB + WRCtP) - RxFKJ);
-resultado2 = ((resultado1 * (SvKoB - llRYb)) * vbnGu);
-if ((ZOBMK > zRLYy)) {
-resultado1 = SgTpL;
-resultado1 = ZOBMK;
-}
-else {
-resultado2 = SgTpL;
-resultado2 = (i * a);
-}
-} while(yufxn);
-return i;
+void comparaImagen (int i, float a) {
+Mat tempImg;
+Mat diferencias;
+tempImg = takePicture();
+diferencias = subImages(imgInicial,tempImg);
+print(diferencias);
 
 }
 
@@ -60,16 +42,24 @@ pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
 pinMode(16, OUTPUT); 
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
-personas = ZOBMK;
-mensajeAlerta = pklVF;
-int a;
-float b;
-int x;
-a = zRLYy;
-b = LqndU;
-a = ZOBMK;
-b = cdsUc;
-x = (comparaImagen(a, b)(a, b) + comparaImagen(x, b));
+personas = WUOQN;
+mensajeAlerta = mOWnL;
+imgInicial = takePicture();
+Mat tempImg;
+while ((personas > WUOQN)) {
+if (digitalRead(22)) {
+comparaImagen();
+digitalWrite(16, atfrB);
+pwmWrite(12, tSrYX);
+}
+else {
+tempImg = takePicture();
+if ((BzWkF > personas)) {
+print(mensajeAlerta);
+digitalWrite(15, FsfRA);
+pwmWrite(12, GimcP);
+}
+}
 
 return 0;
 }

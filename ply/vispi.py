@@ -15,12 +15,26 @@ TypeMap = ['bool', 'int', 'float', 'string', 'Mat', 'void']
 MemSectionMap = ['globals', 'constants', 'locals', 'temporals']
 GPIO = [7, 11, 12, 13, 15, 16, 22] #GPIO pins of the RaspberryPi, we are using the physical number (header pin)
 VarDict={}  #dictionary to find name of GLOBAL and CONSTANT variable using its address
-HwVars={}   #dictionary to find pins using names
+GlobalAdd={} #dictionary to find GLOBAL and CONSTANT address using its name
+HwVars = {} #dictionary to find pin number using names
+HwModes={}   #dictionary to find hardware mode using names
 ProcBegin={} #dictionary to map the begin of each proccedure, addresses are keys, modules are values
 LocalVarName = {} #dictonary to fine name of LOCAL variable by address
 procVars = {} #directory of procedures, as is in the parse file
 TemporalMemory = {} #dictionary, returns values using a temporal address
 Functions = {} #dictionary of Vispi Functions
+#structure to find name of image functions according to operators and operands
+#first operand is always image
+imgOperand={'bool':0, 'int':1, 'float':2, 'string':3, 'Mat':4} #second operand
+imgOperator={'+':0,'-':1,'/':2,'*':3,'%':4,'>':5,'<':6, '<=':7, '>=':8, '!=':9, '==':10, '&&':11, '||':12, '!':13}
+imgFunctions= [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,'resizeDown','resizeUp',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+            ['addImages','subImages',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1] #comparaciones entre image?
+            ]
+#############
 LinfMap = []
 LsupMap = []
 MemBase = 0
@@ -113,7 +127,8 @@ if len(sys.argv) == 2:
         else:
             print "Error" #we are suppose to have only globals and constants in this section
         
-        VarDict[address] = name  
+        VarDict[address] = name
+        GlobalAdd[name] = address
     	#print data
     	line = OBJ.readline().splitlines()[0]
     CPP.write('\n')
@@ -180,12 +195,9 @@ if len(sys.argv) == 2:
                     if nm not in listOfParameters and not resolveMemSection(addresses[i]) == 'temporals':
                         CPP.write('%s %s;\n' %(ty, nm))
 
-                print ProcBegin[number]
                 counterOfUserProcedures = counterOfUserProcedures + 1
             #################################################################################
 
-        if(quadruple[0] == 'GOTO'):
-            print "GOTO"
         if(quadruple[0] == 'CAM'):
             if(quadruple[1] == 'webcam'):
                 MAIN.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
@@ -197,27 +209,32 @@ if len(sys.argv) == 2:
                 name = quadruple[1]
                 MAIN.write('pullUpDnControl(%s, PUD_DOWN); //Enable PullUp Resistor connected to GND \n'%(pin))
                 MAIN.write('pinMode(%s, INPUT); \n'%(pin))
-                HwVars[name]= pin
+                HwModes[name]= 'input'
+                HwVars[name] = pin
+                address = GlobalAdd[name]
+                VarDict[address] = 'digitalRead(%s)'%(pin)
             else:
-                print "Pin %s is not a valid GPIO pin"%(pin)
+                raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
         if(quadruple[0] == 'OUTPUT'):
             pin = int(quadruple[3])
             if(pin in GPIO):
                 name = quadruple[1]
                 MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin));
                 MAIN.write('pinMode(%s, OUTPUT); \n'%(pin))
-                HwVars[name]= pin
+                HwModes[name]= 'output'
+                HwVars[name] = pin
             else:
-                print "Pin %s is not a valid GPIO pin"%(pin)
+                raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
         if(quadruple[0] == 'PWM'):
             pin = int(quadruple[3])
             if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for PWM
                 name = quadruple[1]
                 MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(pin))
                 MAIN.write('pinMode(%s, PWM_OUTPUT); \n'%(pin))
-                HwVars[name]= pin
+                HwModes[name]= 'pwm'
+                HwVars[name] = pin
             else:
-                print "Only pin #12 can be used as pwm"
+                raise TypeError("Only pin #12 can be used as pwm")
 
         if(quadruple[0] is '='):
             origAdd = quadruple[1]
@@ -227,49 +244,110 @@ if len(sys.argv) == 2:
             origZone = resolveMemSection(origAdd)
             destZone = resolveMemSection(destAdd)
 
-            if origTyp is 'Mat' or destTyp is 'Mat':
-                print 'x'                               # CODIGO DE MAT
-            else:
-                if destZone is 'temporals' and origZone is 'temporals':
-                    TemporalMemory[destAdd] = TemporalMemory[origAdd]
-                elif destZone is 'temporals' and (origZone is 'globals' or origZone is 'constants'):
-                    TemporalMemory[destAdd] = VarDict[origAdd]
-                    VarDict[origAdd] = VarDict[origAdd].split('(')[0]
-                elif destZone is 'temporals' and origZone is 'locals':
-                    TemporalMemory[destAdd] = LocalVarName[origAdd]
-                elif destZone is 'globals' and origZone is 'temporals':
-                    x = VarDict[destAdd]
-                    y = TemporalMemory[origAdd]
-                    if mainFileIsOpen:
+            # if origTyp is 'Mat' or destTyp is 'Mat':
+            #     print 'x'                               # CODIGO DE MAT
+            #else:
+            if destZone is 'temporals' and origZone is 'temporals':
+                TemporalMemory[destAdd] = TemporalMemory[origAdd]
+            elif destZone is 'temporals' and (origZone is 'globals' or origZone is 'constants'):
+                TemporalMemory[destAdd] = VarDict[origAdd]
+                VarDict[origAdd] = VarDict[origAdd].split('(')[0]
+            elif destZone is 'temporals' and origZone is 'locals':
+                TemporalMemory[destAdd] = LocalVarName[origAdd]
+            elif destZone is 'globals' and origZone is 'temporals':
+                x = VarDict[destAdd]
+                y = TemporalMemory[origAdd]
+                if mainFileIsOpen:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                    else:
                         MAIN.write('%s = %s;\n' %(x, y))
+                else:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
-                elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
-                    x = VarDict[destAdd]
-                    y = VarDict[origAdd]
-                    if mainFileIsOpen:
+            elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
+                x = VarDict[destAdd]
+                y = VarDict[origAdd]
+                if mainFileIsOpen:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                    elif HwModes.has_key(y):
+                        mode = HwModes[y]
+                        if mode is not 'input':
+                            raise TypeError("Reading with not input mode")
+                    else:
                         MAIN.write('%s = %s;\n' %(x, y))
+                else:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
+                    elif HwModes.has_key(y):
+                        mode = HwModes[y]
+                        if mode is not 'input':
+                            raise TypeError("Reading with not input mode")
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
-                elif destZone is 'globals' and origZone is 'locals':
-                    x = VarDict[destAdd]
-                    y = LocalVarName[origAdd]
-                    if mainFileIsOpen:
+            elif destZone is 'globals' and origZone is 'locals':
+                x = VarDict[destAdd]
+                y = LocalVarName[origAdd]
+                if mainFileIsOpen:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            MAIN.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            MAIN.write('pwmWrite(%s, %s);\n' %(pin, y))
+                    else:
                         MAIN.write('%s = %s;\n' %(x, y))
+                else:
+                    if HwModes.has_key(x):
+                        mode = HwModes[x]
+                        pin = HwVars[x]
+                        if mode is 'output':
+                            CPP.write('digitalWrite(%s, %s);\n' %(pin, y))
+                        elif mode is 'pwm':
+                            CPP.write('pwmWrite(%s, %s);\n' %(pin, y))
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
-                elif destZone is 'locals' and origZone is 'temporals':
-                    x = LocalVarName[destAdd]
-                    y = TemporalMemory[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
-                elif destZone is 'locals' and (origZone is 'globals' or origZone is 'constants'):
-                    x = LocalVarName[destAdd]
-                    y = VarDict[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
-                elif destZone is 'locals' and origZone is 'locals':
-                    x = LocalVarName[destAdd]
-                    y = LocalVarName[origAdd]
-                    CPP.write('%s = %s;\n' %(x, y))
+            elif destZone is 'locals' and origZone is 'temporals':
+                x = LocalVarName[destAdd]
+                y = TemporalMemory[origAdd]
+                CPP.write('%s = %s;\n' %(x, y))
+            elif destZone is 'locals' and (origZone is 'globals' or origZone is 'constants'):
+                x = LocalVarName[destAdd]
+                y = VarDict[origAdd]
+                if HwModes.has_key(y):
+                    mode = HwModes[y]
+                    pin = HwVars[y]
+                    if mode is not 'input':
+                        raise TypeError("Reading with not input mode")
+                CPP.write('%s = %s;\n' %(x, y))
+            elif destZone is 'locals' and origZone is 'locals':
+                x = LocalVarName[destAdd]
+                y = LocalVarName[origAdd]
+                CPP.write('%s = %s;\n' %(x, y))
 
         if(quadruple[0] in operatorAuxList):
             orig1Add = quadruple[1]
@@ -286,22 +364,28 @@ if len(sys.argv) == 2:
 
             operator = quadruple[0]
 
-            if orig1Typ is 'Mat' or orig2Typ is 'Mat' or destTyp is 'Mat':
-                print 'x'                               # CODIGO DE MAT
-            else:
-                if orig1Zone is 'temporals':
-                    x = TemporalMemory[orig1Add]
-                elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
-                    x = VarDict[orig1Add]
-                elif orig1Zone is 'locals':
-                    x = LocalVarName[orig1Add]
+            if orig1Zone is 'temporals':
+                x = TemporalMemory[orig1Add]
+            elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
+                x = VarDict[orig1Add]
+                if HwModes.has_key(x):
+                    raise TypeError("Mix of pins with arithmetic is not allowed")
+            elif orig1Zone is 'locals':
+                x = LocalVarName[orig1Add]
 
-                if orig2Zone is 'temporals':
-                    y = TemporalMemory[orig2Add]
-                elif (orig2Zone is 'globals' or orig2Zone is 'constants'):
-                    y = VarDict[orig2Add]
-                elif orig2Zone is 'locals':
-                    y = LocalVarName[orig2Add]
+            if orig2Zone is 'temporals':
+                y = TemporalMemory[orig2Add]
+            elif (orig2Zone is 'globals' or orig2Zone is 'constants'):
+                y = VarDict[orig2Add]
+                if HwModes.has_key(y):
+                    raise TypeError("Mix of pins with arithmetic is not allowed")
+            elif orig2Zone is 'locals':
+                y = LocalVarName[orig2Add]
+
+            if orig1Typ is 'Mat': # specialImageFunctions
+                functName = imgFunctions[imgOperand[orig2Typ]][imgOperator[operator]] 
+                TemporalMemory[destAdd] = '%s(%s,%s)'%(functName,x,y)
+            else:
                 
                 TemporalMemory[destAdd] = '(' + x + ' ' + operator + ' ' + y + ')'
 
@@ -410,8 +494,6 @@ if len(sys.argv) == 2:
         #insert MAIN
     CPP.write('\nreturn 0;\n}\n')
     CPP.close()
-
-    print HwVars
 
 
     #while line != '%%':        while not eof() ?

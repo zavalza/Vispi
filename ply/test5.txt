@@ -8,9 +8,17 @@ x = 1
 
 def void main ():
 	int x, y
-	image prueba
+	image prueba1, prueba2, prueba3
+	image superPrueba
 	y = x
+	led1 = 1
+	led2 = 0
+	velocidad = 25
 	while (y > x):
-		print(y)
-		prueba = takePicture()
+		prueba1 = takePicture()
+		prueba2 = imLoad("test.jpg")
+		prueba3 = prueba1 + prueba2
+		superPrueba = (prueba3 * 5 / 4) - prueba1
+		print(x)
+		print(superPrueba)
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

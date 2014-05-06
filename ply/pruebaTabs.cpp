@@ -3,12 +3,17 @@
 using namespace std;
 using namespace cv;
 
-bool led1;
-int AiMsN = 1;
-bool led2;
+int led1;
+int hMiqH = 1;
+int led2;
+int IsBhd = 4;
+int pGwtk = 5;
 int velocidad;
-bool boton;
+string FQtee = "test.jpg";
+int boton;
+int YrWBM = 25;
 int x;
+int sakWQ = 0;
 
 int main () {
 
@@ -25,13 +30,24 @@ pullUpDnControl(16, PUD_OFF); //Disable PullUp Resistor
 pinMode(16, OUTPUT); 
 pullUpDnControl(12, PUD_OFF); //Disable PullUp Resistor
 pinMode(12, PWM_OUTPUT); 
-x = AiMsN;
+x = hMiqH;
+Mat prueba1;
+Mat superPrueba;
+Mat prueba2;
 int y;
 int x;
-Mat prueba;
+Mat prueba3;
 y = x;
+digitalWrite(15, hMiqH);
+digitalWrite(16, sakWQ);
+pwmWrite(12, YrWBM);
 while ((y > x)) {
-print(y);
+prueba1 = takePicture();
+prueba2 = imLoad(FQtee);
+prueba3 = addImages(prueba1,prueba2);
+superPrueba = subImages(resizeDown(resizeUp(prueba3,pGwtk),IsBhd),prueba1);
+print(x);
+print(superPrueba);
 }
 
 return 0;

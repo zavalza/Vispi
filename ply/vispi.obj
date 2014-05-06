@@ -1,6 +1,6 @@
-pruebaTabs
+buscaIntruso
 %%
-{'imLoad': [['string'], 'image'], 'imDisplay': [['image'], 'void'], 'takePicture': [[], 'image'], 'imBW': [['image'], 'image'], 'print': [['all'], 'void'], 'filterColor': [['image', 'string'], 'image'], 'imGray': [['image'], 'image']}
+{'imLoad': [['string'], 'image'], 'takePicture': [[], 'image'], 'imBW': [['image'], 'image'], 'print': [['all'], 'void'], 'filterColor': [['image', 'string'], 'image'], 'imGray': [['image'], 'image']}
 0
 1000
 0
@@ -9,23 +9,32 @@ pruebaTabs
 600
 800
 900
-{'main': 7, 'Vispi': 0}
-{'main': [[], {'y': 'int', 'x': 'int', 'prueba': 'image', 'Temporal1': 'image', 'Temporal0': 'bool'}, {'y': 2200, 'x': 2201, 'prueba': 2800, 'Temporal1': 3800, 'Temporal0': 3000}], 'Vispi': [[], {'led1': 'bool', 1: 'int', 'led2': 'bool', 'velocidad': 'int', 'imLoad': 'image', 'boton': 'bool', 'imDisplay': 'void', 'takePicture': 'image', 'imBW': 'image', 'print': 'void', 'x': 'int', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {'led1': 2, 1: 1200, 'led2': 1, 'velocidad': 200, 'imLoad': 800, 'boton': 0, 'imDisplay': 900, 'takePicture': 801, 'imBW': 802, 'print': 901, 'x': 201, 'main': 902, 'filterColor': 803, 'imGray': 804}]}
+{'main': 22, 'comparaImagen': 12, 'Vispi': 0}
+{'main': [[], {'tempImg': 'image', 'Temporal5': 'bool', 'Temporal4': 'image', 'Temporal3': 'bool'}, {'tempImg': 2800, 'Temporal5': 3001, 'Temporal4': 3800, 'Temporal3': 3000}], 'comparaImagen': [['int', 'float'], {'a': 'float', 'tempImg': 'image', 'i': 'int', 'diferencias': 'image', 'Temporal2': 'image', 'Temporal1': 'image'}, {'a': 2400, 'tempImg': 2801, 'i': 2200, 'diferencias': 2800, 'Temporal2': 3802, 'Temporal1': 3801}], 'Vispi': [[], {0: 'int', 1: 'int', 2: 'int', 5: 'int', 'velocidad': 'int', 25: 'int', 'led1': 'int', 'led2': 'int', 'imLoad': 'image', 'takePicture': 'image', 'personas': 'int', 'print': 'void', 'main': 'void', 'imgInicial': 'image', 'imGray': 'image', 'Temporal0': 'image', 'mensajeAlerta': 'string', 75: 'int', 'boton': 'int', 'imBW': 'image', '"Alerta de intruso!"': 'string', 'filterColor': 'image', 'comparaImagen': 'void'}, {0: 1204, 1: 1201, 2: 1203, 5: 1200, 'velocidad': 203, 25: 1202, 'led1': 202, 'led2': 201, 'imLoad': 800, 'takePicture': 801, 'personas': 204, 'print': 900, 'main': 902, 'imgInicial': 805, 'imGray': 804, 'Temporal0': 3800, 'mensajeAlerta': 600, 75: 1205, 'boton': 200, 'imBW': 802, '"Alerta de intruso!"': 1600, 'filterColor': 803, 'comparaImagen': 901}]}
 %%
-led1,2
-1,1200
-led2,1
-velocidad,200
+0,1204
+1,1201
+2,1203
+5,1200
+velocidad,203
+25,1202
+led1,202
+led2,201
 imLoad,800
-boton,0
-imDisplay,900
 takePicture,801
-imBW,802
-print,901
-x,201
+personas,204
+print,900
 main,902
-filterColor,803
+imgInicial,805
 imGray,804
+Temporal0,3800
+mensajeAlerta,600
+75,1205
+boton,200
+imBW,802
+"Alerta de intruso!",1600
+filterColor,803
+comparaImagen,901
 %%
 ['GOTO', -1, 'main', -1]
 ['CAM', 'webcam', -1, -1]
@@ -33,17 +42,41 @@ imGray,804
 ['OUTPUT', 'led1', -1, 15]
 ['OUTPUT', 'led2', -1, 16]
 ['PWM', 'velocidad', -1, 12]
-['=', 1200, -1, 201]
-['=', 2201, -1, 2200]
-['>', 2200, 2201, 3000]
-['GOTOF', 3000, 'while', 18]
+['=', 1200, -1, 204]
+['=', 1600, -1, 600]
+['ERA', 'takePicture', -1, -1]
+['CALL', 'takePicture', -1, -1]
+['=', 801, -1, 3800]
+['=', 3800, -1, 805]
+['ERA', 'takePicture', -1, -1]
+['CALL', 'takePicture', -1, -1]
+['=', 801, -1, 3801]
+['=', 3801, -1, 2801]
+['-', 805, 2801, 3802]
+['=', 3802, -1, 2800]
 ['ERA', 'print', -1, -1]
-['PARAM', 2200, -1, 0]
+['PARAM', 2800, -1, 0]
 ['CALL', 'print', -1, -1]
+['RET', -1, -1, -1]
+['>', 204, 1200, 3000]
+['GOTOF', 3000, 'while', 42]
+['GOTOF', 200, 'if', 30]
+['ERA', 'comparaImagen', -1, -1]
+['GOSUB', 12, -1, -1]
+['=', 1201, -1, 201]
+['=', 1202, -1, 203]
+['GOTO', -1, 'else', 41]
 ['ERA', 'takePicture', -1, -1]
 ['CALL', 'takePicture', -1, -1]
 ['=', 801, -1, 3800]
 ['=', 3800, -1, 2800]
-['GOTO', -1, 'while', 8]
+['>', 1203, 204, 3001]
+['GOTOF', 3001, 'if', 41]
+['ERA', 'print', -1, -1]
+['PARAM', 600, -1, 0]
+['CALL', 'print', -1, -1]
+['=', 1204, -1, 202]
+['=', 1205, -1, 203]
+['GOTO', -1, 'while', 22]
 ['RET', -1, -1, -1]
 ['ENDPROC', -1, -1, -1]
