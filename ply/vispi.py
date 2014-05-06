@@ -73,7 +73,7 @@ if len(sys.argv) == 2:
 
     OBJ = open('vispi.obj', 'r')
     Name = OBJ.readline().splitlines()[0]
-    CPP = open('%s.cpp' %(Name), 'w')
+    CPP = open('vispi.cpp', 'w')
     CPP.write('#include "vispi.h"\n\nusing namespace std;\nusing namespace cv;\n\n')
     MAIN = open('tempMain.cpp', 'w')
     mainFileIsOpen = True
@@ -464,9 +464,12 @@ if len(sys.argv) == 2:
             CPP.write('%s (%s) {\n' %(typeOfCondition, x))
 
         if number + 1 in GotoFList:
-            CPP.write('}\n')
-            GotoFList.remove(number + 1)
-
+            while True:
+                CPP.write('}\n')
+                GotoFList.remove(number + 1)
+                if number + 1 not in GotoFList:
+                    break
+            
         if(quadruple[0] is 'GOTO'):
             typeOfCondition = quadruple[2]
 

@@ -14,11 +14,13 @@ def void main ():
 	led1 = 1
 	led2 = 0
 	velocidad = 25
-	while (y > x):
+	if (y > x):
 		prueba1 = takePicture()
 		prueba2 = imLoad("test.jpg")
 		prueba3 = prueba1 + prueba2
 		superPrueba = (prueba3 * 5 / 4) - prueba1
 		print(x)
 		print(superPrueba)
+	else:
+		led1 = led2
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB
