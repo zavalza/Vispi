@@ -68,6 +68,7 @@ def getRandomName():
 
 
 if len(sys.argv) == 2:
+    global mainFileIsOpen
     data = open(sys.argv[1]).read()
     prog = vispi_parse.parse(data)
 
@@ -160,7 +161,10 @@ if len(sys.argv) == 2:
                 if name is 'main':
                     CPP.write('int %s (' %(name) )
                 else:
-                    CPP.write('%s %s (' %(procVars['Vispi'][typeTable][name],name) )
+                    typeOfFunction = procVars['Vispi'][typeTable][name]
+                    if typeOfFunction is 'image':
+                        typeOfFunction = 'Mat'
+                    CPP.write('%s %s (' %(typeOfFunction,name) )
 
                 addresses = procVars[name][addrTable].values()
                 varnames = procVars[name][addrTable].keys()
@@ -183,6 +187,7 @@ if len(sys.argv) == 2:
                 CPP.write(') {\n')
 
                 if (name is 'main'):
+                    global mainFileIsOpen
                     MAIN.close();
                     mainFileIsOpen = False
                     MAIN = open('tempMain.cpp', 'r')
@@ -201,10 +206,13 @@ if len(sys.argv) == 2:
 
         if(quadruple[0] == 'CAM'):
             if(quadruple[1] == 'webcam'):
-                MAIN.write('VideoCapture Cam(0); // open the default camera\nif(!Cam.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
+                CPP.write('VideoCapture Cam(0); // open the default camera\n') #global
+                MAIN.write('if(!Cam.isOpened()) // check if we succeeded\n\t return -1;\n\n')
+                MAIN.write('Cam.set(CV_CAP_PROP_FRAME_WIDTH, 320); \n');
+                MAIN.write('Cam.set(CV_CAP_PROP_FRAME_HEIGHT, 240); \n\n');
             else: #raspicam
                 print"raspicam"
-        if(quadruple[0] == 'INPUT'):
+        elif(quadruple[0] == 'INPUT'):
             pin = int(quadruple[3])
             if(GPIO.has_key(pin)): #validate pin
                 name = quadruple[1]
@@ -216,7 +224,7 @@ if len(sys.argv) == 2:
                 VarDict[address] = 'digitalRead(%s)'%(GPIO[pin])
             else:
                 raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
-        if(quadruple[0] == 'OUTPUT'):
+        elif(quadruple[0] == 'OUTPUT'):
             pin = int(quadruple[3])
             if(GPIO.has_key(pin)):
                 name = quadruple[1]
@@ -226,6 +234,10 @@ if len(sys.argv) == 2:
                 HwVars[name] = pin
             else:
                 raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
+        else:
+            global mainFileIsOpen
+            mainFileIsOpen = False
+
         if(quadruple[0] == 'PWM'):
             pin = int(quadruple[3])
             if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for hardware PWM
@@ -266,9 +278,15 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            MAIN.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            MAIN.write('}\n')
                         elif mode is 'pwm':
+                            MAIN.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
+                            MAIN.write('delay(20);\n') #wait until signal is received
+                            MAIN.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            MAIN.write('}\n')
                     else:
                         MAIN.write('%s = %s;\n' %(x, y))
                 else:
@@ -276,9 +294,15 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            CPP.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('}\n')
                         elif mode is 'pwm':
+                            CPP.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('delay(20);\n') #wait until signal is received
+                            CPP.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            CPP.write('}\n')
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
             elif destZone is 'globals' and (origZone is 'globals' or origZone is 'constants'):
@@ -289,13 +313,19 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            MAIN.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            MAIN.write('}\n')
                         elif mode is 'pwm':
+                            MAIN.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
-                    elif HwModes.has_key(y):
-                        mode = HwModes[y]
-                        if mode is not 'input':
-                            raise TypeError("Reading with not input mode")
+                            MAIN.write('delay(20);\n') #wait until signal is received
+                            MAIN.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            MAIN.write('}\n')
+                    # elif HwModes.has_key(y):
+                    #     mode = HwModes[y]
+                    #     if mode is not 'input':
+                    #         raise TypeError("Reading with not input mode")
                     else:
                         MAIN.write('%s = %s;\n' %(x, y))
                 else:
@@ -303,9 +333,15 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            CPP.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('}\n')
                         elif mode is 'pwm':
+                            CPP.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('delay(20);\n') #wait until signal is received
+                            CPP.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            CPP.write('}\n')
                     elif HwModes.has_key(y):
                         mode = HwModes[y]
                         if mode is not 'input':
@@ -320,9 +356,15 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            MAIN.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             MAIN.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            MAIN.write('}\n')
                         elif mode is 'pwm':
+                            MAIN.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             MAIN.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
+                            MAIN.write('delay(20);\n') #wait until signal is received
+                            MAIN.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            MAIN.write('}\n')
                     else:
                         MAIN.write('%s = %s;\n' %(x, y))
                 else:
@@ -330,9 +372,15 @@ if len(sys.argv) == 2:
                         mode = HwModes[x]
                         pin = HwVars[x]
                         if mode is 'output':
+                            CPP.write('if((%s==0) || (%s==1)){\n' %(y,y)) #validate
                             CPP.write('digitalWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('}\n')
                         elif mode is 'pwm':
+                            CPP.write('if((%s>23) && (%s<127)){\n' %(y,y)) #validate
                             CPP.write('pwmWrite(%s, %s);\n' %(GPIO[pin], y))
+                            CPP.write('delay(20);\n') #wait until signal is received
+                            CPP.write('pwmWrite(%s,0);\n'%(GPIO[pin])) #turnOffPWM
+                            CPP.write('}\n')
                     else:
                         CPP.write('%s = %s;\n' %(x, y))
             elif destZone is 'locals' and origZone is 'temporals':
@@ -372,8 +420,8 @@ if len(sys.argv) == 2:
                 x = TemporalMemory[orig1Add]
             elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
                 x = VarDict[orig1Add]
-                if HwModes.has_key(x):
-                    raise TypeError("Mix of pins with arithmetic is not allowed")
+                #if HwModes.has_key(x):
+                    #raise TypeError("Mix of pins with arithmetic is not allowed")
             elif orig1Zone is 'locals':
                 x = LocalVarName[orig1Add]
 
@@ -381,8 +429,8 @@ if len(sys.argv) == 2:
                 y = TemporalMemory[orig2Add]
             elif (orig2Zone is 'globals' or orig2Zone is 'constants'):
                 y = VarDict[orig2Add]
-                if HwModes.has_key(y):
-                    raise TypeError("Mix of pins with arithmetic is not allowed")
+                #if HwModes.has_key(y):
+                    #raise TypeError("Mix of pins with arithmetic is not allowed")
             elif orig2Zone is 'locals':
                 y = LocalVarName[orig2Add]
 
@@ -408,8 +456,8 @@ if len(sys.argv) == 2:
                 x = TemporalMemory[orig1Add]
             elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
                 x = VarDict[orig1Add]
-                if HwModes.has_key(x):
-                    raise TypeError("Mix of pins with arithmetic is not allowed")
+                #if HwModes.has_key(x):
+                    #raise TypeError("Mix of pins with arithmetic is not allowed")
             elif orig1Zone is 'locals':
                 x = LocalVarName[orig1Add]
 

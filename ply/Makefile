@@ -7,7 +7,7 @@ vispi: vispi.cpp
 	g++ vispi.cpp -o vispi $(LXXLIBS)
 
 vispi.cpp:
-	python vispi.py testCases/HWsimple.vpi > debugOutput
+	python vispi.py testCases/vispiCore.vpi > debugOutput
 	rm tempMain.cpp
 
 all: vispi.cpp vispi

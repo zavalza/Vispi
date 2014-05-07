@@ -1,0 +1,43 @@
+PROGRAM vispiCore
+CAM webcam:micamara 
+INPUT 22:boton 
+OUTPUT 15:ledAmarillo,16:ledRojo
+PWM 12:angle
+
+def image mueveDerecha():
+	image der
+	ledRojo = 1
+	while(angle < 170):
+		angle = angle + 1
+		delay(5)
+	end
+	der = takePicture()
+	ledRojo = 0
+
+def image mueveIzquierda():
+	image izq
+	ledAmarillo = 1
+	while(angle > 30):
+		angle = angle - 1
+		delay(5)
+	end
+	izq = takePicture()
+	ledAmarillo = 0
+
+def void main ():
+	image im1, im2, temp
+	ledRojo = 0
+	ledAmarillo = 0
+	angle = 90
+	do:
+		temp = takePicture()
+		print(temp)
+		delay(10)
+	loop(boton== 0)
+
+	im1 = mueveDerecha()
+	im2 = mueveIzquierda()
+	while(boton==0):
+		print(im1+im2)
+	end
+#
