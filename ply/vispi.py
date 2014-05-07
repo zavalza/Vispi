@@ -459,7 +459,12 @@ if len(sys.argv) == 2:
             else:
                 addrOfModuleGlobal = procVars['Vispi'][addrTable][moduleName]
                 VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
+                twoQuadAhead = quadruples[number + 1][0]
+                #if (twoQuadAhead is 'PARAM') or (twoQuadAhead is '='):
+                #    CPP.write('%s;\n' %(VarDict[addrOfModuleGlobal]))
+
             paramString = ''
+
         elif(quadruple[0] is 'CALL'):
             global paramString
             functName = quadruple[1]
@@ -470,7 +475,12 @@ if len(sys.argv) == 2:
                 if functName is 'takePicture':
                     paramString = 'Cam'
                 VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
+                twoQuadAhead = quadruples[number + 2][0]
+                #if (twoQuadAhead is 'PARAM') or (twoQuadAhead is '='):
+                #    CPP.write('%s;\n' %(VarDict[addrOfModuleGlobal]))
+
             paramString = ''
+            
         # Leave the following quadruples at the end. More quadruples go above here /\
 
         if(quadruple[0] is 'GOTOF'):

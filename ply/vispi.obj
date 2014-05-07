@@ -9,14 +9,13 @@ fibonacci
 600
 800
 900
-{'main': 24, 'Fibonacci': 1, 'Vispi': 0}
-{'main': [[], {'Temporal7': 'int', 'x': 'int', 'result': 'int'}, {'Temporal7': 3200, 'x': 2201, 'result': 2200}], 'Fibonacci': [['int'], {'oldResult': 'int', 'i': 'int', 'preOldResult': 'int', 'n': 'int', 'result': 'int', 'Temporal6': 'int', 'Temporal5': 'int', 'Temporal4': 'bool', 'Temporal3': 'bool', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'bool'}, {'oldResult': 2202, 'i': 2204, 'preOldResult': 2203, 'n': 2200, 'result': 2201, 'Temporal6': 3201, 'Temporal5': 3200, 'Temporal4': 3004, 'Temporal3': 3003, 'Temporal2': 3002, 'Temporal1': 3001, 'Temporal0': 3000}], 'Vispi': [[], {0: 'int', 1: 'int', 2: 'int', 3: 'int', 5: 'int', 'imLoad': 'image', 'takePicture': 'image', 'imBW': 'image', 'Fibonacci': 'int', 'print': 'void', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {0: 1200, 1: 1202, 2: 1203, 3: 1201, 5: 1204, 'imLoad': 800, 'takePicture': 801, 'imBW': 802, 'Fibonacci': 200, 'print': 900, 'main': 901, 'filterColor': 803, 'imGray': 804}]}
+{'main': 21, 'Fibonacci': 2, 'Vispi': 0}
+{'main': [[], {'x': 'int', 'result': 'int', 'Temporal8': 'int'}, {'x': 2201, 'result': 2200, 'Temporal8': 3200}], 'Fibonacci': [['int'], {'n': 'int', 'Temporal7': 'int', 'Temporal6': 'int', 'Temporal5': 'int', 'Temporal4': 'int', 'Temporal3': 'int', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'bool'}, {'n': 2200, 'Temporal7': 3204, 'Temporal6': 3203, 'Temporal5': 3202, 'Temporal4': 3201, 'Temporal3': 3200, 'Temporal2': 3002, 'Temporal1': 3001, 'Temporal0': 3000}], 'Vispi': [[], {0: 'int', 1: 'int', 2: 'int', 5: 'int', 'imLoad': 'image', 'takePicture': 'image', 'imBW': 'image', 'Fibonacci': 'int', 'print': 'void', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {0: 1200, 1: 1201, 2: 1202, 5: 1203, 'imLoad': 800, 'takePicture': 801, 'imBW': 802, 'Fibonacci': 200, 'print': 900, 'main': 901, 'filterColor': 803, 'imGray': 804}]}
 %%
 0,1200
-1,1202
-2,1203
-3,1201
-5,1204
+1,1201
+2,1202
+5,1203
 imLoad,800
 takePicture,801
 imBW,802
@@ -27,33 +26,30 @@ filterColor,803
 imGray,804
 %%
 ['GOTO', -1, 'main', -1]
-['<=', 2200, 1200, 3000]
-['GOTOF', 3000, 'if', 4]
-['RETURN', 1200, -1, 200]
-['>', 2200, 1200, 3001]
-['<', 2200, 1201, 3002]
-['&&', 3001, 3002, 3003]
-['GOTOF', 3003, 'if', 9]
-['RETURN', 1202, -1, 200]
-['=', 1200, -1, 2201]
-['=', 1202, -1, 2203]
-['=', 1202, -1, 2202]
-['=', 1203, -1, 2204]
-['<', 2204, 2200, 3004]
-['GOTOF', 3004, 'while', 22]
-['+', 2203, 2202, 3200]
-['=', 3200, -1, 2201]
-['=', 2202, -1, 2203]
-['=', 2201, -1, 2202]
-['+', 2204, 1202, 3201]
-['=', 3201, -1, 2204]
-['GOTO', -1, 'while', 13]
-['RETURN', 2201, -1, 200]
+['CAM', 'webcam', -1, -1]
+['==', 2200, 1200, 3000]
+['==', 2200, 1201, 3001]
+['||', 3000, 3001, 3002]
+['GOTOF', 3002, 'if', 8]
+['RETURN', 2200, -1, 200]
+['GOTO', -1, 'else', 20]
+['ERA', 'Fibonacci', -1, -1]
+['-', 2200, 1201, 3200]
+['PARAM', 3200, -1, 0]
+['GOSUB', 2, -1, -1]
+['=', 200, -1, 3201]
+['ERA', 'Fibonacci', -1, -1]
+['-', 2200, 1202, 3202]
+['PARAM', 3202, -1, 0]
+['GOSUB', 2, -1, -1]
+['=', 200, -1, 3203]
+['+', 3201, 3203, 3204]
+['RETURN', 3204, -1, 200]
 ['RET', -1, -1, -1]
-['=', 1204, -1, 2201]
+['=', 1203, -1, 2201]
 ['ERA', 'Fibonacci', -1, -1]
 ['PARAM', 2201, -1, 0]
-['GOSUB', 1, -1, -1]
+['GOSUB', 2, -1, -1]
 ['=', 200, -1, 3200]
 ['=', 3200, -1, 2200]
 ['ERA', 'print', -1, -1]

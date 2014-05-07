@@ -8,6 +8,6 @@ def int factorial(int i):
 
 def void main ():
 	int x
-	x = factorial(3)
+	x = factorial(factorial(factorial(5)))
 	print(x)
 #

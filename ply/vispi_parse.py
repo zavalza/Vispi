@@ -118,6 +118,7 @@ branchStack = Stack()
 operatorsStack = Stack()
 operandsStack = Stack()
 typesStack = Stack()
+counterParamStack = Stack()
 isCondition = False
 typeOfCondition = ""
 isDoWhile = False
@@ -126,6 +127,7 @@ functName = ''
 functType = ''
 isAssign = False
 isReturn = False
+isFunctCall = False
 #temporal variables
 counterTemporals = 0
 #constantes con contador para memoria
@@ -507,8 +509,9 @@ def p_f_return(p):
         counterQuadruples += 1
     else:
         raise TypeError("Type mismatch: function return value")
-    #operandsStack.push(retVal)      # solved in another section
-    #typesStack.push(typ)            #
+
+    #operandsStack.push(globalAddr)      # solved in another section
+    #typesStack.push(globalType)            #
 
 def p_cycle(p):
     'cycle : f_checkTab WHILE f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block END NEWLINE f_resetTab'
@@ -596,9 +599,10 @@ def p_f_endCondition(p):
 
 def p_funct(p):
     '''funct : ID f_checkProc LPAREN RPAREN
-             | ID f_checkProc LPAREN expression f_genParam expressionList RPAREN'''
+             | ID f_checkProc LPAREN f_functCall expression f_genParam f_functCall expressionList RPAREN'''
     global counterQuadruples
     global counterTemporals
+    global isFunctCall
 
     if ProcVars.has_key(functName):
         Quadruples[counterQuadruples] = ['GOSUB', ProcAddr[functName], -1, -1]
@@ -607,7 +611,7 @@ def p_funct(p):
         Quadruples[counterQuadruples] = ['CALL', functName, -1, -1]
         counterQuadruples += 1
 
-    if (not functType == 'void') and (isAssign or isReturn):
+    if (not functType == 'void') and (isAssign or isReturn or isFunctCall):
         globalAddr = ProcVars['Vispi'][addrTable][functName]
         temporalVariable = "Temporal%s" %counterTemporals
         if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
@@ -620,13 +624,20 @@ def p_funct(p):
         Quadruples[counterQuadruples] = ['=', globalAddr, -1, temporalAddress]
         counterTemporals+=1
         counterQuadruples+=1
-    elif functType is 'void' and  (isAssign or isReturn):
-        raise TypeError("Invalid assign with void function")
+    elif (functType == 'void') and  (isAssign or isReturn):
+        raise TypeError("Invalid assign, return or function call with void function")
+
+    isFunctCall = False
+    counterParamStack.pop()
+
+def p_f_functCall(p):
+    'f_functCall : '
+    global isFunctCall
+    isFunctCall = True  
 
 def p_f_checkProc(p):
     'f_checkProc : '
     global counterQuadruples
-    global counterParam
     global functName
     global functType
 
@@ -643,6 +654,7 @@ def p_f_checkProc(p):
     counterQuadruples += 1
 
     counterParam = 0
+    counterParamStack.push(counterParam)
 
 def p_expressionList(p):
     '''expressionList : empty
@@ -652,12 +664,14 @@ def p_expressionList(p):
     else:
         paramList = Functions[functName][0]
 
+    counterParam = counterParamStack.pop()
     if not len(paramList) == counterParam:
         raise TypeError("Invalid number of parameters")
+    counterParamStack.push(counterParam)
 
 def p_f_genParam(p):
     'f_genParam : '
-    global counterParam
+    counterParam = counterParamStack.pop()
     global counterQuadruples
 
     arg = operandsStack.pop()
@@ -682,6 +696,8 @@ def p_f_genParam(p):
         Quadruples[counterQuadruples] = ['PARAM', arg, -1, counterParam]
         counterParam += 1
         counterQuadruples += 1
+
+    counterParamStack.push(counterParam)
 
 def p_expression(p):
     'expression : orExp moreOrExp'

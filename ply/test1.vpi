@@ -11,7 +11,7 @@ personas = 5
 mensajeAlerta = "Alerta de intruso!"
 imgInicial = takePicture()
 
-def void comparaImagen(int i, float a):
+def int comparaImagen(int i, float a):
 	image tempImg, diferencias
 	tempImg = takePicture()
 	diferencias = imgInicial - tempImg
@@ -19,10 +19,10 @@ def void comparaImagen(int i, float a):
 
 def void main ():
 	image tempImg
+	int abc
 	while (personas > 5): 
 		if(boton):
-		#comentario
-			comparaImagen()
+			abc = comparaImagen(comparaImagen(1,2.5), 3.5)
 			led2 = 1
 			velocidad = 25
 			#comentario
