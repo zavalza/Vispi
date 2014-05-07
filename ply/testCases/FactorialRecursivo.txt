@@ -4,6 +4,7 @@ def int factorial(int i):
 		return 1
 	else:
 		return i * factorial(i - 1)
+	end
 
 def void main ():
 	int x

@@ -511,7 +511,7 @@ def p_f_return(p):
     #typesStack.push(typ)            #
 
 def p_cycle(p):
-    'cycle : f_checkTab WHILE f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block'
+    'cycle : f_checkTab WHILE f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block END NEWLINE f_resetTab'
     global counterQuadruples
     end = branchStack.pop()
     condition = branchStack.pop()
@@ -520,8 +520,8 @@ def p_cycle(p):
     Quadruples[end][3]=counterQuadruples
 
 def p_condition(p):
-    '''condition : IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block
-                 | IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
+    '''condition : IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block END NEWLINE f_resetTab
+                 | IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block END NEWLINE f_resetTab'''
     end = branchStack.pop()
     Quadruples[end][3]=counterQuadruples
 

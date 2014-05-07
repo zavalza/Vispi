@@ -10,9 +10,11 @@ def int Fibonacci(int n):
 
 	if(n <= 0):
 		return 0
+	end
 
 	if(n > 0 && n < 3):
 		return 1
+	end
 
 	result = 0;
 	preOldResult = 1;
@@ -24,7 +26,7 @@ def int Fibonacci(int n):
 		preOldResult = oldResult
 		oldResult = result
 		i = i + 1
-
+	end
 	return result
 
 def void main ():

@@ -7,7 +7,8 @@ def int factorial(int i):
 	while (i > 0):
 		result = result * i
 		i = i - 1
-		return result
+	end
+	return result
 
 def void main ():
 	int x

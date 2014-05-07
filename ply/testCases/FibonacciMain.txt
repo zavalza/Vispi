@@ -8,9 +8,11 @@ def void main ():
 
 	if(n <= 0):
 		result = 0
+	end
 
 	if(n > 0 && n < 3):
 		result = 1
+	end
 
 	result = 0;
 	preOldResult = 1;
@@ -22,6 +24,7 @@ def void main ():
 		preOldResult = oldResult
 		oldResult = result
 		i = i + 1
+	end
 
 	print(result)
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

@@ -32,4 +32,7 @@ def void main ():
 				print(mensajeAlerta)
 				led1 = 0 
 				velocidad = 75
-#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
+			end
+		end
+	end
+#

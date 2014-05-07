@@ -21,10 +21,13 @@ def int comparaImagen(int i, float a):
 		if(5 > 1):
 			resultado1= 4
 			resultado1 = 5
-			
+			if(resultado1 > 6):
+				print(resultado1)
+			end
 		else:
 			resultado2 = 4
 			resultado2 = i * a
+		end
 	loop(true)
 
 	return i
@@ -37,5 +40,7 @@ def void main ():
 	a = 5
 	comparaImagen(a, b)
 	b = 2.1
-	x = comparaImagen(a, b) + comparaImagen(x, b)
+	while(1):
+		x = comparaImagen(a, b) + comparaImagen(x, b)
+	end
 #NECESITAMOS NEWLINE Y NO PUEDE IR TAB

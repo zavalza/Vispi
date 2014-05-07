@@ -1,10 +1,11 @@
 PROGRAM fibonacci
 CAM webcam:mycam
 def int Fibonacci(int n):
-	if (!(n == 0) || n == 1):
+	if ((n == 0) || n == 1):
 		return n;
 	else:
 		return Fibonacci(n - 1) + Fibonacci(n - 2)
+	end
 
 def void main ():
 	int x, result
