@@ -1,0 +1,22 @@
+PROGRAM selectLED
+OUTPUT 15:led0,16:led1
+
+def void main ():
+	int ledSeleccionado
+	string reset
+	do:
+		print("Introduce el numero de LED a encender (0 o 1)")
+		ledSeleccionado = readNumber()
+		if((ledSeleccionado != 0)&&(ledSeleccionado != 1)):
+			print ("Error, no diste un número válido")
+		else:
+			if(ledSeleccionado == 0):
+				led0 = 1
+			else:
+				led1 = 1
+			end
+		end
+		print("Reset? (s/n)")
+		reset = readLine()
+	while(reset == "s\n")
+#
