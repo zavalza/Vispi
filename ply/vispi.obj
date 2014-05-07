@@ -9,33 +9,32 @@ vispiCore
 600
 800
 900
-{'main': 36, 'mueveDerecha': 6, 'mueveIzquierda': 21, 'Vispi': 0}
-{'main': [[], {'temp': 'image', 'im1': 'image', 'im2': 'image', 'Temporal9': 'image', 'Temporal8': 'image', 'Temporal7': 'bool', 'Temporal6': 'image', 'Temporal11': 'image', 'Temporal10': 'bool'}, {'temp': 2800, 'im1': 2802, 'im2': 2801, 'Temporal9': 3802, 'Temporal8': 3801, 'Temporal7': 3000, 'Temporal6': 3800, 'Temporal11': 3803, 'Temporal10': 3001}], 'mueveDerecha': [[], {'der': 'image', 'Temporal2': 'image', 'Temporal1': 'int', 'Temporal0': 'bool'}, {'der': 2800, 'Temporal2': 3800, 'Temporal1': 3200, 'Temporal0': 3000}], 'mueveIzquierda': [[], {'izq': 'image', 'Temporal5': 'image', 'Temporal4': 'int', 'Temporal3': 'bool'}, {'izq': 2800, 'Temporal5': 3800, 'Temporal4': 3200, 'Temporal3': 3000}], 'Vispi': [[], {0: 'int', 1: 'int', 'readImage': 'image', 'removeBackground': 'image', 5: 'int', 10: 'int', 'ledAmarillo': 'int', 'mueveIzquierda': 'image', 'readNumber': 'float', 30: 'int', 'angle': 'int', 170: 'int', 'delay': 'void', 'takePicture': 'image', 'print': 'void', 'main': 'void', 'mueveDerecha': 'image', 'imGray': 'image', 'boton': 'int', 'imBW': 'image', 90: 'int', 'filterColor': 'image', 'showInfo': 'void', 'ledRojo': 'int', 'readLine': 'string'}, {0: 1203, 1: 1200, 'readImage': 800, 'removeBackground': 801, 5: 1202, 10: 1206, 'ledAmarillo': 202, 'mueveIzquierda': 807, 'readNumber': 400, 30: 1204, 'angle': 203, 170: 1201, 'delay': 901, 'takePicture': 804, 'print': 902, 'main': 903, 'mueveDerecha': 806, 'imGray': 805, 'boton': 200, 'imBW': 802, 90: 1205, 'filterColor': 803, 'showInfo': 900, 'ledRojo': 201, 'readLine': 600}]}
+{'main': 5, 'Vispi': 0}
+{'main': [[], {'Temporal9': 'bool', 'Temporal8': 'bool', 'Temporal7': 'string', 'Temporal6': 'bool', 'Temporal5': 'image', 'Temporal4': 'image', 'Temporal3': 'image', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'image', 'operacion': 'string', 'factor': 'int', 'Temporal17': 'bool', 'Temporal16': 'string', 'Temporal15': 'image', 'Temporal14': 'image', 'Temporal13': 'image', 'Temporal12': 'bool', 'Temporal11': 'float', 'Temporal10': 'bool', 'resultado': 'image', 'temp': 'image', 'im1': 'image', 'im2': 'image', 'entrada': 'string'}, {'Temporal9': 3004, 'Temporal8': 3003, 'Temporal7': 3600, 'Temporal6': 3002, 'Temporal5': 3803, 'Temporal4': 3802, 'Temporal3': 3801, 'Temporal2': 3001, 'Temporal1': 3000, 'Temporal0': 3800, 'operacion': 2600, 'factor': 2200, 'Temporal17': 3007, 'Temporal16': 3601, 'Temporal15': 3806, 'Temporal14': 3805, 'Temporal13': 3804, 'Temporal12': 3006, 'Temporal11': 3400, 'Temporal10': 3005, 'resultado': 2803, 'temp': 2800, 'im1': 2802, 'im2': 2801, 'entrada': 2601}], 'Vispi': [[], {0: 'int', 1: 'int', 'readImage': 'image', 'removeBackground': 'image', 'ledAmarillo': 'int', '"end"': 'string', 'readNumber': 'float', '"d"': 'string', 'delay': 'void', 'takePicture': 'image', 'print': 'void', 'main': 'void', 'imGray': 'image', '"Suelta el boton One Shot"': 'string', '"Agrandar o dividir? (a/d)"': 'string', 'boton': 'int', 'imBW': 'image', '"Dame el factor"': 'string', 'filterColor': 'image', 'showInfo': 'void', 'ledRojo': 'int', '"a"': 'string', '"perfil.jpg"': 'string', 'readLine': 'string'}, {0: 1200, 1: 1201, 'readImage': 800, 'removeBackground': 801, 'ledAmarillo': 202, '"end"': 1606, 'readNumber': 400, '"d"': 1604, 'delay': 901, 'takePicture': 804, 'print': 902, 'main': 903, 'imGray': 805, '"Suelta el boton One Shot"': 1600, '"Agrandar o dividir? (a/d)"': 1602, 'boton': 200, 'imBW': 802, '"Dame el factor"': 1605, 'filterColor': 803, 'showInfo': 900, 'ledRojo': 201, '"a"': 1603, '"perfil.jpg"': 1601, 'readLine': 600}]}
 %%
-0,1203
-1,1200
+0,1200
+1,1201
 readImage,800
 removeBackground,801
-5,1202
-10,1206
 ledAmarillo,202
-mueveIzquierda,807
+"end",1606
 readNumber,400
-30,1204
-angle,203
-170,1201
+"d",1604
 delay,901
 takePicture,804
 print,902
 main,903
-mueveDerecha,806
 imGray,805
+"Suelta el boton One Shot",1600
+"Agrandar o dividir? (a/d)",1602
 boton,200
 imBW,802
-90,1205
+"Dame el factor",1605
 filterColor,803
 showInfo,900
 ledRojo,201
+"a",1603
+"perfil.jpg",1601
 readLine,600
 %%
 ['GOTO', -1, 'main', -1]
@@ -43,40 +42,8 @@ readLine,600
 ['INPUT', 'boton', -1, 22]
 ['OUTPUT', 'ledAmarillo', -1, 15]
 ['OUTPUT', 'ledRojo', -1, 16]
-['PWM', 'angle', -1, 12]
 ['=', 1200, -1, 201]
-['<', 203, 1201, 3000]
-['GOTOF', 3000, 'while', 15]
-['+', 203, 1200, 3200]
-['=', 3200, -1, 203]
-['ERA', 'delay', -1, -1]
-['PARAM', 1202, -1, 0]
-['CALL', 'delay', -1, -1]
-['GOTO', -1, 'while', 7]
-['ERA', 'takePicture', -1, -1]
-['CALL', 'takePicture', -1, -1]
-['=', 804, -1, 3800]
-['=', 3800, -1, 2800]
-['=', 1203, -1, 201]
-['RET', -1, -1, -1]
 ['=', 1200, -1, 202]
-['>', 203, 1204, 3000]
-['GOTOF', 3000, 'while', 30]
-['-', 203, 1200, 3200]
-['=', 3200, -1, 203]
-['ERA', 'delay', -1, -1]
-['PARAM', 1202, -1, 0]
-['CALL', 'delay', -1, -1]
-['GOTO', -1, 'while', 22]
-['ERA', 'takePicture', -1, -1]
-['CALL', 'takePicture', -1, -1]
-['=', 804, -1, 3800]
-['=', 3800, -1, 2800]
-['=', 1203, -1, 202]
-['RET', -1, -1, -1]
-['=', 1203, -1, 201]
-['=', 1203, -1, 202]
-['=', 1205, -1, 203]
 ['DO', -1, -1, -1]
 ['ERA', 'takePicture', -1, -1]
 ['CALL', 'takePicture', -1, -1]
@@ -85,25 +52,71 @@ readLine,600
 ['ERA', 'print', -1, -1]
 ['PARAM', 2800, -1, 0]
 ['CALL', 'print', -1, -1]
-['ERA', 'delay', -1, -1]
-['PARAM', 1206, -1, 0]
-['CALL', 'delay', -1, -1]
-['==', 200, 1203, 3000]
-['GOTOT', 3000, 'do', 39]
-['ERA', 'mueveDerecha', -1, -1]
-['GOSUB', 6, -1, -1]
-['=', 806, -1, 3801]
-['=', 3801, -1, 2802]
-['ERA', 'mueveIzquierda', -1, -1]
-['GOSUB', 21, -1, -1]
-['=', 807, -1, 3802]
-['=', 3802, -1, 2801]
-['==', 200, 1203, 3001]
-['GOTOF', 3001, 'while', 67]
+['==', 200, 1200, 3000]
+['GOTOT', 3000, 'do', 7]
+['==', 200, 1201, 3001]
+['GOTOF', 3001, 'while', 23]
 ['ERA', 'print', -1, -1]
-['+', 2802, 2801, 3803]
-['PARAM', 3803, -1, 0]
+['PARAM', 1600, -1, 0]
 ['CALL', 'print', -1, -1]
-['GOTO', -1, 'while', 60]
+['GOTO', -1, 'while', 17]
+['ERA', 'takePicture', -1, -1]
+['CALL', 'takePicture', -1, -1]
+['=', 804, -1, 3801]
+['=', 3801, -1, 2802]
+['ERA', 'readImage', -1, -1]
+['PARAM', 1601, -1, 0]
+['CALL', 'readImage', -1, -1]
+['=', 800, -1, 3802]
+['=', 3802, -1, 2801]
+['+', 2802, 2801, 3803]
+['=', 3803, -1, 2800]
+['==', 200, 1200, 3002]
+['GOTOF', 3002, 'while', 40]
+['ERA', 'print', -1, -1]
+['PARAM', 2800, -1, 0]
+['CALL', 'print', -1, -1]
+['GOTO', -1, 'while', 34]
+['DO', -1, -1, -1]
+['ERA', 'print', -1, -1]
+['PARAM', 1602, -1, 0]
+['CALL', 'print', -1, -1]
+['ERA', 'readLine', -1, -1]
+['CALL', 'readLine', -1, -1]
+['=', 600, -1, 3600]
+['=', 3600, -1, 2600]
+['!=', 2600, 1603, 3003]
+['!=', 2600, 1604, 3004]
+['&&', 3003, 3004, 3005]
+['GOTOT', 3005, 'do', 40]
+['ERA', 'print', -1, -1]
+['PARAM', 1605, -1, 0]
+['CALL', 'print', -1, -1]
+['ERA', 'readNumber', -1, -1]
+['CALL', 'readNumber', -1, -1]
+['=', 400, -1, 3400]
+['=', 3400, -1, 2200]
+['==', 2600, 1603, 3006]
+['GOTOF', 3006, 'if', 64]
+['*', 2801, 2200, 3804]
+['=', 3804, -1, 2803]
+['GOTO', -1, 'else', 66]
+['/', 2801, 2200, 3805]
+['=', 3805, -1, 2803]
+['ERA', 'imGray', -1, -1]
+['PARAM', 2803, -1, 0]
+['CALL', 'imGray', -1, -1]
+['=', 805, -1, 3806]
+['=', 3806, -1, 2803]
+['DO', -1, -1, -1]
+['ERA', 'print', -1, -1]
+['PARAM', 2803, -1, 0]
+['CALL', 'print', -1, -1]
+['ERA', 'readLine', -1, -1]
+['CALL', 'readLine', -1, -1]
+['=', 600, -1, 3601]
+['=', 3601, -1, 2601]
+['!=', 2601, 1606, 3007]
+['GOTOT', 3007, 'do', 71]
 ['RET', -1, -1, -1]
 ['ENDPROC', -1, -1, -1]

@@ -17,9 +17,9 @@ Mat readImage(string);
 Mat takePicture(VideoCapture inputCam);
 Mat imBW(Mat);
 Mat imGray(Mat);
-Mat resizeUp(Mat,int);
-Mat resizeDown(Mat,int);
-Mat filterColor(Mat, string); /*Incompleta*/
+Mat resizeUp(Mat,float);
+Mat resizeDown(Mat,float);
+Mat filterColor(Mat, string);
 Mat addImages(Mat, Mat);
 Mat subImages(Mat, Mat);
 Mat removeBackground(Mat);
@@ -77,7 +77,7 @@ void print(Mat image)
 	string name = "Image";
 	namedWindow(name, CV_WINDOW_AUTOSIZE);
 	imshow(name, image);
-	waitKey(30);
+	waitKey(300);
 }
 
 void print(int num)
@@ -119,17 +119,17 @@ Mat imGray(Mat image)
 	return grayImage;
 }
 
-Mat resizeUp(Mat image, int num)
+Mat resizeUp(Mat image, float num)
 {
 	Mat imageUp;
-	resize(image, imageUp, Size(image.cols*num, image.rows*num), 0, 0, INTER_CUBIC);
+	resize(image, imageUp, Size(image.cols*(int)num, image.rows*(int)num), 0, 0, INTER_CUBIC);
 	return imageUp;
 }
 
-Mat resizeDown(Mat image, int num)
+Mat resizeDown(Mat image, float num)
 {
 	Mat imageDown;
-	resize(image, imageDown, Size(image.cols/num, image.rows/num), 0, 0, INTER_CUBIC);
+	resize(image, imageDown, Size(image.cols/(int)num, image.rows/(int)num), 0, 0, INTER_CUBIC);
 	return imageDown;
 }
 

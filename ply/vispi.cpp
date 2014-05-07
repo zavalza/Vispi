@@ -3,59 +3,20 @@
 using namespace std;
 using namespace cv;
 
-const int LYIXx = 0;
-const int LIxdK = 1;
-const int XYvvk = 5;
-const int BcRhD = 10;
+const int mkWyg = 0;
+const int sDDFJ = 1;
 int ledAmarillo;
-const int UCLdj = 30;
-int angle;
-const int YhesO = 170;
+const string bHYvQ = "end";
+const string oFjyx = "d";
+const string sZXha = "Suelta el boton One Shot";
+const string hRWgh = "Agrandar o dividir? (a/d)";
 int boton;
-const int ACPWT = 90;
+const string YjegN = "Dame el factor";
 int ledRojo;
+const string qzwUp = "a";
+const string MEVAn = "perfil.jpg";
 
 VideoCapture Cam(0); // open the default camera
-Mat mueveDerecha () {
-Mat der;
-if((LIxdK==0) || (LIxdK==1)){
-digitalWrite(4, LIxdK);
-}
-while ((angle < YhesO)) {
-if(((angle + LIxdK)>23) && ((angle + LIxdK)<127)){
-pwmWrite(1, (angle + LIxdK));
-delay(20);
-pwmWrite(1,0);
-}
-delay(XYvvk);
-}
-der = takePicture(Cam);
-if((LYIXx==0) || (LYIXx==1)){
-digitalWrite(4, LYIXx);
-}
-
-}
-
-Mat mueveIzquierda () {
-Mat izq;
-if((LIxdK==0) || (LIxdK==1)){
-digitalWrite(3, LIxdK);
-}
-while ((angle > UCLdj)) {
-if(((angle - LIxdK)>23) && ((angle - LIxdK)<127)){
-pwmWrite(1, (angle - LIxdK));
-delay(20);
-pwmWrite(1,0);
-}
-delay(XYvvk);
-}
-izq = takePicture(Cam);
-if((LYIXx==0) || (LYIXx==1)){
-digitalWrite(3, LYIXx);
-}
-
-}
-
 int main () {
 
 	wiringPiSetup(); //allow the use of wiringPi interface library
@@ -71,35 +32,49 @@ pullUpDnControl(3, PUD_OFF); //Disable PullUp Resistor
 pinMode(3, OUTPUT); 
 pullUpDnControl(4, PUD_OFF); //Disable PullUp Resistor
 pinMode(4, OUTPUT); 
-pullUpDnControl(1, PUD_OFF); //Disable PullUp Resistor
-pinMode(1, PWM_OUTPUT); 
-pwmSetMode(PWM_MODE_MS); 
-pwmSetClock(400);
-pwmSetRange(200);
+int factor;
+string operacion;
+Mat resultado;
+Mat temp;
 Mat im1;
 Mat im2;
-Mat temp;
-if((LYIXx==0) || (LYIXx==1)){
-digitalWrite(4, LYIXx);
+string entrada;
+if((mkWyg==0) || (mkWyg==1)){
+digitalWrite(4, mkWyg);
 }
-if((LYIXx==0) || (LYIXx==1)){
-digitalWrite(3, LYIXx);
-}
-if((ACPWT>23) && (ACPWT<127)){
-pwmWrite(1, ACPWT);
-delay(20);
-pwmWrite(1,0);
+if((mkWyg==0) || (mkWyg==1)){
+digitalWrite(3, mkWyg);
 }
 do {
 temp = takePicture(Cam);
 print(temp);
-delay(BcRhD);
-} while((digitalRead(6) == LYIXx));
-im1 = mueveDerecha();
-im2 = mueveIzquierda();
-while ((digitalRead(6) == LYIXx)) {
-print(addImages(im1,im2));
+} while((digitalRead(6) == mkWyg));
+while ((digitalRead(6) == sDDFJ)) {
+print(sZXha);
 }
+im1 = takePicture(Cam);
+im2 = readImage(MEVAn);
+temp = addImages(im1,im2);
+while ((digitalRead(6) == mkWyg)) {
+print(temp);
+}
+do {
+print(hRWgh);
+operacion = readLine();
+} while(((operacion != qzwUp) && (operacion != oFjyx)));
+print(YjegN);
+factor = readNumber();
+if ((operacion == qzwUp)) {
+resultado = resizeUp(im2,factor);
+}
+else {
+resultado = resizeDown(im2,factor);
+}
+resultado = imGray(resultado);
+do {
+print(resultado);
+entrada = readLine();
+} while((entrada != bHYvQ));
 
 return 0;
 }
