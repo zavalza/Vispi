@@ -1,14 +1,16 @@
 PROGRAM selectLED
-OUTPUT 15:led0,16:led1
+OUTPUT 15:led1,16:led0
 
 def void main ():
 	int ledSeleccionado
 	string reset
 	do:
+		led1 = 0
+		led0 = 0
 		print("Introduce el numero de LED a encender (0 o 1)")
 		ledSeleccionado = readNumber()
 		if((ledSeleccionado != 0)&&(ledSeleccionado != 1)):
-			print ("Error, no diste un número válido")
+			print ("Error no diste un numero valido")
 		else:
 			if(ledSeleccionado == 0):
 				led0 = 1
@@ -18,5 +20,7 @@ def void main ():
 		end
 		print("Reset? (s/n)")
 		reset = readLine()
-	while(reset == "s\n")
+	loop(reset == "s")
+	led0 = 0
+	led1 = 0
 #

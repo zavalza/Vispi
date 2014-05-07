@@ -100,9 +100,9 @@ ProcVars = {'Vispi':[[],{},{}]} #global scope
 Functions = {'print':[['all'], 'void'],#receives one parameter that can be of all types 
              'takePicture':[[], 'image'], #no parameters
              'imBW':[['image'], 'image'],
-             'readNumber':[['float'], 'void'],
+             'readNumber':[[], 'float'],
              'readImage':[['string'], 'image'],
-             'readLine':[['string'],'void'],
+             'readLine':[[],'string'],
              'showInfo':[['image'], 'void'],
              'removeBackground':[['image'], 'image'],
              'imGray':[['image'], 'image'],

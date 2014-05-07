@@ -6,6 +6,7 @@
 #include <wiringPi.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
+#include <opencv2/video/background_segm.hpp>
 #include <opencv2/highgui/highgui.hpp>
 using namespace cv;
 using namespace std;
@@ -19,8 +20,8 @@ Mat imGray(Mat);
 Mat resizeUp(Mat,int);
 Mat resizeDown(Mat,int);
 Mat filterColor(Mat, string); /*Incompleta*/
-Mat addImage(Mat, Mat);
-Mat subImage(Mat, Mat);
+Mat addImages(Mat, Mat);
+Mat subImages(Mat, Mat);
 Mat removeBackground(Mat);
 bool findLight(Mat);
 void showInfo(Mat);
@@ -186,14 +187,14 @@ Mat filterColor(Mat image, string color)
 	return imgBGR;
 }
 
-Mat addImage(Mat image1, Mat image2)
+Mat addImages(Mat image1, Mat image2)
 {
 	Mat result;
-	if(image1.cols > image2.cols) || (image1.rows > image2.rows)
+	if((image1.cols > image2.cols) || (image1.rows > image2.rows))
 	{
 		resize(image1, image1, Size(image2.cols, image2.rows), 0, 0, INTER_CUBIC);
 	}
-	else if(image2.cols > image1.cols) || (image2.rows > image1.rows)
+	else if((image2.cols > image1.cols) || (image2.rows > image1.rows))
 	{
 		resize(image2, image2, Size(image1.cols, image1.rows), 0, 0, INTER_CUBIC);
 	}
@@ -202,18 +203,19 @@ Mat addImage(Mat image1, Mat image2)
 	return result;
 }
 
-Mat subImage(Mat, Mat)
+Mat subImages(Mat image1, Mat image2)
 {
 	Mat result;
-	if(image1.cols > image2.cols) || (image1.rows > image2.rows)
+	if((image1.cols > image2.cols) || (image1.rows > image2.rows))
 	{
 		resize(image1, image1, Size(image2.cols, image2.rows), 0, 0, INTER_CUBIC);
 	}
-	else if(image2.cols > image1.cols) || (image2.rows > image1.rows)
+	else if((image2.cols > image1.cols) || (image2.rows > image1.rows))
 	{
 		resize(image2, image2, Size(image1.cols, image1.rows), 0, 0, INTER_CUBIC);
 	}
 
+	absdiff(image1,image2, result);
 	return result;
 
 }
@@ -224,7 +226,7 @@ Mat removeBackground(Mat image)
 	Ptr< BackgroundSubtractor> pMOG; //MOG Background subtractor  
 	pMOG = new BackgroundSubtractorMOG();  
 
-	pMOG->apply(image, fgMaskMOG);
+	pMOG->operator()(image, fgMaskMOG);
 	return fgMaskMOG;
 
 }
@@ -234,7 +236,7 @@ void delay(int ms)
 	delay(ms);
 }
 
-void showInfo(Mat image)
+bool findLight(Mat image)
 {
 	cout<<"Buenfil haz tu trabajo"<<endl;
 }

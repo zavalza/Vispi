@@ -1,20 +1,19 @@
-Illegal character ';' in line '5'
 programa exitoso
-{'main': 'void', 'Fibonacci': 'int', 'Vispi': 'prog'}
+{'main': 'void', 'Vispi': 'prog'}
 
 
-{'main': [0, 2, 0, 0, 0, 0, 1, 0, 0, 0], 'Fibonacci': [0, 1, 0, 0, 0, 3, 5, 0, 0, 0], 'Vispi': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+{'main': [0, 1, 0, 1, 0, 5, 0, 1, 1, 0], 'Vispi': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
 
 
-{'main': 21, 'Fibonacci': 2, 'Vispi': 0}
+{'main': 3, 'Vispi': 0}
 
 
-{'main': [[], {'x': 'int', 'result': 'int', 'Temporal8': 'int'}, {'x': 2201, 'result': 2200, 'Temporal8': 3200}], 'Fibonacci': [['int'], {'n': 'int', 'Temporal7': 'int', 'Temporal6': 'int', 'Temporal5': 'int', 'Temporal4': 'int', 'Temporal3': 'int', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'bool'}, {'n': 2200, 'Temporal7': 3204, 'Temporal6': 3203, 'Temporal5': 3202, 'Temporal4': 3201, 'Temporal3': 3200, 'Temporal2': 3002, 'Temporal1': 3001, 'Temporal0': 3000}], 'Vispi': [[], {0: 'int', 1: 'int', 2: 'int', 5: 'int', 'imLoad': 'image', 'takePicture': 'image', 'imBW': 'image', 'Fibonacci': 'int', 'print': 'void', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {0: 1200, 1: 1201, 2: 1202, 5: 1203, 'imLoad': 800, 'takePicture': 801, 'imBW': 802, 'Fibonacci': 200, 'print': 900, 'main': 901, 'filterColor': 803, 'imGray': 804}]}
+{'main': [[], {'reset': 'string', 'Temporal4': 'bool', 'Temporal6': 'bool', 'Temporal5': 'string', 'ledSeleccionado': 'int', 'Temporal3': 'bool', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'float'}, {'reset': 2600, 'Temporal4': 3003, 'Temporal6': 3004, 'Temporal5': 3600, 'ledSeleccionado': 2200, 'Temporal3': 3002, 'Temporal2': 3001, 'Temporal1': 3000, 'Temporal0': 3400}], 'Vispi': [[], {'led1': 'int', 'led0': 'int', 'readImage': 'image', 'showInfo': 'void', 'removeBackground': 'image', 0: 'int', '"Introduce el numero de LED a encender (0 o 1)"': 'string', 'imGray': 'image', 'delay': 'void', '"Reset? (s/n)"': 'string', 'takePicture': 'image', 'imBW': 'image', 1: 'int', '"Error no diste un numero valido"': 'string', 'print': 'void', 'readLine': 'string', 'main': 'void', 'filterColor': 'image', 'readNumber': 'float', '"s"': 'string'}, {'led1': 201, 'led0': 200, 'readImage': 800, 'showInfo': 900, 'removeBackground': 801, 0: 1200, '"Introduce el numero de LED a encender (0 o 1)"': 1600, 'imGray': 805, 'delay': 901, '"Reset? (s/n)"': 1602, 'takePicture': 804, 'imBW': 802, 1: 1201, '"Error no diste un numero valido"': 1601, 'print': 902, 'readLine': 600, 'main': 903, 'filterColor': 803, 'readNumber': 400, '"s"': 1603}]}
 
 
 
 
-{0: ['GOTO', -1, 'main', -1], 1: ['CAM', 'webcam', -1, -1], 2: ['==', 2200, 1200, 3000], 3: ['==', 2200, 1201, 3001], 4: ['||', 3000, 3001, 3002], 5: ['GOTOF', 3002, 'if', 8], 6: ['RETURN', 2200, -1, 200], 7: ['GOTO', -1, 'else', 20], 8: ['ERA', 'Fibonacci', -1, -1], 9: ['-', 2200, 1201, 3200], 10: ['PARAM', 3200, -1, 0], 11: ['GOSUB', 2, -1, -1], 12: ['=', 200, -1, 3201], 13: ['ERA', 'Fibonacci', -1, -1], 14: ['-', 2200, 1202, 3202], 15: ['PARAM', 3202, -1, 0], 16: ['GOSUB', 2, -1, -1], 17: ['=', 200, -1, 3203], 18: ['+', 3201, 3203, 3204], 19: ['RETURN', 3204, -1, 200], 20: ['RET', -1, -1, -1], 21: ['=', 1203, -1, 2201], 22: ['ERA', 'Fibonacci', -1, -1], 23: ['PARAM', 2201, -1, 0], 24: ['GOSUB', 2, -1, -1], 25: ['=', 200, -1, 3200], 26: ['=', 3200, -1, 2200], 27: ['ERA', 'print', -1, -1], 28: ['PARAM', 2200, -1, 0], 29: ['CALL', 'print', -1, -1], 30: ['RET', -1, -1, -1], 31: ['ENDPROC', -1, -1, -1]}
+{0: ['GOTO', -1, 'main', -1], 1: ['OUTPUT', 'led1', -1, 15], 2: ['OUTPUT', 'led0', -1, 16], 3: ['DO', -1, -1, -1], 4: ['=', 1200, -1, 201], 5: ['=', 1200, -1, 200], 6: ['ERA', 'print', -1, -1], 7: ['PARAM', 1600, -1, 0], 8: ['CALL', 'print', -1, -1], 9: ['ERA', 'readNumber', -1, -1], 10: ['CALL', 'readNumber', -1, -1], 11: ['=', 400, -1, 3400], 12: ['=', 3400, -1, 2200], 13: ['!=', 2200, 1200, 3000], 14: ['!=', 2200, 1201, 3001], 15: ['&&', 3000, 3001, 3002], 16: ['GOTOF', 3002, 'if', 21], 17: ['ERA', 'print', -1, -1], 18: ['PARAM', 1601, -1, 0], 19: ['CALL', 'print', -1, -1], 20: ['GOTO', -1, 'else', 26], 21: ['==', 2200, 1200, 3003], 22: ['GOTOF', 3003, 'if', 25], 23: ['=', 1201, -1, 200], 24: ['GOTO', -1, 'else', 26], 25: ['=', 1201, -1, 201], 26: ['ERA', 'print', -1, -1], 27: ['PARAM', 1602, -1, 0], 28: ['CALL', 'print', -1, -1], 29: ['ERA', 'readLine', -1, -1], 30: ['CALL', 'readLine', -1, -1], 31: ['=', 600, -1, 3600], 32: ['=', 3600, -1, 2600], 33: ['==', 2600, 1603, 3004], 34: ['GOTOT', 3004, 'do', 3], 35: ['=', 1200, -1, 200], 36: ['=', 1200, -1, 201], 37: ['RET', -1, -1, -1], 38: ['ENDPROC', -1, -1, -1]}
 
 
 operatorsStack
@@ -37,6 +36,6 @@ branchStack
 1000
 [0, 200, 400, 600, 800, 900]
 [199, 399, 599, 799, 899, 999]
-{0: 'Vispi', 2: 'Fibonacci', 21: 'main'}
-{800: 'imLoad', 801: 'takePicture', 802: 'imBW', 803: 'filterColor', 900: 'print', 901: 'main', 200: 'Fibonacci', 1200: 'CpEHs', 1201: 'uqjdN', 1202: 'atcCN', 1203: 'zhDLx', 804: 'imGray'}
-[['GOTO', -1, 'main', -1], ['CAM', 'webcam', -1, -1], ['==', 2200, 1200, 3000], ['==', 2200, 1201, 3001], ['||', 3000, 3001, 3002], ['GOTOF', 3002, 'if', 8], ['RETURN', 2200, -1, 200], ['GOTO', -1, 'else', 20], ['ERA', 'Fibonacci', -1, -1], ['-', 2200, 1201, 3200], ['PARAM', 3200, -1, 0], ['GOSUB', 2, -1, -1], ['=', 200, -1, 3201], ['ERA', 'Fibonacci', -1, -1], ['-', 2200, 1202, 3202], ['PARAM', 3202, -1, 0], ['GOSUB', 2, -1, -1], ['=', 200, -1, 3203], ['+', 3201, 3203, 3204], ['RETURN', 3204, -1, 200], ['RET', -1, -1, -1], ['=', 1203, -1, 2201], ['ERA', 'Fibonacci', -1, -1], ['PARAM', 2201, -1, 0], ['GOSUB', 2, -1, -1], ['=', 200, -1, 3200], ['=', 3200, -1, 2200], ['ERA', 'print', -1, -1], ['PARAM', 2200, -1, 0], ['CALL', 'print', -1, -1], ['RET', -1, -1, -1], ['ENDPROC', -1, -1, -1]]
+{0: 'Vispi', 3: 'main'}
+{800: 'readImage', 801: 'removeBackground', 1602: 'lzifX', 803: 'filterColor', 900: 'showInfo', 805: 'imGray', 902: 'print', 1601: 'vbsiI', 200: 'led0', 201: 'led1', 903: 'main', 802: 'imBW', 600: 'readLine', 1200: 'PItIP', 1201: 'SEmIW', 400: 'readNumber', 1603: 'obSNt', 1600: 'uDntb', 804: 'takePicture', 901: 'delay'}
+[['GOTO', -1, 'main', -1], ['OUTPUT', 'led1', -1, 15], ['OUTPUT', 'led0', -1, 16], ['DO', -1, -1, -1], ['=', 1200, -1, 201], ['=', 1200, -1, 200], ['ERA', 'print', -1, -1], ['PARAM', 1600, -1, 0], ['CALL', 'print', -1, -1], ['ERA', 'readNumber', -1, -1], ['CALL', 'readNumber', -1, -1], ['=', 400, -1, 3400], ['=', 3400, -1, 2200], ['!=', 2200, 1200, 3000], ['!=', 2200, 1201, 3001], ['&&', 3000, 3001, 3002], ['GOTOF', 3002, 'if', 21], ['ERA', 'print', -1, -1], ['PARAM', 1601, -1, 0], ['CALL', 'print', -1, -1], ['GOTO', -1, 'else', 26], ['==', 2200, 1200, 3003], ['GOTOF', 3003, 'if', 25], ['=', 1201, -1, 200], ['GOTO', -1, 'else', 26], ['=', 1201, -1, 201], ['ERA', 'print', -1, -1], ['PARAM', 1602, -1, 0], ['CALL', 'print', -1, -1], ['ERA', 'readLine', -1, -1], ['CALL', 'readLine', -1, -1], ['=', 600, -1, 3600], ['=', 3600, -1, 2600], ['==', 2600, 1603, 3004], ['GOTOT', 3004, 'do', 3], ['=', 1200, -1, 200], ['=', 1200, -1, 201], ['RET', -1, -1, -1], ['ENDPROC', -1, -1, -1]]
