@@ -228,10 +228,13 @@ if len(sys.argv) == 2:
                 raise TypeError("Pin %s is not a valid GPIO pin"%(pin))
         if(quadruple[0] == 'PWM'):
             pin = int(quadruple[3])
-            if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for PWM
+            if (pin == 12): #validate pin, with wiringPi only the GPIO1 can be used for hardware PWM
                 name = quadruple[1]
                 MAIN.write('pullUpDnControl(%s, PUD_OFF); //Disable PullUp Resistor\n'%(GPIO[pin]))
                 MAIN.write('pinMode(%s, PWM_OUTPUT); \n'%(GPIO[pin]))
+                MAIN.write('pwmSetMode(PWM_MODE_MS); \n')
+                MAIN.write('pwmSetClock(400);\n')
+                MAIN.write('pwmSetRange(200);\n') #set pwm frequency to 50Hz approx
                 HwModes[name]= 'pwm'
                 HwVars[name] = pin
             else:
