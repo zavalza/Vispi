@@ -1,14 +1,8 @@
 0. Que onda con los TABS? (casos else, while)
 
-!1.  Operador NOT !
-
-
 !2. Validar no exceder los segmentos de memoria virtual al crear nuevas variables
 
-3. Validaciones de valores de write y pwm, se escribe la validacion en CPP?
-x. Anidar IF dentro de DO, y en general anidar condiciones
-
-*6. comparaImagen(comparaImagen(x, b), b) ??????
+*6. comparaImagen(comparaImagen(x, b), b)
 7. Igualaciones anidadas
 9. llamdas a funciones que no son void y que no tienen asignacion no se escriben en el cpp 
 x. test test test

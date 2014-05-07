@@ -12,7 +12,7 @@
 using namespace cv;
 using namespace std;
 
-Mat takePicture(void);
+Mat takePicture(VideoCapture inputCam);
 Mat imBW(Mat);
 Mat imLoad(string);
 Mat imGray(Mat);
@@ -26,12 +26,9 @@ void print(double);
 void print(String);
 
 
-Mat takePicture(void)
+Mat takePicture(VideoCapture inputCam)
 {
 	Mat frame;
-	VideoCapture inputCam(0);
-	inputCam >> frame;
-	inputCam >> frame;
 	inputCam >> frame;
 	return frame;
 }

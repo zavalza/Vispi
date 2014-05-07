@@ -1,4 +1,4 @@
-buscaIntruso
+fibonacci
 %%
 {'imLoad': [['string'], 'image'], 'takePicture': [[], 'image'], 'imBW': [['image'], 'image'], 'print': [['all'], 'void'], 'filterColor': [['image', 'string'], 'image'], 'imGray': [['image'], 'image']}
 0
@@ -9,96 +9,51 @@ buscaIntruso
 600
 800
 900
-{'main': 36, 'comparaImagen': 8, 'Vispi': 0}
-{'main': [[], {'a': 'int', 'b': 'float', 'x': 'int', 'Temporal12': 'int', 'Temporal11': 'int', 'Temporal10': 'int'}, {'a': 2200, 'b': 2400, 'x': 2201, 'Temporal12': 3202, 'Temporal11': 3201, 'Temporal10': 3200}], 'comparaImagen': [['int', 'float'], {'a': 'float', 'Temporal6': 'image', 'i': 'int', 'Temporal8': 'bool', 'Temporal5': 'image', 'Temporal1': 'float', 'Temporal9': 'float', 'imgResultante': 'image', 'Temporal7': 'bool', 'resultado2': 'float', 'resultado1': 'float', 'Temporal4': 'float', 'Temporal3': 'float', 'Temporal2': 'float', 'imgActual': 'image', 'Temporal0': 'float'}, {'a': 2400, 'Temporal6': 3801, 'i': 2200, 'Temporal8': 3001, 'Temporal5': 3800, 'Temporal1': 3401, 'Temporal9': 3405, 'imgResultante': 2800, 'Temporal7': 3000, 'resultado2': 2402, 'resultado1': 2401, 'Temporal4': 3404, 'Temporal3': 3403, 'Temporal2': 3402, 'imgActual': 2801, 'Temporal0': 3400}], 'Vispi': [[], {1: 'int', 3: 'int', 4: 'int', 5: 'int', 'velocidad': 'int', 10: 'int', 20: 'int', 'led1': 'int', 'led2': 'int', 6: 'int', 'imLoad': 'image', 'true': 'bool', 45.0: 'float', 'takePicture': 'image', 2.1: 'float', 'personas': 'int', 'print': 'void', 'main': 'void', 'imgInicial': 'image', 'imGray': 'image', 'mensajeAlerta': 'string', 1.2: 'float', 'boton': 'int', 'imBW': 'image', '"Alerta de intruso!"': 'string', 'filterColor': 'image', 'a': 'int', 'comparaImagen': 'int', 85: 'int'}, {1: 1205, 3: 1204, 4: 1206, 5: 1200, 'velocidad': 203, 10: 1202, 20: 1203, 'led1': 202, 'led2': 201, 6: 1207, 'imLoad': 800, 'true': 1000, 45.0: 1400, 'takePicture': 801, 2.1: 1402, 'personas': 204, 'print': 900, 'main': 901, 'imgInicial': 805, 'imGray': 804, 'mensajeAlerta': 600, 1.2: 1401, 'boton': 200, 'imBW': 802, '"Alerta de intruso!"': 1600, 'filterColor': 803, 'a': 205, 'comparaImagen': 206, 85: 1201}]}
+{'main': 21, 'Fibonacci': 2, 'Vispi': 0}
+{'main': [[], {'x': 'int', 'result': 'int', 'Temporal8': 'int'}, {'x': 2201, 'result': 2200, 'Temporal8': 3200}], 'Fibonacci': [['int'], {'n': 'int', 'Temporal7': 'int', 'Temporal6': 'int', 'Temporal5': 'int', 'Temporal4': 'int', 'Temporal3': 'int', 'Temporal2': 'bool', 'Temporal1': 'bool', 'Temporal0': 'bool'}, {'n': 2200, 'Temporal7': 3204, 'Temporal6': 3203, 'Temporal5': 3202, 'Temporal4': 3201, 'Temporal3': 3200, 'Temporal2': 3002, 'Temporal1': 3001, 'Temporal0': 3000}], 'Vispi': [[], {0: 'int', 1: 'int', 2: 'int', 5: 'int', 'imLoad': 'image', 'takePicture': 'image', 'imBW': 'image', 'Fibonacci': 'int', 'print': 'void', 'main': 'void', 'filterColor': 'image', 'imGray': 'image'}, {0: 1200, 1: 1201, 2: 1202, 5: 1203, 'imLoad': 800, 'takePicture': 801, 'imBW': 802, 'Fibonacci': 200, 'print': 900, 'main': 901, 'filterColor': 803, 'imGray': 804}]}
 %%
-1,1205
-3,1204
-4,1206
-5,1200
-velocidad,203
-10,1202
-20,1203
-led1,202
-led2,201
-6,1207
+0,1200
+1,1201
+2,1202
+5,1203
 imLoad,800
-true,1000
-45.0,1400
 takePicture,801
-2.1,1402
-personas,204
+imBW,802
+Fibonacci,200
 print,900
 main,901
-imgInicial,805
-imGray,804
-mensajeAlerta,600
-1.2,1401
-boton,200
-imBW,802
-"Alerta de intruso!",1600
 filterColor,803
-a,205
-comparaImagen,206
-85,1201
+imGray,804
 %%
 ['GOTO', -1, 'main', -1]
 ['CAM', 'webcam', -1, -1]
-['INPUT', 'boton', -1, 22]
-['OUTPUT', 'led1', -1, 15]
-['OUTPUT', 'led2', -1, 16]
-['PWM', 'velocidad', -1, 12]
-['=', 1200, -1, 204]
-['=', 1600, -1, 600]
-['DO', -1, -1, -1]
-['+', 1400, 1201, 3400]
-['-', 3400, 1202, 3401]
-['=', 3401, -1, 2401]
-['-', 1400, 1203, 3402]
-['*', 2401, 3402, 3403]
-['*', 3403, 1204, 3404]
-['=', 3404, -1, 2402]
-['-', 2801, 805, 3800]
-['=', 3800, -1, 2800]
-['*', 2800, 1200, 3801]
-['=', 3801, -1, 2800]
-['>', 1200, 1205, 3000]
-['GOTOF', 3000, 'if', 30]
-['=', 1206, -1, 2401]
-['=', 1200, -1, 2401]
-['>', 2401, 1207, 3001]
-['GOTOF', 3001, 'if', 29]
-['ERA', 'print', -1, -1]
-['PARAM', 2401, -1, 0]
-['CALL', 'print', -1, -1]
-['GOTO', -1, 'else', 33]
-['=', 1206, -1, 2402]
-['*', 2200, 2400, 3405]
-['=', 3405, -1, 2402]
-['GOTOT', 1000, 'do', 8]
-['RETURN', 2200, -1, 206]
+['==', 2200, 1200, 3000]
+['==', 2200, 1201, 3001]
+['||', 3000, 3001, 3002]
+['GOTOF', 3002, 'if', 8]
+['RETURN', 2200, -1, 200]
+['GOTO', -1, 'else', 20]
+['ERA', 'Fibonacci', -1, -1]
+['-', 2200, 1201, 3200]
+['PARAM', 3200, -1, 0]
+['GOSUB', 2, -1, -1]
+['=', 200, -1, 3201]
+['ERA', 'Fibonacci', -1, -1]
+['-', 2200, 1202, 3202]
+['PARAM', 3202, -1, 0]
+['GOSUB', 2, -1, -1]
+['=', 200, -1, 3203]
+['+', 3201, 3203, 3204]
+['RETURN', 3204, -1, 200]
 ['RET', -1, -1, -1]
-['=', 1205, -1, 2200]
-['=', 1401, -1, 2400]
-['=', 1200, -1, 2200]
-['ERA', 'comparaImagen', -1, -1]
-['PARAM', 2200, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 1402, -1, 2400]
-['GOTOF', 1205, 'while', 58]
-['ERA', 'comparaImagen', -1, -1]
-['PARAM', 2200, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 206, -1, 3200]
-['ERA', 'comparaImagen', -1, -1]
+['=', 1203, -1, 2201]
+['ERA', 'Fibonacci', -1, -1]
 ['PARAM', 2201, -1, 0]
-['PARAM', 2400, -1, 1]
-['GOSUB', 8, -1, -1]
-['=', 206, -1, 3201]
-['+', 3200, 3201, 3202]
-['=', 3202, -1, 2201]
-['GOTO', -1, 'while', 44]
+['GOSUB', 2, -1, -1]
+['=', 200, -1, 3200]
+['=', 3200, -1, 2200]
+['ERA', 'print', -1, -1]
+['PARAM', 2200, -1, 0]
+['CALL', 'print', -1, -1]
 ['RET', -1, -1, -1]
 ['ENDPROC', -1, -1, -1]

@@ -1,0 +1,14 @@
+PROGRAM factorial
+
+def void main ():
+	int x, result
+	x = 5
+
+	result = x
+	x = x - 1
+	while (x > 0):
+		result = result * x
+		x = x - 1
+	end
+	print(result)
+#
