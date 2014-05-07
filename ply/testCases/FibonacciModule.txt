@@ -1,0 +1,35 @@
+PROGRAM fibonacci
+
+def int Fibonacci(int n):
+	int result
+
+	int preOldResult, oldResult
+	int i
+	
+	n = 5
+
+	if(n <= 0):
+		return 0
+
+	if(n > 0 && n < 3):
+		return 1
+
+	result = 0;
+	preOldResult = 1;
+	oldResult = 1;
+
+	i = 2
+	while (i < 2):
+		result = preOldResult + oldResult
+		preOldResult = oldResult
+		oldResult = result
+		i = i + 1
+
+	return result
+
+def void main ():
+	int x, result
+	x = 5
+	result = Fibonacci(x)
+	print (result)
+#

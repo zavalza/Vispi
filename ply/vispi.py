@@ -200,7 +200,8 @@ if len(sys.argv) == 2:
 
         if(quadruple[0] == 'CAM'):
             if(quadruple[1] == 'webcam'):
-                MAIN.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
+                print "webcam"
+                #MAIN.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
             else: #raspicam
                 print"raspicam"
         if(quadruple[0] == 'INPUT'):
@@ -386,8 +387,32 @@ if len(sys.argv) == 2:
                 functName = imgFunctions[imgOperand[orig2Typ]][imgOperator[operator]] 
                 TemporalMemory[destAdd] = '%s(%s,%s)'%(functName,x,y)
             else:
-                
                 TemporalMemory[destAdd] = '(' + x + ' ' + operator + ' ' + y + ')'
+        
+        elif (quadruple[0] is '!'):
+            orig1Add = quadruple[1]
+            destAdd = quadruple[3]
+
+            orig1Typ = resolveType(orig1Add)
+            destTyp = resolveType(destAdd)
+
+            orig1Zone = resolveMemSection(orig1Add)
+            destZone = resolveMemSection(destAdd)
+
+            operator = quadruple[0]
+
+            if orig1Zone is 'temporals':
+                x = TemporalMemory[orig1Add]
+            elif (orig1Zone is 'globals' or orig1Zone is 'constants'):
+                x = VarDict[orig1Add]
+                if HwModes.has_key(x):
+                    raise TypeError("Mix of pins with arithmetic is not allowed")
+            elif orig1Zone is 'locals':
+                x = LocalVarName[orig1Add]
+
+            # NOT Mat is not accepted
+            TemporalMemory[destAdd] = '(' + operator + x + ')'
+
 
         if (quadruple[0] is 'RETURN'):
             origAdd = quadruple[1]
