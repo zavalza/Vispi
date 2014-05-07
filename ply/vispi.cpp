@@ -3,18 +3,18 @@
 using namespace std;
 using namespace cv;
 
-const int mkWyg = 0;
-const int sDDFJ = 1;
+const int ALMqH = 0;
+const int dZaGH = 1;
 int ledAmarillo;
-const string bHYvQ = "end";
-const string oFjyx = "d";
-const string sZXha = "Suelta el boton One Shot";
-const string hRWgh = "Agrandar o dividir? (a/d)";
+const string dPVdg = "end";
+const string hiaob = "d";
+const string PICSP = "Suelta el boton One Shot";
+const string VbnWQ = "Agrandar o dividir? (a/d)";
 int boton;
-const string YjegN = "Dame el factor";
+const string ccBnE = "Dame el factor";
 int ledRojo;
-const string qzwUp = "a";
-const string MEVAn = "perfil.jpg";
+const string lPppa = "a";
+const string aYJiC = "perfil.jpg";
 
 VideoCapture Cam(0); // open the default camera
 int main () {
@@ -39,32 +39,32 @@ Mat temp;
 Mat im1;
 Mat im2;
 string entrada;
-if((mkWyg==0) || (mkWyg==1)){
-digitalWrite(4, mkWyg);
+if((ALMqH==0) || (ALMqH==1)){
+digitalWrite(4, ALMqH);
 }
-if((mkWyg==0) || (mkWyg==1)){
-digitalWrite(3, mkWyg);
+if((ALMqH==0) || (ALMqH==1)){
+digitalWrite(3, ALMqH);
 }
 do {
 temp = takePicture(Cam);
 print(temp);
-} while((digitalRead(6) == mkWyg));
-while ((digitalRead(6) == sDDFJ)) {
-print(sZXha);
+} while((digitalRead(6) == ALMqH));
+while ((digitalRead(6) == dZaGH)) {
+print(PICSP);
 }
 im1 = takePicture(Cam);
-im2 = readImage(MEVAn);
+im2 = readImage(aYJiC);
 temp = addImages(im1,im2);
-while ((digitalRead(6) == mkWyg)) {
+while ((digitalRead(6) == ALMqH)) {
 print(temp);
 }
 do {
-print(hRWgh);
+print(VbnWQ);
 operacion = readLine();
-} while(((operacion != qzwUp) && (operacion != oFjyx)));
-print(YjegN);
+} while(((operacion != lPppa) && (operacion != hiaob)));
+print(ccBnE);
 factor = readNumber();
-if ((operacion == qzwUp)) {
+if ((operacion == lPppa)) {
 resultado = resizeUp(im2,factor);
 }
 else {
@@ -74,7 +74,7 @@ resultado = imGray(resultado);
 do {
 print(resultado);
 entrada = readLine();
-} while((entrada != bHYvQ));
+} while((entrada != dPVdg));
 
 return 0;
 }

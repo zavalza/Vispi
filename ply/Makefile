@@ -6,11 +6,7 @@ LXXLIBS+=-L/home/pi/Desktop/git/raspberry/userland/build/lib -lmmal_core -lmmal 
 vispi: vispi.cpp
 	g++ vispi.cpp -o vispi $(LXXLIBS)
 
-vispi.cpp:
-	python vispi.py testCases/vispiCore.vpi > debugOutput
-	rm tempMain.cpp
-
-all: vispi.cpp vispi
+all: vispi.cpp
 	
 
 clean:
