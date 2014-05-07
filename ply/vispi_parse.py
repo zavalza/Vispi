@@ -132,7 +132,7 @@ counterTemporals = 0
 
 #Grammatic rules
 def p_program(p):
-    'program : programName f_loadVispiFunctions hardware vars assign functions'
+    'program : programName f_loadVispiFunctions hardware moreVars moreAssign functions'
     global counterQuadruples
     Quadruples[counterQuadruples] = ['ENDPROC', -1, -1, -1]
     counterQuadruples += 1
@@ -507,11 +507,11 @@ def p_f_return(p):
         counterQuadruples += 1
     else:
         raise TypeError("Type mismatch: function return value")
-    operandsStack.push(retVal)      #
-    typesStack.push(typ)            #
+    #operandsStack.push(retVal)      # solved in another section
+    #typesStack.push(typ)            #
 
 def p_cycle(p):
-    'cycle : f_checkTab WHILE f_isCondition expression COLON NEWLINE f_resetTab f_incTab block'
+    'cycle : f_checkTab WHILE f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block'
     global counterQuadruples
     end = branchStack.pop()
     condition = branchStack.pop()
@@ -520,8 +520,8 @@ def p_cycle(p):
     Quadruples[end][3]=counterQuadruples
 
 def p_condition(p):
-    '''condition : IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block
-                 | IF f_isCondition expression COLON NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
+    '''condition : IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block
+                 | IF f_isCondition expression COLON f_endCondition NEWLINE f_resetTab f_incTab block f_checkTab ELSE f_popIf COLON NEWLINE f_resetTab f_incTab block'''
     end = branchStack.pop()
     Quadruples[end][3]=counterQuadruples
 
@@ -531,7 +531,7 @@ def p_f_decTab(p):
     expectedTabulation -=1
 
 def p_doCycle(p):
-    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression NEWLINE f_resetTab'
+    'doCycle : DO f_pushDo COLON NEWLINE f_resetTab f_incTab block f_checkTab LOOP f_isDoWhile f_isCondition expression f_endCondition NEWLINE f_resetTab'
 
 def p_f_popIf(p):
     'f_popIf : '
@@ -568,6 +568,31 @@ def p_f_isCondition(p):
             branchStack.push(counterQuadruples)
     isDoWhile=False #
     #print typeOfCondition
+
+def p_f_endCondition(p):
+    'f_endCondition : '
+    global isCondition
+    global counterQuadruples
+
+    if(isCondition):
+        isCondition = False
+        operand = operandsStack.pop()
+        typeVariable = typesStack.pop()
+        if(typeVariable == 'bool')or(typeVariable == 'int'): #follow c/c++ sintax
+            #print typeOfCondition
+            if (typeOfCondition == 'if' or typeOfCondition=='while'):
+                Quadruples[counterQuadruples]=["GOTOF", operand, typeOfCondition, -1]
+                branchStack.push(counterQuadruples)
+                counterQuadruples+=1
+            elif(typeOfCondition=='do'):
+                code = branchStack.pop()
+                Quadruples[counterQuadruples]=['GOTOT', operand, typeOfCondition, code]
+                counterQuadruples+=1
+            else:
+                #print typeOfCondition
+                raise TypeError("Not a valid condition")
+        else:
+            raise TypeError("Result of condition is not valid")
 
 def p_funct(p):
     '''funct : ID f_checkProc LPAREN RPAREN
@@ -659,8 +684,121 @@ def p_f_genParam(p):
         counterQuadruples += 1
 
 def p_expression(p):
-    '''expression : exp
-                  | exp compareToken exp f_popComparation'''
+    'expression : orExp moreOrExp'
+
+def p_orExp(p):
+    'orExp : andExp moreAndExp'
+
+def p_moreOrExp(p):
+    '''moreOrExp : empty
+                | OR f_pushOperator orExp f_popOrExp moreOrExp'''
+
+def p_f_popOrExp(p):
+    'f_popOrExp : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '||'):
+        operand2=operandsStack.pop()
+        operand1=operandsStack.pop()
+
+        type2=typesStack.pop()
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type mismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, operand2, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
+
+def p_andExp(p):
+    'andExp : notExp'
+
+def p_moreAndExp(p):
+    '''moreAndExp : empty
+                | AND f_pushOperator andExp f_popAndExp moreAndExp'''
+
+def p_f_popAndExp(p):
+    'f_popAndExp : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '&&'):
+        operand2=operandsStack.pop()
+        operand1=operandsStack.pop()
+
+        type2=typesStack.pop()
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1[type1]][semIndex2[type2]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type mismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, operand2, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
+
+def p_notExp(p):
+    '''notExp : boolExp
+            | NOT f_pushOperator boolExp f_popNotExp'''
+
+def p_f_popNotExp(p):
+    'f_popNotExp : '
+    global counterTemporals
+    global counterQuadruples
+    operator = operatorsStack.pop()
+    if(operator== '!'):
+        operand1=operandsStack.pop()
+
+        type1=typesStack.pop()
+        typeResult = SemCube[semIndex1['<NULL>']][semIndex2[type1]][semIndex3[operator]]
+
+        if(typeResult==-1):
+            raise TypeError("Type mismatch")
+
+        else:
+            temporalVariable = "Temporal%s" %counterTemporals
+            if not ProcVars[moduleName][addrTable].has_key(temporalVariable):
+                ProcVars[moduleName][typeTable][temporalVariable] = typeResult
+                ProcVars[moduleName][addrTable][temporalVariable] = ES_base + S_offsetTable[typeResult] + ES_counterTable[typeResult]
+                ES_counterTable[typeResult] += 1
+            temporalAddress=ProcVars[moduleName][addrTable][temporalVariable]
+            operandsStack.push(temporalAddress)
+            typesStack.push(typeResult)
+            Quadruples[counterQuadruples]=[operator, operand1, -1, temporalAddress]
+            counterTemporals+=1
+            counterQuadruples+=1
+    else:
+        operatorsStack.push(operator)
+
+
+def p_boolExp(p):
+    '''boolExp : exp
+                | exp compareToken exp f_popComparation'''
 
 def p_f_popComparation(p):
     'f_popComparation : '
@@ -757,35 +895,13 @@ def p_factor(p):
 
 def p_f_pushOperator(p):
     'f_pushOperator : '
-    if(not isCondition):
-        operatorsStack.push(p[-1])
+    #if(not isCondition):
+    operatorsStack.push(p[-1])
 
 def p_f_popOperator(p):
     'f_popOperator : '
-    global isCondition
-    global counterQuadruples
-
-    if(isCondition):
-        isCondition = False
-        operand = operandsStack.pop()
-        typeVariable = typesStack.pop()
-        if(typeVariable == 'bool')or(typeVariable == 'int'): #follow c/c++ sintax
-            #print typeOfCondition
-            if (typeOfCondition == 'if' or typeOfCondition=='while'):
-                Quadruples[counterQuadruples]=["GOTOF", operand, typeOfCondition, -1]
-                branchStack.push(counterQuadruples)
-                counterQuadruples+=1
-            elif(typeOfCondition=='do'):
-                code = branchStack.pop()
-                Quadruples[counterQuadruples]=['GOTOT', operand, typeOfCondition, code]
-                counterQuadruples+=1
-            else:
-                #print typeOfCondition
-                raise TypeError("Not a valid condition")
-        else:
-            raise TypeError("Result of condition is not valid")
-    else:
-        operatorsStack.pop()
+    #if(not isCondition):
+    operatorsStack.pop()
 
 def p_f_popFactor(p):
     'f_popFactor : '

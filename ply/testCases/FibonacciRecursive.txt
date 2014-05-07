@@ -1,0 +1,14 @@
+PROGRAM fibonacci
+CAM webcam:mycam
+def int Fibonacci(int n):
+	if (!(n == 0) || n == 1):
+		return n;
+	else:
+		return Fibonacci(n - 1) + Fibonacci(n - 2)
+
+def void main ():
+	int x, result
+	x = 5
+	result = Fibonacci(x)
+	print (result)
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
