@@ -1,0 +1,13 @@
+PROGRAM factorial
+def int factorial(int i):
+	if (i < 2):
+		return 1
+	else:
+		return i * factorial(i - 1)
+	end
+
+def void main ():
+	int x
+	x = factorial(3)
+	print(x)
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB

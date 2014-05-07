@@ -75,6 +75,7 @@ if len(sys.argv) == 2:
     Name = OBJ.readline().splitlines()[0]
     CPP = open('vispi.cpp', 'w')
     CPP.write('#include "vispi.h"\n\nusing namespace std;\nusing namespace cv;\n\n')
+#    CPP.write('using namespace std;\n\n')
     MAIN = open('tempMain.cpp', 'w')
     mainFileIsOpen = True
 
@@ -123,7 +124,7 @@ if len(sys.argv) == 2:
         elif(resolveMemSection(address)=='constants'):
             value = (data[0])
             name = getRandomName()
-            CPP.write('%s %s = %s;\n'%(typeOfData,name,value))
+            CPP.write('const %s %s = %s;\n'%(typeOfData,name,value))
         else:
             print "Error" #we are suppose to have only globals and constants in this section
         
@@ -200,8 +201,7 @@ if len(sys.argv) == 2:
 
         if(quadruple[0] == 'CAM'):
             if(quadruple[1] == 'webcam'):
-                print "webcam"
-                #MAIN.write('VideoCapture cap(0); // open the default camera\nif(!cap.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
+                MAIN.write('VideoCapture Cam(0); // open the default camera\nif(!Cam.isOpened()) // check if we succeeded\n\treturn -1;\n\n');
             else: #raspicam
                 print"raspicam"
         if(quadruple[0] == 'INPUT'):
@@ -460,14 +460,15 @@ if len(sys.argv) == 2:
                 addrOfModuleGlobal = procVars['Vispi'][addrTable][moduleName]
                 VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
             paramString = ''
-
-        if(quadruple[0] is 'CALL'):
+        elif(quadruple[0] is 'CALL'):
             global paramString
             functName = quadruple[1]
             if procVars['Vispi'][typeTable][functName] is 'void':
                 CPP.write('%s(%s);\n' %(functName, paramString))
             else:
                 addrOfModuleGlobal = procVars['Vispi'][addrTable][functName]
+                if functName is 'takePicture':
+                    paramString = 'Cam'
                 VarDict[addrOfModuleGlobal] += '(' + paramString + ')'
             paramString = ''
         # Leave the following quadruples at the end. More quadruples go above here /\

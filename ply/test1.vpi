@@ -1,0 +1,38 @@
+PROGRAM buscaIntruso 
+CAM webcam:micamara 
+INPUT 22:boton 
+OUTPUT 15:led1,16:led2
+PWM 12:velocidad
+int personas
+string mensajeAlerta
+image imgInicial
+
+personas = 5
+mensajeAlerta = "Alerta de intruso!"
+imgInicial = takePicture()
+
+def void comparaImagen(int i, float a):
+	image tempImg, diferencias
+	tempImg = takePicture()
+	diferencias = imgInicial - tempImg
+	print(diferencias)
+
+def void main ():
+	image tempImg
+	while (personas > 5): 
+		if(boton):
+		#comentario
+			comparaImagen()
+			led2 = 1
+			velocidad = 25
+			#comentario
+		else:
+			tempImg = takePicture()
+			if(2 > personas):
+				print(mensajeAlerta)
+				led1 = 0 
+				velocidad = 75
+			end
+		end
+	end
+#

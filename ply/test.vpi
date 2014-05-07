@@ -1,0 +1,27 @@
+PROGRAM primerTest
+CAM webcam : cam1
+INPUT 8 : boton1, 9: boton2
+OUTPUT 5: led1
+
+int elefante, paloma
+float tigre
+bool si_o_no
+
+def int funcionextra (int parametro1):
+	int otroAnimal
+	otroAnimal = parametro1 - 1
+	if (otroAnimal != 0):
+		funcionextra(4)
+	else: 
+		funcionextra(3)
+
+def void main ():
+	string estoEsUnMensaje
+    char letra
+
+	estoEsUnMensaje = "el elefante rosa corre en la pradera"
+    esteEsUnChar = 'a'
+
+	print(estoEsUnMensaje)
+	tigre = tigre + 5 * 8 - elefante / si_o_no + 9
+#NECESITAMOS NEWLINE Y NO PUEDE IR TAB
